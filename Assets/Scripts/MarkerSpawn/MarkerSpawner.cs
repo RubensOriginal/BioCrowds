@@ -39,6 +39,6 @@ public abstract class MarkerSpawner : MonoBehaviour
 
     protected bool IsOnNavmesh(Vector3 test)
     {
-        return NavMesh.SamplePosition(test, out NavMeshHit hit, 0.05f, 1 << NavMesh.GetAreaFromName("Walkable"));
+        return NavMesh.SamplePosition(test, out NavMeshHit hit, MarkerRadius/2f, 1 << NavMesh.GetAreaFromName("Walkable"));
     }
 }

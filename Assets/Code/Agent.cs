@@ -97,6 +97,8 @@ namespace Biocrowds.Core
             //cache world info
             _totalX = Mathf.FloorToInt(_world.Dimension.x / 2.0f) - 1;
             _totalZ = Mathf.FloorToInt(_world.Dimension.y / 2.0f);
+            _elapsedTime = UPDATE_NAVMESH_INTERVAL;
+            //UpdateGoalPositionAndNavmesh();
         }
 
         public void NavmeshStep(float _timeStep)

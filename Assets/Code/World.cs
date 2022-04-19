@@ -8,7 +8,7 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-using UnityEditor.AI;
+//using UnityEditor.AI;
 using System.Collections;
 using UnityEngine.AI;
 using System.Linq;
@@ -140,12 +140,12 @@ namespace Biocrowds.Core
             _terrain.terrainData.size = new Vector3(_dimension.x, _terrain.terrainData.size.y, _dimension.y);
             _terrain.transform.position = new Vector3(_offset.x, _terrain.transform.position.y, _offset.y);
 
-            GameObjectUtility.SetStaticEditorFlags(_terrain.gameObject, StaticEditorFlags.NavigationStatic);
+            //GameObjectUtility.SetStaticEditorFlags(_terrain.gameObject, StaticEditorFlags.NavigationStatic);
 
             //build the navmesh at runtime
             //NavMeshBuilder.BuildNavMesh();
-            UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
-
+            //UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
+            yield return new WaitForSeconds(1.0f);
 
             //create all cells based on dimension
             yield return StartCoroutine(CreateCells());
