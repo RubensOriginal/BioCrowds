@@ -139,12 +139,13 @@ namespace Biocrowds.Core
             //change terrain size according informed
             _terrain.terrainData.size = new Vector3(_dimension.x, _terrain.terrainData.size.y, _dimension.y);
             _terrain.transform.position = new Vector3(_offset.x, _terrain.transform.position.y, _offset.y);
-
-            //GameObjectUtility.SetStaticEditorFlags(_terrain.gameObject, StaticEditorFlags.NavigationStatic);
+#if UNITY_EDITOR
+            GameObjectUtility.SetStaticEditorFlags(_terrain.gameObject, StaticEditorFlags.NavigationStatic);
 
             //build the navmesh at runtime
             //NavMeshBuilder.BuildNavMesh();
-            //UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
+            UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
+#endif
             yield return new WaitForSeconds(1.0f);
 
             //create all cells based on dimension

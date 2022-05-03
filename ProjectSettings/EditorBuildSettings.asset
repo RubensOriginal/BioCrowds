@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LevelEditor.unity
     guid: 9da7a089530336643a03b82522719285
+  - enabled: 0
+    path: Assets/StandaloneFileBrowser/Sample/CanvasSampleScene.unity
+    guid: c0e4eec5741834194a946535d535405c
   m_configObjects: {}
