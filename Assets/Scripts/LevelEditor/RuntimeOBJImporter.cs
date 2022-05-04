@@ -16,6 +16,7 @@ using UnityEditor;
 public class RuntimeOBJImporter : MonoBehaviour
 {
 	GameObject loadedObject;
+	public Transform loadedModelsContainer;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     
@@ -36,7 +37,7 @@ public class RuntimeOBJImporter : MonoBehaviour
 
         var textStream = new MemoryStream(Encoding.UTF8.GetBytes(loader.text));
         loadedObject = new OBJLoader().Load(textStream);
-
+        loadedObject.transform.SetParent(loadedModelsContainer);
         loadedObject.transform.position = new Vector3(25f, 0, 20f);
         yield break;
     }
@@ -59,18 +60,19 @@ public class RuntimeOBJImporter : MonoBehaviour
 				Debug.Log("Now Loading: " + FileBrowser.Result[i]);
 
 			loadedObject = new OBJLoader().Load(FileBrowser.Result[0]);
+            loadedObject.transform.SetParent(loadedModelsContainer);
 			loadedObject.transform.position = new Vector3(15f, 0, 15f);
-
-			// Sets all objects as NavigationStatic
-			GameObjectUtility.SetStaticEditorFlags(loadedObject, StaticEditorFlags.NavigationStatic);
-			for (int i = 0; i < loadedObject.transform.childCount; i++)
-				if (loadedObject.transform.GetChild(i).TryGetComponent(out MeshRenderer _mesh))
-					GameObjectUtility.SetStaticEditorFlags(loadedObject.transform.GetChild(i).gameObject, StaticEditorFlags.NavigationStatic);
 		}
 	}
 #endif
 
-	public void LoadOBJ()
+    public void Awake()
+    {
+        if (!loadedModelsContainer)
+            loadedModelsContainer = GameObject.Find("ImportedModels").GetComponent<Transform>();
+    }
+
+    public void LoadOBJ()
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
         UploadFile(gameObject.name, "OnFileUpload", ".obj", false);

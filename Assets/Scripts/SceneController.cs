@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using Unity.AI.Navigation;
 using UnityEngine.SceneManagement;
 using Biocrowds.Core;
 using System.Linq;
+using NavMeshBuilder = UnityEngine.AI.NavMeshBuilder;
 
 public class SceneController : MonoBehaviour
 {
@@ -23,6 +26,12 @@ public class SceneController : MonoBehaviour
     public bool _showAuxinVector;
     public bool _showSpawnAreas;
     public bool _showNavMeshCorners;
+
+    public NavMeshSurface surface;
+    public NavMeshData m_NavMesh;
+    public AsyncOperation m_Operation;
+    public NavMeshDataInstance m_Instance;
+    public List<NavMeshBuildSource> m_Sources = new List<NavMeshBuildSource>();
 
     private void Awake()
     {
@@ -76,6 +85,21 @@ public class SceneController : MonoBehaviour
             initialized = true;
             world.LoadWorld();
         }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            var defaultBuildSettings = NavMesh.GetSettingsByID(0);
+            surface.BuildNavMesh();
+        }
 
+    }
+
+    private void OnEnable()
+    {
+        if (m_NavMesh == null)
+        {
+            Debug.Log("Creatin NavMesh Data");
+            m_NavMesh = new NavMeshData();
+            m_Instance = NavMesh.AddNavMeshData(m_NavMesh);
+        }
     }
 }

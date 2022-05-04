@@ -39,7 +39,7 @@ public class SpawnArea : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha9))
             Debug.Log(GetRandomPoint());
     }
 
