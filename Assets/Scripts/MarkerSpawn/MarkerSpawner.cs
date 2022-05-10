@@ -14,14 +14,12 @@ public abstract class MarkerSpawner : MonoBehaviour
     //density
     public float MarkerDensity = 0.65f;
 
-    protected Transform _auxinsContainer;
-
     protected float _cellSize;
     protected int _maxMarkersPerCell;
 
     public Auxin auxinPrefab;
 
-    public abstract IEnumerator CreateMarkers(List<Cell> _cells, List<Auxin> _auxins);
+    public abstract IEnumerator CreateMarkers(Transform _auxinContainer,List<Cell> _cells, List<Auxin> _auxins);
 
     protected bool HasMarkersNearby(Vector3 test, List<Auxin> others)
     {

@@ -6,21 +6,20 @@ using UnityEngine.AI;
 
 public class RegularGridMarkerSpawner : MarkerSpawner
 {
-    public override IEnumerator CreateMarkers(List<Cell> cells, List<Auxin> auxins)
+    public override IEnumerator CreateMarkers(Transform _auxinsContainer, List<Cell> cells, List<Auxin> auxins)
     {
-        _auxinsContainer = new GameObject("Markers").transform;
         _cellSize = cells[0].transform.localScale.x;
 
         // Generate a number of markers for each Cell
         for (int c = 0; c < cells.Count; c++)
         {
-            StartCoroutine(PopulateCell(cells[c], auxins, c));
+            StartCoroutine(PopulateCell(_auxinsContainer, cells[c], auxins, c));
         }
 
         yield break;
     }
 
-    private IEnumerator PopulateCell(Cell cell, List<Auxin> auxins, int cellIndex)
+    private IEnumerator PopulateCell(Transform _auxinsContainer, Cell cell, List<Auxin> auxins, int cellIndex)
     {
         var bounds = new Bounds(cell.transform.position, Vector3.one * (_cellSize - MarkerRadius));
         var floatCorrection = MarkerRadius / 4f;

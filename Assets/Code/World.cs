@@ -8,10 +8,10 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-//using UnityEditor.AI;
 using System.Collections;
 using UnityEngine.AI;
 using System.Linq;
+using Unity.AI.Navigation;
 
 namespace Biocrowds.Core
 {
@@ -42,6 +42,14 @@ namespace Biocrowds.Core
         private Terrain _terrain;
 
         [SerializeField]
+        private NavMeshSurface surface;
+
+        [SerializeField] 
+        private NavMeshData navMeshData;
+
+        public NavMeshDataInstance navMeshDataInstance;
+
+        [SerializeField]
         private Vector2 _dimension = new Vector2(30.0f, 20.0f);
         public Vector2 Dimension
         {
@@ -54,31 +62,28 @@ namespace Biocrowds.Core
         {
             get { return _offset; }
         }
-        //number of agents in the scene
-        [SerializeField]
-        private int _maxAgents = 30;
 
-        //agent prefab
-        [SerializeField]
-        private List<Agent> _agentPrefabList;
-
-        [SerializeField]
-        private Cell _cellPrefab;
-
-        [SerializeField]
-        private Auxin _auxinPrefab;
+        [Header("Agents Settings and Data")]
+        [SerializeField] private int _maxAgents = 30;
+        [SerializeField] private List<Agent> _agentPrefabList;
+        [SerializeField] private Transform _agentsContainer;
+        [SerializeField] private List<Agent> _agents = new List<Agent>();
+        private int _newAgentID = 0;
 
 
-        [SerializeField]
-        private List<Agent> _agents = new List<Agent>();
+        [Header("Cells Settings and Data")]
+        [SerializeField] private Transform _cellsContainer;
+        [SerializeField] private Cell _cellPrefab;
         List<Cell> _cells = new List<Cell>();
+
+        [Header("Auxins Settings and Data")]
+        [SerializeField] private Transform _auxinsContainer;
+        [SerializeField] private Auxin _auxinPrefab;
         List<Auxin> _auxins = new List<Auxin>();
 
         public List<SpawnArea> spawnAreas;
 
-        [SerializeField]
-        private Transform _agentsContainer;
-        private int _newAgentID = 0;
+
 
         public List<Cell> Cells
         {
@@ -121,37 +126,51 @@ namespace Biocrowds.Core
 
                 planeMeshFilter.gameObject.SetActive(false);
             }
+
+            if (navMeshData == null)
+            {
+                Debug.Log("Creatin NavMesh Data");
+                navMeshData = new NavMeshData();
+                navMeshDataInstance = NavMesh.AddNavMeshData(navMeshData);
+            }
         }
 
         public void LoadWorld()
         {
+            _isReady = false;
             var markerSpawnerMethods = transform.GetComponentsInChildren<MarkerSpawner>();
             _markerSpawner = markerSpawnerMethods.First(p => p.spawnMethod == markerSpawnMethod);
 
             StartCoroutine(SetupWorld());
         }
 
+        public void ClearWorld()
+        {
+            Destroy(_agentsContainer.gameObject);
+            Destroy(_cellsContainer.gameObject);
+            Destroy(_auxinsContainer.gameObject);
+            _agents = new List<Agent>();
+            _cells = new List<Cell>();
+            _auxins = new List<Auxin>();
+        }
+
         // Use this for initialization
         IEnumerator SetupWorld()
         {
-            //Application.runInBackground = true;
-
             //change terrain size according informed
             _terrain.terrainData.size = new Vector3(_dimension.x, _terrain.terrainData.size.y, _dimension.y);
             _terrain.transform.position = new Vector3(_offset.x, _terrain.transform.position.y, _offset.y);
-#if UNITY_EDITOR
-            GameObjectUtility.SetStaticEditorFlags(_terrain.gameObject, StaticEditorFlags.NavigationStatic);
 
-            //build the navmesh at runtime
-            //NavMeshBuilder.BuildNavMesh();
-            UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
-#endif
+            //GameObjectUtility.SetStaticEditorFlags(_terrain.gameObject, StaticEditorFlags.NavigationStatic);
+            var defaultBuildSettings = NavMesh.GetSettingsByID(0);
+            surface.BuildNavMesh();
             yield return new WaitForSeconds(1.0f);
 
             //create all cells based on dimension
             yield return StartCoroutine(CreateCells());
 
-            yield return StartCoroutine(_markerSpawner.CreateMarkers(_cells, _auxins));
+            _auxinsContainer = new GameObject("Auxins").transform;
+            yield return StartCoroutine(_markerSpawner.CreateMarkers(_auxinsContainer, _cells, _auxins));
             Debug.Log(_auxins.Count/_cells.Count);
 
             //populate cells with auxins
@@ -162,13 +181,14 @@ namespace Biocrowds.Core
 
             //wait a little bit to start moving
             yield return new WaitForSeconds(1.0f);
-            _isReady = true;
-            Debug.Break();
+
+            //_isReady = true;
+            //Debug.Break();
         }
 
         private IEnumerator CreateCells()
         {
-            Transform cellPool = new GameObject("Cells").transform;
+            _cellsContainer = new GameObject("Cells").transform;
             Vector3 _spawnPos = new Vector3();
 
             for (int i = 0; i < _dimension.x / 2; i++) //i + agentRadius * 2
@@ -179,7 +199,7 @@ namespace Biocrowds.Core
                     _spawnPos.x = (1.0f + (i * 2.0f)) + _offset.x;
                     _spawnPos.z = (1.0f + (j * 2.0f)) + _offset.y;
 
-                    Cell newCell = Instantiate(_cellPrefab, _spawnPos, Quaternion.Euler(90.0f, 0.0f, 0.0f), cellPool);
+                    Cell newCell = Instantiate(_cellPrefab, _spawnPos, Quaternion.Euler(90.0f, 0.0f, 0.0f), _cellsContainer);
 
                     //change its name
                     newCell.name = "Cell [" + i + "][" + j + "]";
@@ -192,8 +212,9 @@ namespace Biocrowds.Core
 
                     _cells.Add(newCell);
 
-                    yield return null;
                 }
+                yield return null;
+
             }
         }
 
@@ -202,7 +223,7 @@ namespace Biocrowds.Core
             //lets set the qntAuxins for each cell according the density estimation
             float densityToQnt = AUXIN_DENSITY;
 
-            Transform auxinPool = new GameObject("Auxins").transform;
+            _auxinsContainer = new GameObject("Auxins").transform;
 
             densityToQnt *= 2f / (2.0f * AUXIN_RADIUS);
             densityToQnt *= 2f / (2.0f * AUXIN_RADIUS);
@@ -251,7 +272,7 @@ namespace Biocrowds.Core
                     //check if auxin can be created there
                     if (createAuxin)
                     {
-                        Auxin newAuxin = Instantiate(_auxinPrefab, new Vector3(x, 0.0f, z), Quaternion.identity, auxinPool);
+                        Auxin newAuxin = Instantiate(_auxinPrefab, new Vector3(x, 0.0f, z), Quaternion.identity, _auxinsContainer);
 
                         //change its name
                         newAuxin.name = "Auxin [" + c + "][" + i + "]";
@@ -298,6 +319,7 @@ namespace Biocrowds.Core
             //instantiate agents
             foreach (SpawnArea _area in spawnAreas)
             {
+                _area.ResetSpawner();
                 for (int i = 0; i < _area.initialNumberOfAgents; i ++)
                 {
                     if (MAX_AGENTS == 0 || _agents.Count < MAX_AGENTS)

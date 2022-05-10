@@ -11,12 +11,12 @@ using Dummiesman;
 using System.Runtime.InteropServices;
 #else
 using SimpleFileBrowser;
-using UnityEditor;
 #endif
 public class RuntimeOBJImporter : MonoBehaviour
 {
 	GameObject loadedObject;
 	public Transform loadedModelsContainer;
+    public List<string> loadedModelsContent;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     
@@ -59,7 +59,12 @@ public class RuntimeOBJImporter : MonoBehaviour
 			for (int i = 0; i < FileBrowser.Result.Length; i++)
 				Debug.Log("Now Loading: " + FileBrowser.Result[i]);
 
-			loadedObject = new OBJLoader().Load(FileBrowser.Result[0]);
+            using (var fs = new FileStream(FileBrowser.Result[0], FileMode.Open))
+            {
+                loadedModelsContent.Add(new StreamReader(fs).ReadToEnd());
+            }
+
+            loadedObject = new OBJLoader().Load(FileBrowser.Result[0]);
             loadedObject.transform.SetParent(loadedModelsContainer);
 			loadedObject.transform.position = new Vector3(15f, 0, 15f);
 		}

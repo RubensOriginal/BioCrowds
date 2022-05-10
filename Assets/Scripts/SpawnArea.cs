@@ -32,8 +32,7 @@ public class SpawnArea : MonoBehaviour
         if (_meshRenderer == null)
             _meshRenderer = GetComponent<MeshRenderer>();
 
-        cycleCounter = 0.0f;
-        cycleReady = false;
+        ResetSpawner();
     }
 
     // Update is called once per frame
@@ -41,6 +40,12 @@ public class SpawnArea : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha9))
             Debug.Log(GetRandomPoint());
+    }
+
+    public void ResetSpawner()
+    {
+        cycleCounter = 0.0f;
+        cycleReady = false;
     }
 
     public void UpdateSpawnCounter(float dt)

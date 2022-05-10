@@ -430,5 +430,15 @@ namespace Biocrowds.Core
                 goalsList[goalsList.Count - 1].transform.position.z);
             return (Vector2.Distance(agentPos, goalPos) <= goalDistThreshold);
         }
+
+        public Vector3 GetFinalGoalPosition()
+        {
+            return goalsList[goalsList.Count - 1].transform.position;
+        }
+
+        public List<float> GetFinalGoalPositionAsList()
+        {
+            return goalsList[goalsList.Count - 1].transform.position.AsList();
+        }
     }
 }

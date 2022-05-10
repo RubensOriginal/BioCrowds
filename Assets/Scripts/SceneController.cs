@@ -27,12 +27,6 @@ public class SceneController : MonoBehaviour
     public bool _showSpawnAreas;
     public bool _showNavMeshCorners;
 
-    public NavMeshSurface surface;
-    public NavMeshData m_NavMesh;
-    public AsyncOperation m_Operation;
-    public NavMeshDataInstance m_Instance;
-    public List<NavMeshBuildSource> m_Sources = new List<NavMeshBuildSource>();
-
     private void Awake()
     {
         ShowCells = _showCells;
@@ -76,30 +70,22 @@ public class SceneController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1) && !initialized)
         {
-            Debug.Log("Loading World");
-
-            List<SpawnArea> _spawners = FindObjectsOfType<SpawnArea>().ToList();
-            foreach (SpawnArea s in _spawners)
-                s.ShowMesh(ShowSpawnAreas);
-
-            initialized = true;
-            world.LoadWorld();
+            LoadSimulationWorld();
         }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            var defaultBuildSettings = NavMesh.GetSettingsByID(0);
-            surface.BuildNavMesh();
-        }
-
     }
 
-    private void OnEnable()
+    public void LoadSimulationWorld()
     {
-        if (m_NavMesh == null)
-        {
-            Debug.Log("Creatin NavMesh Data");
-            m_NavMesh = new NavMeshData();
-            m_Instance = NavMesh.AddNavMeshData(m_NavMesh);
-        }
+        if (initialized)
+            world.ClearWorld();
+
+        Debug.Log("Loading World");
+
+        List<SpawnArea> _spawners = FindObjectsOfType<SpawnArea>().ToList();
+        foreach (SpawnArea s in _spawners)
+            s.ShowMesh(ShowSpawnAreas);
+
+        initialized = true;
+        world.LoadWorld();
     }
 }

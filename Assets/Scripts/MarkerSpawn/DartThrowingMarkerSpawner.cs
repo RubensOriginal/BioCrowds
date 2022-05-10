@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DartThrowingMarkerSpawner : MarkerSpawner
 {
-    public override IEnumerator CreateMarkers(List<Cell> cells, List<Auxin> auxins)
+    public override IEnumerator CreateMarkers(Transform _auxinsContainer, List<Cell> cells, List<Auxin> auxins)
     {
         _auxinsContainer = new GameObject("Markers").transform;
         _cellSize = cells[0].transform.localScale.x;
@@ -15,13 +15,13 @@ public class DartThrowingMarkerSpawner : MarkerSpawner
         // Generate a number of markers for each Cell
         for (int c = 0; c < cells.Count; c++)
         {
-            StartCoroutine(PopulateCell(cells[c], auxins, c));
+            StartCoroutine(PopulateCell(_auxinsContainer, cells[c], auxins, c));
         }
 
         yield break;
     }
 
-    private IEnumerator PopulateCell(Cell cell, List<Auxin> auxins, int cellIndex)
+    private IEnumerator PopulateCell(Transform _auxinsContainer, Cell cell, List<Auxin> auxins, int cellIndex)
     {
         float cellHalfSize = (_cellSize / 2.0f) * (1.0f - (MarkerRadius/2f));
 
