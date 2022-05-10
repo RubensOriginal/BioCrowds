@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using Biocrowds.Core;
 
 public class LevelEditorUIController : MonoBehaviour
 {
@@ -12,10 +13,14 @@ public class LevelEditorUIController : MonoBehaviour
     public CustomPointerHandler importOBJButton;
     public CustomPointerHandler createMarkersButton;
     public CustomPointerHandler saveSceneButton;
+    public CustomPointerHandler loadSceneButton;
+    public CustomPointerHandler loadSceneTestButton;
 
     [SerializeField] private TMP_Text errorMessage;
+    [SerializeField] private World simulationWorld;
     [SerializeField] private RuntimeOBJImporter objImporter;
     [SerializeField] private LevelExporter levelExporter;
+    [SerializeField] private LevelImporter levelImporter;
 
 
     // Start is called before the first frame update
@@ -26,6 +31,18 @@ public class LevelEditorUIController : MonoBehaviour
         importOBJButton.OnPointerDownEvent += ImportOBJButtonClicked;
         createMarkersButton.OnPointerDownEvent += CreateMarkersButton_OnPointerDownEvent;
         saveSceneButton.OnPointerDownEvent += SaveSceneButton_OnPointerDownEvent;
+        loadSceneButton.OnPointerDownEvent += LoadSceneButton_OnPointerDownEvent;
+        loadSceneTestButton.OnPointerDownEvent += LoadSceneTestButton_OnPointerDownEvent;
+    }
+
+    private void LoadSceneTestButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        levelImporter.ImportTestLevel(simulationWorld);
+    }
+
+    private void LoadSceneButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        throw new System.NotImplementedException();
     }
 
     private void SaveSceneButton_OnPointerDownEvent(PointerEventData obj)

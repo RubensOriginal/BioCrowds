@@ -502,5 +502,10 @@ namespace Biocrowds.Core
             foreach (Cell _c in Cells)
                 _c.ShowMesh(p_enable);
         }
+
+        public Terrain GetTerrain()
+        {
+            return _terrain;
+        }
     }
 }
