@@ -432,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000011549557636, guid: c1d6a8b56708a2a4b833bbbc88504078, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010125518806, guid: c1d6a8b56708a2a4b833bbbc88504078, type: 3}
       propertyPath: m_RootOrder
@@ -589,7 +589,7 @@ PrefabInstance:
     - target: {fileID: 3211918698737073736, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
@@ -635,7 +635,7 @@ PrefabInstance:
         type: 3}
       propertyPath: repeatingGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 1600797735}
+      objectReference: {fileID: 319556107}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: repeatingGoalList.Array.data[1]
@@ -665,7 +665,7 @@ PrefabInstance:
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 1600797735}
+      objectReference: {fileID: 319556107}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[1]
@@ -1164,7 +1164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000013283948280, guid: 17f4f253015b3c3448220062d29b90c8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012487660736, guid: 17f4f253015b3c3448220062d29b90c8, type: 3}
       propertyPath: m_RootOrder
@@ -1793,6 +1793,36 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &876951748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 876951749}
+  m_Layer: 0
+  m_Name: Agents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &876951749
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 876951748}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1627891576}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &893605738
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,7 +2201,7 @@ PrefabInstance:
     - target: {fileID: 3211918698737073736, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
@@ -2489,7 +2519,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000013283948280, guid: 17f4f253015b3c3448220062d29b90c8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000012487660736, guid: 17f4f253015b3c3448220062d29b90c8, type: 3}
       propertyPath: m_RootOrder
@@ -2543,6 +2573,36 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1208691432}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1288776334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1288776335}
+  m_Layer: 0
+  m_Name: Auxins
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1288776335
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288776334}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1627891576}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1296330534
 GameObject:
   m_ObjectHideFlags: 0
@@ -2654,7 +2714,7 @@ PrefabInstance:
     - target: {fileID: 3211918698737073736, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
@@ -2700,7 +2760,7 @@ PrefabInstance:
         type: 3}
       propertyPath: repeatingGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 319556107}
+      objectReference: {fileID: 1600797735}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: repeatingGoalList.Array.data[1]
@@ -2730,12 +2790,12 @@ PrefabInstance:
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 319556107}
+      objectReference: {fileID: 1600797735}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[1]
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 319556107}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[2]
@@ -2839,7 +2899,7 @@ PrefabInstance:
     - target: {fileID: 3211918698737073736, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
@@ -2885,7 +2945,7 @@ PrefabInstance:
         type: 3}
       propertyPath: repeatingGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 319556107}
+      objectReference: {fileID: 1600797735}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: repeatingGoalList.Array.data[1]
@@ -2915,7 +2975,7 @@ PrefabInstance:
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 319556107}
+      objectReference: {fileID: 1600797735}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[1]
@@ -3091,7 +3151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1000011549557636, guid: c1d6a8b56708a2a4b833bbbc88504078, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4000010125518806, guid: c1d6a8b56708a2a4b833bbbc88504078, type: 3}
       propertyPath: m_RootOrder
@@ -3202,6 +3262,9 @@ Transform:
   - {fileID: 1184794663}
   - {fileID: 204754538}
   - {fileID: 404805867}
+  - {fileID: 876951749}
+  - {fileID: 2140859389}
+  - {fileID: 1288776335}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3332,6 +3395,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}
+      propertyPath: auxinPrefab
+      value: 
+      objectReference: {fileID: 114037783865560150, guid: a4cbdac8590e952489e5ec8974b65f64,
+        type: 3}
+    - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
       propertyPath: AGENT_RADIUS
       value: 0.7
       objectReference: {fileID: 0}
@@ -3360,6 +3429,21 @@ PrefabInstance:
       propertyPath: _goalContainer
       value: 
       objectReference: {fileID: 1956958054}
+    - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: cellsContainer
+      value: 
+      objectReference: {fileID: 2140859389}
+    - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: agentsContainer
+      value: 
+      objectReference: {fileID: 876951749}
+    - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: auxinsContainer
+      value: 
+      objectReference: {fileID: 1288776335}
     - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}
       propertyPath: markerSpawnMethod
@@ -3516,7 +3600,7 @@ PrefabInstance:
     - target: {fileID: 3211918698737073736, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
@@ -3994,7 +4078,7 @@ PrefabInstance:
     - target: {fileID: 3211918698737073736, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
@@ -4040,7 +4124,7 @@ PrefabInstance:
         type: 3}
       propertyPath: repeatingGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 1600797735}
+      objectReference: {fileID: 319556107}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: repeatingGoalList.Array.data[1]
@@ -4070,7 +4154,7 @@ PrefabInstance:
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[0]
       value: 
-      objectReference: {fileID: 1600797735}
+      objectReference: {fileID: 319556107}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
       propertyPath: initialAgentsGoalList.Array.data[1]
@@ -4382,4 +4466,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   world: {fileID: 1639241294}
-  objImporter: {fileID: 0}
+  objImporter: {fileID: 1632854838}
+--- !u!1 &2140859388
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2140859389}
+  m_Layer: 0
+  m_Name: Cells
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2140859389
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140859388}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1627891576}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -16,6 +16,7 @@ namespace Biocrowds.Core
         private MeshRenderer _meshRenderer;
 
         //is auxin taken?
+        [SerializeField]
         private bool _isTaken = false;
         public bool IsTaken
         {
@@ -45,6 +46,7 @@ namespace Biocrowds.Core
         }
 
         //agent who took this auxin
+        [SerializeField]
         private Agent _agent;
         public Agent Agent
         {
@@ -53,6 +55,7 @@ namespace Biocrowds.Core
         }
 
         //cell who has this auxin
+        [SerializeField]
         private Cell _cell;
         public Cell Cell
         {

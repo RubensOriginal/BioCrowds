@@ -314,7 +314,6 @@ namespace Biocrowds.Core
 
             //get all auxins on my cell
             List<Auxin> cellAuxins = _currentCell.Auxins;
-
             //iterate all cell auxins to check distance between auxins and agent
             for (int i = 0; i < cellAuxins.Count; i++)
             {
@@ -322,11 +321,11 @@ namespace Biocrowds.Core
                 float distanceSqr = (transform.position - cellAuxins[i].Position).sqrMagnitude;
                 if (distanceSqr < cellAuxins[i].MinDistance && distanceSqr <= agentRadius * agentRadius)
                 {
+                    //Debug.Log("ismine" + transform.position.ToString() + " " + cellAuxins[i].Position.ToString() + distanceSqr);
                     //take the auxin!
                     //if this auxin already was taken, need to remove it from the agent who had it
                     if (cellAuxins[i].IsTaken)
                         cellAuxins[i].Agent.Auxins.Remove(cellAuxins[i]);
-
                     //auxin is taken
                     cellAuxins[i].IsTaken = true;
 

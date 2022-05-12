@@ -33,8 +33,9 @@ public class LevelImporter : MonoBehaviour
     private void LoadContent(string text)
     {
         JObject content = JObject.Parse(text);
-
+        List<Transform> _goals = new List<Transform>();
         // Terrain - Only 1 terrain for now
+        world.CreateCells();
         var _terrain = world.GetTerrain();
         var _t = content["terrains"][0];
         _terrain.transform.FromJObject(_t["transform"]);
@@ -49,6 +50,7 @@ public class LevelImporter : MonoBehaviour
             Vector3 _goalPos = Vector3Extensions.FromJObject((_goalData[i]["position"]));
             Transform newGoal = Instantiate(world.goalPrefab, _goalPos, Quaternion.identity, world.goalContainer);
             newGoal.name = "Goal_" + i.ToString();
+            _goals.Add(newGoal);
         }
 
         // Obstacles
@@ -67,6 +69,7 @@ public class LevelImporter : MonoBehaviour
             Transform newSpawnArea = Instantiate(world.spawnAreaPrefab, world.spawnAreaContainer);
             newSpawnArea.name = "SpawnArea_" + i.ToString();
             newSpawnArea.FromJObject(_spawnAreaData[i]["transform"]);
+            world.spawnAreas.Add(newSpawnArea.GetComponent<SpawnArea>());
         }
 
         // LoadedModels
@@ -76,12 +79,48 @@ public class LevelImporter : MonoBehaviour
             LoadedOBJData newSpawnAreaData = objImporter.LoadOBJFromString(_loadedModelsData[i]["data"].ToObject<string>());
             newSpawnAreaData.name = "LoadedModel_" + i.ToString();
             newSpawnAreaData.transform.FromJObject(_loadedModelsData[i]["transform"]);
-            //Transform newSpawnArea = Instantiate(world.spawnAreaPrefab, world.spawnAreaContainer);
-            //newSpawnArea.name = "SpawnArea_" + i.ToString();
-            //newSpawnArea.FromJObject(_loadedModelsData[i]["transform"]);
         }
 
+        // Agents
+        var _agentsData = content["agents"] as JArray;
+        for (int i = 0; i < _agentsData.Count; i++)
+        {
+            Transform newAgentT = Instantiate(world.GetRandomAgentPrefab(), world.agentsContainer);
+            //newAgentT.name = "Agent [" + world.GetNewAgentID() + "]";
+            newAgentT.position = Vector3Extensions.FromJObject((_agentsData[i]["position"]));
+            Agent newAgent = newAgentT.GetComponent<Agent>();
+            newAgent.goalsList = new List<GameObject>();
+            var _goalList = _agentsData[i]["goal_list"] as JArray;
+            for (int j = 0; j < _goalList.Count; j++)
+            {
+                newAgent.goalsList.Add(_goals[_goalList[j].ToObject<int>()].gameObject);
+                newAgent.goalsWaitList.Add(0f);
+            }
+            world.PrepareAgent(newAgent);
+            newAgent.Goal = newAgent.goalsList[0];
+            newAgent.removeWhenGoalReached = _agentsData[i]["remove_goal_reach"].ToObject<bool>();
 
+            //newAgent.World = world;
+            //world.agents.Add(newAgent);
+        }
+        // Auxins
+        var _auxinsData = content["auxins"] as JArray;
+        for (int i = 0; i < _auxinsData.Count; i++)
+        {
+            Auxin newAuxin = Instantiate(world.auxinPrefab, world.auxinsContainer);
+            newAuxin.name = (_auxinsData[i]["name"].ToObject<string>());
+            newAuxin.transform.position = Vector3Extensions.FromJObject((_auxinsData[i]["position"]));
+            string index = newAuxin.name.Split('[')[1].Split(']')[0];
+            newAuxin.Cell = world.Cells[int.Parse(index)];
+            newAuxin.Cell.Auxins.Add(newAuxin);
+            newAuxin.Position = newAuxin.transform.position;
+            //world.Cells[int.Parse(index)].Auxins.Add(newAuxin);
+
+
+        }
+
+        world.CreateNavMesh();
+        world._isReady = true;
 
         /*
         output.Add("goals", _goalsArray);

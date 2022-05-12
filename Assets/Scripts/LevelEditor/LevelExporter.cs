@@ -46,12 +46,14 @@ public class LevelExporter : MonoBehaviour
             for (int j = 0; j < _agents[i].goalsList.Count; j++)
                 _goalIndexList.Add(_goals.IndexOf(_agents[i].goalsList[j]));
             _a.Add("goal_list", JToken.FromObject(_goalIndexList));
+            _a.Add("remove_goal_reach", JToken.FromObject(_agents[i].removeWhenGoalReached));
             _agentsArray.Add(_a);
         }
         for (int i = 0; i < _auxins.Count; i++) // Auxins/Markers
         {
             JObject _a = new JObject();
             _a.Add("position", JArray.FromObject(_auxins[i].transform.position.AsList()));
+            _a.Add("name", _auxins[i].name);
             _auxinsArray.Add(_a);
         }
         for (int i = 0; i < _goals.Count; i++) // Goals
