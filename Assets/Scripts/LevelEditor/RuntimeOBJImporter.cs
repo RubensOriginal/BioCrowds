@@ -72,6 +72,18 @@ public class RuntimeOBJImporter : MonoBehaviour
 			loadedObject.transform.position = new Vector3(15f, 0, 15f);
 		}
 	}
+
+    private LoadedOBJData LoadFromString(string data)
+    {
+        var textStream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+        loadedObject = new OBJLoader().Load(textStream);
+
+        var newObjData = loadedObject.AddComponent<LoadedOBJData>();
+        newObjData.objData = data;
+        loadedModels.Add(newObjData);
+        loadedObject.transform.SetParent(loadedModelsContainer);
+        return newObjData;
+    }
 #endif
 
     public void Awake()
@@ -86,6 +98,15 @@ public class RuntimeOBJImporter : MonoBehaviour
         UploadFile(gameObject.name, "OnFileUpload", ".obj", false);
         #else
         StartCoroutine(ShowLoadDialogCoroutine());
+        #endif
+    }
+
+    public LoadedOBJData LoadOBJFromString(string data)
+    {
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        UploadFile(gameObject.name, "OnFileUpload", ".obj", false);
+        #else
+        return LoadFromString(data);
         #endif
     }
 }

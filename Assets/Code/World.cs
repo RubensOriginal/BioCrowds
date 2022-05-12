@@ -98,6 +98,13 @@ namespace Biocrowds.Core
         [SerializeField]
         private MarkerSpawner _markerSpawner = null;
 
+        [Header ("Other Info")]
+        public Transform goalContainer;
+        public Transform goalPrefab;
+        public Transform obstacleContainer;
+        public Transform obstaclePrefab;
+        public Transform spawnAreaContainer;
+        public Transform spawnAreaPrefab;
 
         //max auxins on the ground
         private bool _isReady;
@@ -507,5 +514,6 @@ namespace Biocrowds.Core
         {
             return _terrain;
         }
+
     }
 }
