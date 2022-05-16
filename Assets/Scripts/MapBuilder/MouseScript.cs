@@ -15,6 +15,7 @@ public class MouseScript : MonoBehaviour
     public MeshRenderer mr;
 
     public ManagerScript ms;
+    public ObjectEditor oe;
 
     private Vector3 mousePos;
     private bool colliding;
@@ -64,6 +65,12 @@ public class MouseScript : MonoBehaviour
                     if (hit.collider.gameObject.layer == 9)
                         Destroy(hit.collider.gameObject);
 
+                } else if (manipulatorOption == LevelManupulator.Edit)
+                {
+                    if (hit.collider.gameObject.layer == 9)
+                        oe.selectObject(hit.collider.gameObject);
+                    else
+                        oe.unselectObject();
                 }
 
             }
@@ -79,6 +86,7 @@ public class MouseScript : MonoBehaviour
                 newObject = GameObject.Instantiate(ms.spawnerPrefab);
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
+                newObject.tag = "Spawner";
 
                 Object spawnerObject = newObject.AddComponent<Object>();
 
@@ -90,6 +98,7 @@ public class MouseScript : MonoBehaviour
                 newObject = GameObject.Instantiate(ms.goalPrefab);
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
+                newObject.tag = "Goal";
 
                 Object goalObject = newObject.AddComponent<Object>();
 
@@ -99,5 +108,10 @@ public class MouseScript : MonoBehaviour
                 break;
 
         }
+    }
+
+    void EditObject(GameObject editObject)
+    {
+
     }
 }

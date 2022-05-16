@@ -25,8 +25,12 @@ public class TextEditorMode : MonoBehaviour
                 textMeshPro.SetText("Manipulation Tool: Create \n Item: Spawner");
             else if (ms.itemOption == MouseScript.ItemList.Goal)
                 textMeshPro.SetText("Manipulation Tool: Create \n Item: Goal");
-        } 
+        }
         else if (ms.manipulatorOption == MouseScript.LevelManupulator.Destroy)
             textMeshPro.SetText("Manipulation Tool: Destroy");
+        else if (ms.manipulatorOption == MouseScript.LevelManupulator.Edit)
+            textMeshPro.SetText("Manipulation Tool: Edit");
+        else if (ms.manipulatorOption == MouseScript.LevelManupulator.Move)
+            textMeshPro.SetText("Manipulation Tool: Move");
     }
 }

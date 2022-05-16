@@ -7,6 +7,9 @@ public class ManagerScript : MonoBehaviour
     public GameObject spawnerPrefab;
     public GameObject goalPrefab;
 
+    public Material spawnerMaterial;
+    public Material spawnerMaterialSelected;
+
     public MeshFilter mouseObject;
 
     public MouseScript user;
@@ -58,5 +61,15 @@ public class ManagerScript : MonoBehaviour
     public void ChooseDestroy()
     {
         user.manipulatorOption = MouseScript.LevelManupulator.Destroy;
+    }
+
+    public void ChooseEdit()
+    {
+        user.manipulatorOption = MouseScript.LevelManupulator.Edit;
+    }
+
+    public void ChooseMove()
+    {
+        user.manipulatorOption = MouseScript.LevelManupulator.Move;
     }
 }
