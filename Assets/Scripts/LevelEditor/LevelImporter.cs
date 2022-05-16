@@ -5,6 +5,12 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Text;
+using System.Collections;
+using System.Runtime.InteropServices;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using SFB;
 
 public class LevelImporter : MonoBehaviour
 {
@@ -13,10 +19,25 @@ public class LevelImporter : MonoBehaviour
     [SerializeField]
     private RuntimeOBJImporter objImporter;
 
+    public ExtensionFilter[] extensions;
+
+
+    private void Start()
+    {
+        extensions = new[] {
+            new ExtensionFilter("JSON Files", "json"),
+        };
+    }
+
     public void ImportLevel(World _world, RuntimeOBJImporter _objLoader)
     {
         world = _world;
         objImporter = _objLoader;
+#if UNITY_WEBGL && !UNITY_EDITOR
+        UploadFile(gameObject.name, "OnFileUpload", ".json", false);
+#else
+        StartCoroutine(DesktopImportCoroutine());
+#endif
     }
 
     public void ImportTestLevel(World _world, RuntimeOBJImporter _objLoader)
@@ -29,6 +50,45 @@ public class LevelImporter : MonoBehaviour
         reader.Close();
         LoadContent(text);
     }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    
+	// WebGL
+    [DllImport("__Internal")]
+    private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
+
+    // Called from browser
+    public void OnFileUpload(string url) {
+        StartCoroutine(WebGLImportCoroutine(url));
+    }
+
+	private IEnumerator WebGLImportCoroutine(string url)
+    {
+        var loader = new WWW(url);
+        yield return loader;
+        LoadContent(loader.text);
+        yield break;
+    }
+#else
+    IEnumerator DesktopImportCoroutine()
+    {
+        yield return new WaitForEndOfFrame(); // To re-enable button color
+        var paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
+        if (paths.Length > 0)
+        {
+            for (int i = 0; i < paths.Length; i++)
+                Debug.Log("Now Importing: " + " " + paths[0]);
+
+            using var fs = new FileStream(paths[0], FileMode.Open);
+            string content = new StreamReader(fs).ReadToEnd();
+            Debug.Log(content);
+            LoadContent(content);
+        }
+        yield return null;
+
+    }
+#endif
+
 
     private void LoadContent(string text)
     {

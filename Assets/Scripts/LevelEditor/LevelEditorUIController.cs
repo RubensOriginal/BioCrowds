@@ -42,7 +42,7 @@ public class LevelEditorUIController : MonoBehaviour
 
     private void LoadSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
-        throw new System.NotImplementedException();
+        levelImporter.ImportLevel(simulationWorld, objImporter);
     }
 
     private void SaveSceneButton_OnPointerDownEvent(PointerEventData obj)

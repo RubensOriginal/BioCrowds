@@ -5,11 +5,49 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using SFB;
+using System.Collections;
+using System.Text;
+using System.Runtime.InteropServices;
+
 
 public class LevelExporter : MonoBehaviour
 {
-
     public void ExportLevel(RuntimeOBJImporter objImporter)
+    {
+        string content = GenerateFileContent(objImporter);
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        var bytes = Encoding.UTF8.GetBytes(content);
+        DownloadFile(gameObject.name, "OnFileDownload", "SavedScene.json", bytes, bytes.Length);
+#else
+        StartCoroutine(DesktopExportCoroutine(content));
+#endif
+    }
+
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [DllImport("__Internal")]
+    private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
+
+    // Called from browser
+    public void OnFileDownload() {
+        Debug.Log("File Successfully Downloaded");
+    }
+#else
+    IEnumerator DesktopExportCoroutine(string content)
+    {
+        yield return new WaitForEndOfFrame(); // To re-enable button color
+        var path = StandaloneFileBrowser.SaveFilePanel("Title", "", "SavedScene", "json");
+        if (!string.IsNullOrEmpty(path))
+        {
+            File.WriteAllText(path, content);
+        }
+    }
+#endif
+
+
+    private string GenerateFileContent(RuntimeOBJImporter objImporter)
     {
         JObject output = new JObject();
         JArray _terrainsArray = new JArray();
@@ -38,7 +76,7 @@ public class LevelExporter : MonoBehaviour
             _t.Add("terrain_size", JArray.FromObject(_terrains[i].terrainData.size.AsList()));
             _terrainsArray.Add(_t);
         }
-        for (int i = 0; i < _agents.Count; i ++) // Agents
+        for (int i = 0; i < _agents.Count; i++) // Agents
         {
             JObject _a = new JObject();
             _a.Add("position", JArray.FromObject(_agents[i].transform.position.AsList()));
@@ -89,9 +127,7 @@ public class LevelExporter : MonoBehaviour
         output.Add("loaded_models", _loadedModelsArray);
         output.Add("agents", _agentsArray);
         output.Add("auxins", _auxinsArray);
-        var fileFinalName = "test";
-        StreamWriter writer = new StreamWriter("Assets/Resources/SavedLevels/" + fileFinalName + ".json", false);
-        writer.Write(JsonConvert.SerializeObject(output, Formatting.Indented));
-        writer.Close();
+
+        return JsonConvert.SerializeObject(output, Formatting.Indented);
     }
 }
