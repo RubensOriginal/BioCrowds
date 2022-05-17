@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using System;
 using UnityEngine;
 
 public class ObjectEditor : MonoBehaviour {
@@ -27,5 +29,13 @@ public class ObjectEditor : MonoBehaviour {
     {
         this.gameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterial;
         isSelected = false;
+    }
+
+    public void updateNumberAgents(string numberAgents)
+    {
+        if (Int32.TryParse(numberAgents, out int numberAgentsInt))
+            gameObject.GetComponent<SpawnArea>().initialNumberOfAgents = numberAgentsInt;
+
+        
     }
 }
