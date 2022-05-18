@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ManagerScript : MonoBehaviour
 {
@@ -13,6 +13,8 @@ public class ManagerScript : MonoBehaviour
     public MeshFilter mouseObject;
 
     public MouseScript user;
+
+    public TMP_InputField numberAgentsInputField;
 
     private MapBuilder mapBuider;
 

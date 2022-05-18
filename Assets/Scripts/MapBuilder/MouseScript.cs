@@ -68,9 +68,9 @@ public class MouseScript : MonoBehaviour
                 } else if (manipulatorOption == LevelManupulator.Edit)
                 {
                     if (hit.collider.gameObject.layer == 9)
-                        oe.selectObject(hit.collider.gameObject);
+                        oe.SelectObject(hit.collider.gameObject);
                     else
-                        oe.unselectObject();
+                        oe.UnselectObject();
                 }
 
             }

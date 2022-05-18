@@ -13,29 +13,37 @@ public class ObjectEditor : MonoBehaviour {
 
     private bool isSelected = false;
 
-    public void selectObject(GameObject gameObject)
+    public void Awake()
+    {
+        gameObject = new GameObject();
+    }
+
+    public void SelectObject(GameObject gameObject)
     {
         if (gameObject.tag == "Spawner")
         {
             if (isSelected)
-                unselectObject();
+                UnselectObject();
             this.gameObject = gameObject;
             this.gameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterialSelected;
             isSelected = true;
+            ms.numberAgentsInputField.text = gameObject.GetComponent<SpawnArea>().initialNumberOfAgents.ToString();
         }
     }
 
-    public void unselectObject()
+    public void UnselectObject()
     {
         this.gameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterial;
         isSelected = false;
     }
 
-    public void updateNumberAgents(string numberAgents)
+    public void UpdateNumberAgents()
     {
-        if (Int32.TryParse(numberAgents, out int numberAgentsInt))
-            gameObject.GetComponent<SpawnArea>().initialNumberOfAgents = numberAgentsInt;
+        Debug.Log("N Agents: " + ms.numberAgentsInputField.text);
+        if (ms.numberAgentsInputField.text == "")
+            if (Int32.TryParse(ms.numberAgentsInputField.text, out int numberAgentsInt))
+                gameObject.GetComponent<SpawnArea>().initialNumberOfAgents = numberAgentsInt;
 
-        
+
     }
 }
