@@ -32,5 +32,7 @@ public class TextEditorMode : MonoBehaviour
             textMeshPro.SetText("Manipulation Tool: Edit");
         else if (ms.manipulatorOption == MouseScript.LevelManupulator.Move)
             textMeshPro.SetText("Manipulation Tool: Move");
+        else if (ms.manipulatorOption == MouseScript.LevelManupulator.Link)
+            textMeshPro.SetText("Manipulation Tool: Link");
     }
 }

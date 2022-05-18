@@ -4,7 +4,7 @@ using UnityEngine;
 public class MouseScript : MonoBehaviour
 {
 
-    public enum LevelManupulator {  Create, Move, Edit, Destroy };
+    public enum LevelManupulator {  Create, Move, Edit, Destroy, Link };
     public enum ItemList { Spawner, Goal };
 
     [HideInInspector]
@@ -71,6 +71,10 @@ public class MouseScript : MonoBehaviour
                         oe.SelectObject(hit.collider.gameObject);
                     else
                         oe.UnselectObject();
+                } else if (manipulatorOption == LevelManupulator.Link)
+                {
+                    if (hit.collider.gameObject.layer == 9 || hit.collider.gameObject.tag == "Goal")
+                        oe.LinkGoalToSpawner(hit.collider.gameObject);
                 }
 
             }
@@ -108,10 +112,5 @@ public class MouseScript : MonoBehaviour
                 break;
 
         }
-    }
-
-    void EditObject(GameObject editObject)
-    {
-
     }
 }

@@ -4,16 +4,20 @@ using TMPro;
 
 public class ManagerScript : MonoBehaviour
 {
+
+    [Header("Prefabs")]
     public GameObject spawnerPrefab;
     public GameObject goalPrefab;
 
+    [Header("Materials")]
     public Material spawnerMaterial;
     public Material spawnerMaterialSelected;
+    public Material goalMaterial;
+    public Material goalMaterialSelected;
 
+    [Header("Other Gameobjects")]
     public MeshFilter mouseObject;
-
     public MouseScript user;
-
     public TMP_InputField numberAgentsInputField;
 
     private MapBuilder mapBuider;
@@ -73,5 +77,13 @@ public class ManagerScript : MonoBehaviour
     public void ChooseMove()
     {
         user.manipulatorOption = MouseScript.LevelManupulator.Move;
+    }
+
+    public void ChooseLink()
+    {
+        if (user.manipulatorOption == MouseScript.LevelManupulator.Edit)
+            user.manipulatorOption = MouseScript.LevelManupulator.Link;
+        else if (user.manipulatorOption == MouseScript.LevelManupulator.Link)
+            user.manipulatorOption = MouseScript.LevelManupulator.Edit;
     }
 }
