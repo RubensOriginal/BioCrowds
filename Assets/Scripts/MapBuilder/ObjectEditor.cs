@@ -36,16 +36,17 @@ public class ObjectEditor : MonoBehaviour {
     public void UnselectObject()
     {
         this.gameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterial;
-        this.gameObject.GetComponent<SpawnArea>().initialAgentsGoalList[0].GetComponent<MeshRenderer>().material = ms.goalMaterial;
+        if (gameObject.GetComponent<SpawnArea>().initialAgentsGoalList.Count != 0)
+            this.gameObject.GetComponent<SpawnArea>().initialAgentsGoalList[0].GetComponent<MeshRenderer>().material = ms.goalMaterial;
         isSelected = false;
     }
 
     public void UpdateNumberAgents()
     {
-        Debug.Log("N Agents: " + ms.numberAgentsInputField.text);
-        if (ms.numberAgentsInputField.text == "" && (ms.user.manipulatorOption == MouseScript.LevelManupulator.Edit || ms.user.manipulatorOption == MouseScript.LevelManupulator.Link))
+        if (ms.numberAgentsInputField.text != "" && (ms.user.manipulatorOption == MouseScript.LevelManupulator.Edit || ms.user.manipulatorOption == MouseScript.LevelManupulator.Link))
             if (Int32.TryParse(ms.numberAgentsInputField.text, out int numberAgentsInt))
                 gameObject.GetComponent<SpawnArea>().initialNumberOfAgents = numberAgentsInt;
+            
     }
 
     public void LinkGoalToSpawner(GameObject gameObject)

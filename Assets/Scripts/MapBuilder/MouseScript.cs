@@ -22,10 +22,13 @@ public class MouseScript : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
 
+    private MoveObject mo;
+
     // Start is called before the first frame update
     void Start()
     {
         mr = GetComponent<MeshRenderer>();
+        mo = GetComponent<MoveObject>();
     }
 
     // Update is called once per frame
@@ -73,8 +76,17 @@ public class MouseScript : MonoBehaviour
                         oe.UnselectObject();
                 } else if (manipulatorOption == LevelManupulator.Link)
                 {
-                    if (hit.collider.gameObject.layer == 9 || hit.collider.gameObject.tag == "Goal")
+                    if (hit.collider.gameObject.layer == 9 || hit.collider.gameObject.CompareTag("Goal"))
                         oe.LinkGoalToSpawner(hit.collider.gameObject);
+                } else if (manipulatorOption == LevelManupulator.Move)
+                {
+                    if (hit.collider.gameObject.layer == 9)
+                    {
+                        if (!mo.isSelected)
+                            mo.SelectObject(hit.collider.gameObject);
+                        else
+                            mo.isSelected = false;
+                    }
                 }
 
             }
