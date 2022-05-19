@@ -202,6 +202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneController: {fileID: 341301015}
+  eventSystem: {fileID: 1776557174}
   importOBJButton: {fileID: 893605743}
   createMarkersButton: {fileID: 441161546}
   saveSceneButton: {fileID: 1702562538}
@@ -337,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712fd809678ff184da33f026b2dd85e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!114 &266975425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -935,6 +937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712fd809678ff184da33f026b2dd85e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!114 &424868367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1069,6 +1072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712fd809678ff184da33f026b2dd85e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!114 &441161547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1860,7 +1864,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 19.999878, y: -9.9999695}
+  m_AnchoredPosition: {x: 19.999878, y: -10}
   m_SizeDelta: {x: 200, y: 60}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &893605740
@@ -1957,6 +1961,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712fd809678ff184da33f026b2dd85e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!1 &950797122
 GameObject:
   m_ObjectHideFlags: 0
@@ -2819,6 +2824,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1340744278}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1437298036 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1639241292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 490a8d75173c1224aaf7770e9b580788, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1447900373
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3426,6 +3443,11 @@ PrefabInstance:
       objectReference: {fileID: 1956958054}
     - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}
+      propertyPath: prefabManager
+      value: 
+      objectReference: {fileID: 1437298036}
+    - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
       propertyPath: _goalContainer
       value: 
       objectReference: {fileID: 1956958054}
@@ -3474,6 +3496,16 @@ PrefabInstance:
       propertyPath: GOAL_DISTANCE_THRESHOLD
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 223156698650332967, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 495330975046237097, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1604022374861079138, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}
       propertyPath: auxinPrefab
@@ -3500,6 +3532,51 @@ PrefabInstance:
       propertyPath: MarkerRadius
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: goalContainer
+      value: 
+      objectReference: {fileID: 1956958054}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: cellPrefabType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: cellsContainer
+      value: 
+      objectReference: {fileID: 2140859389}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: agentsContainer
+      value: 
+      objectReference: {fileID: 876951749}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: auxinPrefabType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: auxinsContainer
+      value: 
+      objectReference: {fileID: 1288776335}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: agentsPrefabType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: obstacleContainer
+      value: 
+      objectReference: {fileID: 579093713}
+    - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
+        type: 3}
+      propertyPath: spawnAreaContainer
+      value: 
+      objectReference: {fileID: 1184794663}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d322bc9d9d73524b9a1ca068bbf97c7, type: 3}
 --- !u!4 &1639241293 stripped
@@ -3932,6 +4009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712fd809678ff184da33f026b2dd85e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!1 &1776557172
 GameObject:
   m_ObjectHideFlags: 0

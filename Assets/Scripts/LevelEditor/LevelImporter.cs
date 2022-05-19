@@ -16,6 +16,7 @@ public class LevelImporter : MonoBehaviour
 {
     [SerializeField]
     private World world;
+    private SimulationPrefabManager prefabManager;
     [SerializeField]
     private RuntimeOBJImporter objImporter;
 
@@ -32,6 +33,7 @@ public class LevelImporter : MonoBehaviour
     public void ImportLevel(World _world, RuntimeOBJImporter _objLoader)
     {
         world = _world;
+        prefabManager = _world.prefabManager;
         objImporter = _objLoader;
 #if UNITY_WEBGL && !UNITY_EDITOR
         UploadFile(gameObject.name, "OnFileUpload", ".json", false);
@@ -43,6 +45,7 @@ public class LevelImporter : MonoBehaviour
     public void ImportTestLevel(World _world, RuntimeOBJImporter _objLoader)
     {
         world = _world;
+        prefabManager = _world.prefabManager;
         objImporter = _objLoader;
         var fileFinalName = "test";
         StreamReader reader = new StreamReader("Assets/Resources/SavedLevels/" + fileFinalName + ".json", false);
@@ -108,27 +111,27 @@ public class LevelImporter : MonoBehaviour
         for (int i = 0; i < _goalData.Count; i++)
         {
             Vector3 _goalPos = Vector3Extensions.FromJObject((_goalData[i]["position"]));
-            Transform newGoal = Instantiate(world.goalPrefab, _goalPos, Quaternion.identity, world.goalContainer);
+            GameObject newGoal = Instantiate(prefabManager.GetGoalPrefab(), _goalPos, Quaternion.identity, prefabManager.goalContainer);
             newGoal.name = "Goal_" + i.ToString();
-            _goals.Add(newGoal);
+            _goals.Add(newGoal.transform);
         }
 
         // Obstacles
         var _obstacleData = content["obstacles"] as JArray;
         for (int i = 0; i < _goalData.Count; i++)
         {
-            Transform newObstacle = Instantiate(world.obstaclePrefab, world.obstacleContainer);
+            GameObject newObstacle = Instantiate(prefabManager.GetObstaclePrefab(), prefabManager.obstacleContainer);
             newObstacle.name = "Obstacle_" + i.ToString();
-            newObstacle.FromJObject(_obstacleData[i]["transform"]);
+            newObstacle.transform.FromJObject(_obstacleData[i]["transform"]);
         }
 
         // SpawnArea
         var _spawnAreaData = content["spawnAreas"] as JArray;
         for (int i = 0; i < _spawnAreaData.Count; i++)
         {
-            Transform newSpawnArea = Instantiate(world.spawnAreaPrefab, world.spawnAreaContainer);
+            GameObject newSpawnArea = Instantiate(prefabManager.GetSpawnAreaPrefab(), prefabManager.spawnAreaContainer);
             newSpawnArea.name = "SpawnArea_" + i.ToString();
-            newSpawnArea.FromJObject(_spawnAreaData[i]["transform"]);
+            newSpawnArea.transform.FromJObject(_spawnAreaData[i]["transform"]);
             world.spawnAreas.Add(newSpawnArea.GetComponent<SpawnArea>());
         }
 
@@ -145,10 +148,10 @@ public class LevelImporter : MonoBehaviour
         var _agentsData = content["agents"] as JArray;
         for (int i = 0; i < _agentsData.Count; i++)
         {
-            Transform newAgentT = Instantiate(world.GetRandomAgentPrefab(), world.agentsContainer);
+            GameObject newAgentGO = Instantiate(prefabManager.GetAgentPrefab(), prefabManager.agentsContainer);
             //newAgentT.name = "Agent [" + world.GetNewAgentID() + "]";
-            newAgentT.position = Vector3Extensions.FromJObject((_agentsData[i]["position"]));
-            Agent newAgent = newAgentT.GetComponent<Agent>();
+            newAgentGO.transform.position = Vector3Extensions.FromJObject((_agentsData[i]["position"]));
+            Agent newAgent = newAgentGO.GetComponent<Agent>();
             newAgent.goalsList = new List<GameObject>();
             var _goalList = _agentsData[i]["goal_list"] as JArray;
             for (int j = 0; j < _goalList.Count; j++)
@@ -167,13 +170,15 @@ public class LevelImporter : MonoBehaviour
         var _auxinsData = content["auxins"] as JArray;
         for (int i = 0; i < _auxinsData.Count; i++)
         {
-            Auxin newAuxin = Instantiate(world.auxinPrefab, world.auxinsContainer);
+            GameObject newAuxin = Instantiate(prefabManager.GetAuxinPrefab(), prefabManager.auxinsContainer);
+            Auxin _auxin = newAuxin.GetComponent<Auxin>();
+
             newAuxin.name = (_auxinsData[i]["name"].ToObject<string>());
             newAuxin.transform.position = Vector3Extensions.FromJObject((_auxinsData[i]["position"]));
             string index = newAuxin.name.Split('[')[1].Split(']')[0];
-            newAuxin.Cell = world.Cells[int.Parse(index)];
-            newAuxin.Cell.Auxins.Add(newAuxin);
-            newAuxin.Position = newAuxin.transform.position;
+            _auxin.Cell = world.Cells[int.Parse(index)];
+            _auxin.Cell.Auxins.Add(_auxin);
+            _auxin.Position = newAuxin.transform.position;
             //world.Cells[int.Parse(index)].Auxins.Add(newAuxin);
 
 

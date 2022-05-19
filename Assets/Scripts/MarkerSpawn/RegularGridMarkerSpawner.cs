@@ -6,20 +6,20 @@ using UnityEngine.AI;
 
 public class RegularGridMarkerSpawner : MarkerSpawner
 {
-    public override IEnumerator CreateMarkers(Transform _auxinsContainer, List<Cell> cells, List<Auxin> auxins)
+    public override IEnumerator CreateMarkers(GameObject _auxingPrefab, Transform _auxinsContainer, List<Cell> cells, List<Auxin> auxins)
     {
         _cellSize = cells[0].transform.localScale.x;
 
         // Generate a number of markers for each Cell
         for (int c = 0; c < cells.Count; c++)
         {
-            StartCoroutine(PopulateCell(_auxinsContainer, cells[c], auxins, c));
+            StartCoroutine(PopulateCell(_auxingPrefab, _auxinsContainer, cells[c], auxins, c));
         }
 
         yield break;
     }
 
-    private IEnumerator PopulateCell(Transform _auxinsContainer, Cell cell, List<Auxin> auxins, int cellIndex)
+    private IEnumerator PopulateCell(GameObject _auxingPrefab, Transform _auxinsContainer, Cell cell, List<Auxin> auxins, int cellIndex)
     {
         var bounds = new Bounds(cell.transform.position, Vector3.one * (_cellSize - MarkerRadius));
         var floatCorrection = MarkerRadius / 4f;
@@ -35,15 +35,17 @@ public class RegularGridMarkerSpawner : MarkerSpawner
                     continue;
                 
                 // Creates new Marker and sets its data
-                Auxin newMarker = Instantiate(auxinPrefab, targetPosition, Quaternion.identity, _auxinsContainer);
+                GameObject newMarker = Instantiate(_auxingPrefab, targetPosition, Quaternion.identity, _auxinsContainer);
+
+                Auxin _maker = newMarker.GetComponent<Auxin>();
                 newMarker.transform.localScale = Vector3.one * MarkerRadius;
                 newMarker.name = "Marker [" + cellIndex + "][" + count + "]";
-                newMarker.Cell = cell;
-                newMarker.Position = targetPosition;
-                newMarker.ShowMesh(SceneController.ShowAuxins);
+                _maker.Cell = cell;
+                _maker.Position = targetPosition;
+                _maker.ShowMesh(SceneController.ShowAuxins);
 
-                auxins.Add(newMarker);
-                cell.Auxins.Add(newMarker);
+                auxins.Add(_maker);
+                cell.Auxins.Add(_maker);
                 count++;
             }
         }

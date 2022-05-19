@@ -17,9 +17,7 @@ public abstract class MarkerSpawner : MonoBehaviour
     protected float _cellSize;
     protected int _maxMarkersPerCell;
 
-    public Auxin auxinPrefab;
-
-    public abstract IEnumerator CreateMarkers(Transform _auxinContainer,List<Cell> _cells, List<Auxin> _auxins);
+    public abstract IEnumerator CreateMarkers(GameObject _auxinPrefab, Transform _auxinContainer,List<Cell> _cells, List<Auxin> _auxins);
 
     protected bool HasMarkersNearby(Vector3 test, List<Auxin> others)
     {

@@ -9,6 +9,7 @@ using Biocrowds.Core;
 public class LevelEditorUIController : MonoBehaviour
 {
     public SceneController sceneController;
+    public EventSystem eventSystem;
 
     public CustomPointerHandler importOBJButton;
     public CustomPointerHandler createMarkersButton;
@@ -28,7 +29,8 @@ public class LevelEditorUIController : MonoBehaviour
     {
         if (sceneController == null)
             sceneController = FindObjectOfType<SceneController>();
-        importOBJButton.OnPointerDownEvent += ImportOBJButtonClicked;
+
+        importOBJButton.OnPointerDownEvent += ImportOBJButton_OnPointerDownEvent;
         createMarkersButton.OnPointerDownEvent += CreateMarkersButton_OnPointerDownEvent;
         saveSceneButton.OnPointerDownEvent += SaveSceneButton_OnPointerDownEvent;
         loadSceneButton.OnPointerDownEvent += LoadSceneButton_OnPointerDownEvent;
@@ -37,27 +39,31 @@ public class LevelEditorUIController : MonoBehaviour
 
     private void LoadSceneTestButton_OnPointerDownEvent(PointerEventData obj)
     {
+        eventSystem.SetSelectedGameObject(null);
         levelImporter.ImportTestLevel(simulationWorld, objImporter);
     }
 
     private void LoadSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
+        eventSystem.SetSelectedGameObject(null);
         levelImporter.ImportLevel(simulationWorld, objImporter);
     }
 
     private void SaveSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
+        eventSystem.SetSelectedGameObject(null);
         levelExporter.ExportLevel(objImporter);
     }
 
     private void CreateMarkersButton_OnPointerDownEvent(PointerEventData obj)
     {
+        eventSystem.SetSelectedGameObject(null);
         sceneController.LoadSimulationWorld();
     }
 
-    private void ImportOBJButtonClicked(PointerEventData eventData)
+    private void ImportOBJButton_OnPointerDownEvent(PointerEventData eventData)
     {
-        Debug.Log("OBJ Clicked");
+        eventSystem.SetSelectedGameObject(null);
         objImporter.LoadOBJ();
     }
 }

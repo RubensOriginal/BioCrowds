@@ -5,9 +5,8 @@ using UnityEngine;
 
 public class DartThrowingMarkerSpawner : MarkerSpawner
 {
-    public override IEnumerator CreateMarkers(Transform _auxinsContainer, List<Cell> cells, List<Auxin> auxins)
+    public override IEnumerator CreateMarkers(GameObject _auxingPrefab, Transform _auxinsContainer, List<Cell> cells, List<Auxin> auxins)
     {
-        _auxinsContainer = new GameObject("Markers").transform;
         _cellSize = cells[0].transform.localScale.x;
 
         _maxMarkersPerCell = Mathf.RoundToInt(MarkerDensity / (MarkerRadius * MarkerRadius));
@@ -15,13 +14,13 @@ public class DartThrowingMarkerSpawner : MarkerSpawner
         // Generate a number of markers for each Cell
         for (int c = 0; c < cells.Count; c++)
         {
-            StartCoroutine(PopulateCell(_auxinsContainer, cells[c], auxins, c));
+            StartCoroutine(PopulateCell(_auxingPrefab, _auxinsContainer, cells[c], auxins, c));
         }
 
         yield break;
     }
 
-    private IEnumerator PopulateCell(Transform _auxinsContainer, Cell cell, List<Auxin> auxins, int cellIndex)
+    private IEnumerator PopulateCell(GameObject _auxingPrefab, Transform _auxinsContainer, Cell cell, List<Auxin> auxins, int cellIndex)
     {
         float cellHalfSize = (_cellSize / 2.0f) * (1.0f - (MarkerRadius/2f));
 
@@ -48,15 +47,16 @@ public class DartThrowingMarkerSpawner : MarkerSpawner
             }
            
             // Creates new Marker and sets its data
-            Auxin newMarker = Instantiate(auxinPrefab, targetPosition, Quaternion.identity, _auxinsContainer);
+            GameObject newMarker = Instantiate(_auxingPrefab, targetPosition, Quaternion.identity, _auxinsContainer);
+            Auxin _marker = newMarker.GetComponent<Auxin>();
             newMarker.transform.localScale = Vector3.one * MarkerRadius;
             newMarker.name = "Marker [" + cellIndex + "][" + i + "]";
-            newMarker.Cell = cell;
-            newMarker.Position = targetPosition;
-            newMarker.ShowMesh(SceneController.ShowAuxins);
+            _marker.Cell = cell;
+            _marker.Position = targetPosition;
+            _marker.ShowMesh(SceneController.ShowAuxins);
 
-            auxins.Add(newMarker);
-            cell.Auxins.Add(newMarker);
+            auxins.Add(_marker);
+            cell.Auxins.Add(_marker);
 
             // Reset the tries counter
             _tries = 0;

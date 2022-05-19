@@ -64,21 +64,15 @@ namespace Biocrowds.Core
         }
 
         [Header("Agents Settings and Data")]
-        [SerializeField] private int _maxAgents = 30;
-        [SerializeField] private List<Agent> _agentPrefabList;
-        public Transform agentsContainer;
-        public List<Agent> agents = new List<Agent>();
         private int _newAgentID = 0;
+        [SerializeField] private int _maxAgents = 30;
+        public List<Agent> agents = new List<Agent>();
 
 
         [Header("Cells Settings and Data")]
-        public Transform cellsContainer;
-        [SerializeField] private Cell _cellPrefab;
         List<Cell> _cells = new List<Cell>();
 
         [Header("Auxins Settings and Data")]
-        public Transform auxinsContainer;
-        public Auxin auxinPrefab;
         List<Auxin> _auxins = new List<Auxin>();
 
         public List<SpawnArea> spawnAreas;
@@ -95,16 +89,8 @@ namespace Biocrowds.Core
             get { return _auxins; }
         }
 
-        [SerializeField]
         private MarkerSpawner _markerSpawner = null;
-
-        [Header ("Other Info")]
-        public Transform goalContainer;
-        public Transform goalPrefab;
-        public Transform obstacleContainer;
-        public Transform obstaclePrefab;
-        public Transform spawnAreaContainer;
-        public Transform spawnAreaPrefab;
+        public SimulationPrefabManager prefabManager;
 
         //max auxins on the ground
         public bool _isReady;
@@ -154,11 +140,11 @@ namespace Biocrowds.Core
         public void ClearWorld()
         {
             _newAgentID = 0;
-            foreach (Transform child in agentsContainer)
+            foreach (Transform child in prefabManager.agentsContainer)
                 Destroy(child.gameObject);
-            foreach (Transform child in cellsContainer)
+            foreach (Transform child in prefabManager.cellsContainer)
                 Destroy(child.gameObject);
-            foreach (Transform child in auxinsContainer)
+            foreach (Transform child in prefabManager.auxinsContainer)
                 Destroy(child.gameObject);
             agents = new List<Agent>();
             _cells = new List<Cell>();
@@ -182,12 +168,10 @@ namespace Biocrowds.Core
 
             //create all cells based on dimension
             CreateCells();
-            
-            yield return StartCoroutine(_markerSpawner.CreateMarkers(auxinsContainer, _cells, _auxins));
-            Debug.Log(_auxins.Count/_cells.Count);
 
             //populate cells with auxins
-            //yield return StartCoroutine(DartThrowing());
+            yield return StartCoroutine(_markerSpawner.CreateMarkers(prefabManager.GetAuxinPrefab(), prefabManager.auxinsContainer, _cells, _auxins));
+            Debug.Log(_auxins.Count/_cells.Count);
 
             //create our agents
             yield return StartCoroutine(CreateAgents());
@@ -211,24 +195,24 @@ namespace Biocrowds.Core
                     _spawnPos.x = (1.0f + (i * 2.0f)) + _offset.x;
                     _spawnPos.z = (1.0f + (j * 2.0f)) + _offset.y;
 
-                    Cell newCell = Instantiate(_cellPrefab, _spawnPos, Quaternion.Euler(90.0f, 0.0f, 0.0f), cellsContainer);
-
+                    GameObject newCell = Instantiate(prefabManager.GetCellPrefab(), _spawnPos, Quaternion.identity, prefabManager.cellsContainer);
+                    Cell _cell = newCell.GetComponent<Cell>();
                     //change its name
                     newCell.name = "Cell [" + i + "][" + j + "]";
 
                     //metadata for optimization
-                    newCell.X = i;
-                    newCell.Z = j;
+                    _cell.X = i;
+                    _cell.Z = j;
 
-                    newCell.ShowMesh(SceneController.ShowCells);
+                    _cell.ShowMesh(SceneController.ShowCells);
 
-                    _cells.Add(newCell);
+                    _cells.Add(_cell);
 
                 }
             }
         }
 
-        private IEnumerator DartThrowing()
+        /*private IEnumerator DartThrowing()
         {
             //lets set the qntAuxins for each cell according the density estimation
             float densityToQnt = AUXIN_DENSITY;
@@ -320,7 +304,7 @@ namespace Biocrowds.Core
                     }
                 }
             }
-        }
+        }*/
 
         private IEnumerator CreateAgents()
         {
@@ -468,33 +452,34 @@ namespace Biocrowds.Core
         private void SpawnNewAgent(Vector3 _pos, bool _removeWhenGoalReached, 
             List<GameObject> _goalList)
         {
-            Agent newAgent = Instantiate(_agentPrefabList[Random.Range(0, _agentPrefabList.Count)],
-                _pos, Quaternion.identity, agentsContainer);
-            PrepareAgent(newAgent);
-            newAgent.Goal = _goalList[0];  //agent goal
-            newAgent.goalsList = _goalList;
-            newAgent.removeWhenGoalReached = _removeWhenGoalReached;
+            GameObject newAgent = Instantiate(prefabManager.GetAgentPrefab(), _pos, Quaternion.identity, prefabManager.agentsContainer);
+            Agent _agent = newAgent.GetComponent<Agent>();
+
+            PrepareAgent(_agent);
+            _agent.Goal = _goalList[0];  //agent goal
+            _agent.goalsList = _goalList;
+            _agent.removeWhenGoalReached = _removeWhenGoalReached;
         }
 
         private void SpawnNewAgentInArea(SpawnArea _area, bool _isInitialSpawn)
         {
             Vector3 _pos = _area.GetRandomPoint();
-            Agent newAgent = Instantiate(_agentPrefabList[Random.Range(0, _agentPrefabList.Count)], 
-                _pos, Quaternion.identity, agentsContainer);
-            PrepareAgent(newAgent);
+            GameObject newAgent = Instantiate(prefabManager.GetAgentPrefab(),  _pos, Quaternion.identity, prefabManager.agentsContainer);
+            Agent _agent = newAgent.GetComponent<Agent>();
+            PrepareAgent(_agent);
             if (_isInitialSpawn)
             {
-                newAgent.Goal = _area.initialAgentsGoalList[0];  //agent goal
-                newAgent.goalsList = _area.initialAgentsGoalList;
-                newAgent.removeWhenGoalReached = _area.initialRemoveWhenGoalReached;
-                newAgent.goalsWaitList = _area.initialWaitList;
+                _agent.Goal = _area.initialAgentsGoalList[0];  //agent goal
+                _agent.goalsList = _area.initialAgentsGoalList;
+                _agent.removeWhenGoalReached = _area.initialRemoveWhenGoalReached;
+                _agent.goalsWaitList = _area.initialWaitList;
             }
             else
             {
-                newAgent.Goal = _area.repeatingGoalList[0];  //agent goal
-                newAgent.goalsList = _area.repeatingGoalList;
-                newAgent.removeWhenGoalReached = _area.repeatingRemoveWhenGoalReached;
-                newAgent.goalsWaitList = _area.repeatingWaitList;
+                _agent.Goal = _area.repeatingGoalList[0];  //agent goal
+                _agent.goalsList = _area.repeatingGoalList;
+                _agent.removeWhenGoalReached = _area.repeatingRemoveWhenGoalReached;
+                _agent.goalsWaitList = _area.repeatingWaitList;
             }
         }
 
@@ -518,11 +503,6 @@ namespace Biocrowds.Core
         public Terrain GetTerrain()
         {
             return _terrain;
-        }
-
-        public Transform GetRandomAgentPrefab()
-        {
-            return _agentPrefabList[Random.Range(0, _agentPrefabList.Count)].transform;
         }
 
     }
