@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 23000011963245992}
   - component: {fileID: -1595524354001383904}
   m_Layer: 0
-  m_Name: GoalPrefab
+  m_Name: GoalPrefab2
   m_TagString: Goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
