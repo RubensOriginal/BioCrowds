@@ -24,7 +24,7 @@ public class MouseScript : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
 
-    private MoveObject mo;
+    public MoveObject mo;
 
     // Start is called before the first frame update
     void Start()
@@ -64,7 +64,7 @@ public class MouseScript : MonoBehaviour
 
             transform.position = new Vector3(
                 Mathf.Clamp(mousePos.x, -50, 50),
-                0.75f,
+                0.50f,
                 Mathf.Clamp(mousePos.z, -50, 50));
         }
 

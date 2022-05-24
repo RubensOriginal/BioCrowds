@@ -70,12 +70,15 @@ public class LevelEditorUIController : MonoBehaviour
     {
         eventSystem.SetSelectedGameObject(null);
         levelImporter.ImportLevel(simulationWorld, objImporter);
+        actionToggles[0].isOn = true;
+        levelEditorManager.user.oe.UnselectObject();
+        levelEditorManager.user.mo.isSelected = false;
     }
 
     private void SaveSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
         eventSystem.SetSelectedGameObject(null);
-        levelExporter.ExportLevel(objImporter);
+        levelExporter.ExportLevel(sceneController.world, objImporter);
     }
 
     private void CreateMarkersButton_OnPointerDownEvent(PointerEventData obj)

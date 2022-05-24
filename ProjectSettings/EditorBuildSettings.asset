@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/LevelEditor.unity
     guid: 9da7a089530336643a03b82522719285
   - enabled: 0
@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/LevelMapEditor.unity
     guid: 4b3c96bcb1cdfc84eb4cbd196319e97f
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TerrainFix.unity
     guid: 95a8e2eb13b3b724f9a19dca815f029e
   m_configObjects: {}

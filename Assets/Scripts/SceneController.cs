@@ -68,16 +68,18 @@ public class SceneController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Alpha0) && !initialized)
         {
             LoadSimulationWorld();
         }
+#endif
     }
 
     public void LoadSimulationWorld()
     {
         if (initialized)
-            world.ClearWorld();
+            world.ClearWorld(true);
 
         Debug.Log("Loading World");
 

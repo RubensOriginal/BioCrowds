@@ -95,7 +95,7 @@ public class LevelImporter : MonoBehaviour
 
     private void LoadContent(string text)
     {
-        world.ClearWorld();
+        world.ClearWorld(true);
         objImporter.ClearLoadedModels();
 
         JObject content = JObject.Parse(text);

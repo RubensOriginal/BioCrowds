@@ -13,9 +13,9 @@ using System.Runtime.InteropServices;
 
 public class LevelExporter : MonoBehaviour
 {
-    public void ExportLevel(RuntimeOBJImporter objImporter)
+    public void ExportLevel(World world, RuntimeOBJImporter objImporter)
     {
-        string content = GenerateFileContent(objImporter);
+        string content = GenerateFileContent(world, objImporter);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         var bytes = Encoding.UTF8.GetBytes(content);
@@ -47,7 +47,7 @@ public class LevelExporter : MonoBehaviour
 #endif
 
 
-    private string GenerateFileContent(RuntimeOBJImporter objImporter)
+    private string GenerateFileContent(World world, RuntimeOBJImporter objImporter)
     {
         JObject output = new JObject();
         JArray _terrainsArray = new JArray();
@@ -59,15 +59,21 @@ public class LevelExporter : MonoBehaviour
         JArray _loadedModelsArray = new JArray();
         Debug.Log("Exporing Level");
 
+        //objImporter
+        world.CreateNavMesh();
+        world.CreateCells();
+        world.SetMarkerSpawner();
+        StartCoroutine(world._markerSpawner.CreateMarkers(world.prefabManager.GetAuxinPrefab(), world.prefabManager.auxinsContainer, world.Cells, world.Auxins));
+        //world.markerSpawnMethod.
+
         var _terrains = FindObjectsOfType<Terrain>().ToList();
         var _agents = FindObjectsOfType<Agent>().ToList();
-        var _auxins = FindObjectsOfType<Auxin>().ToList();
         var _spawnAreas = FindObjectsOfType<SpawnArea>().ToList();
         var _loadedModels = FindObjectsOfType<LoadedOBJData>().ToList();
         var _goals = GameObject.FindGameObjectsWithTag("Goal").ToList();
         var _obstacles = GameObject.FindGameObjectsWithTag("Obstacle").ToList();
 
-        Debug.Log(_agents.Count + " " + _auxins.Count);
+        Debug.Log(_agents.Count + " " + world.Auxins.Count);
 
         for (int i = 0; i < _terrains.Count; i++) // Terrains
         {
@@ -76,7 +82,22 @@ public class LevelExporter : MonoBehaviour
             _t.Add("terrain_size", JArray.FromObject(_terrains[i].terrainData.size.AsList()));
             _terrainsArray.Add(_t);
         }
-        for (int i = 0; i < _agents.Count; i++) // Agents
+        
+        for (int i = 0; i < _spawnAreas.Count; i++) // Agents (sampling points)
+        {
+            for(int j = 0; j < _spawnAreas[i].initialNumberOfAgents; j++)
+            {
+                JObject _a = new JObject();
+                _a.Add("position", JArray.FromObject(_spawnAreas[i].GetRandomPoint().AsList()));
+                List<int> _goalIndexList = new List<int>();
+                for (int k = 0; k < _spawnAreas[i].initialAgentsGoalList.Count; k++)
+                    _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].initialAgentsGoalList[k]));
+                _a.Add("goal_list", JToken.FromObject(_goalIndexList));
+                _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
+                _agentsArray.Add(_a);
+            }
+        }
+        /*for (int i = 0; i < _agents.Count; i++) // Agents (loaded agents)
         {
             JObject _a = new JObject();
             _a.Add("position", JArray.FromObject(_agents[i].transform.position.AsList()));
@@ -86,12 +107,12 @@ public class LevelExporter : MonoBehaviour
             _a.Add("goal_list", JToken.FromObject(_goalIndexList));
             _a.Add("remove_goal_reach", JToken.FromObject(_agents[i].removeWhenGoalReached));
             _agentsArray.Add(_a);
-        }
-        for (int i = 0; i < _auxins.Count; i++) // Auxins/Markers
+        }*/
+        for (int i = 0; i < world.Auxins.Count; i++) // Auxins/Markers
         {
             JObject _a = new JObject();
-            _a.Add("position", JArray.FromObject(_auxins[i].transform.position.AsList()));
-            _a.Add("name", _auxins[i].name);
+            _a.Add("position", JArray.FromObject(world.Auxins[i].transform.position.AsList()));
+            _a.Add("name", world.Auxins[i].name);
             _auxinsArray.Add(_a);
         }
         for (int i = 0; i < _goals.Count; i++) // Goals
@@ -145,6 +166,8 @@ public class LevelExporter : MonoBehaviour
         output.Add("loaded_models", _loadedModelsArray);
         output.Add("agents", _agentsArray);
         output.Add("auxins", _auxinsArray);
+
+        world.ClearWorld(false);
 
         return JsonConvert.SerializeObject(output, Formatting.Indented);
     }

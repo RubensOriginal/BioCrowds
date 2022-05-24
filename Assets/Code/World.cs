@@ -89,7 +89,7 @@ namespace Biocrowds.Core
             get { return _auxins; }
         }
 
-        private MarkerSpawner _markerSpawner = null;
+        public MarkerSpawner _markerSpawner = null;
         public SimulationPrefabManager prefabManager;
 
         //max auxins on the ground
@@ -126,24 +126,27 @@ namespace Biocrowds.Core
                 navMeshData = new NavMeshData();
                 navMeshDataInstance = NavMesh.AddNavMeshData(navMeshData);
             }
+
         }
 
         public void LoadWorld()
         {
             _isReady = false;
-            var markerSpawnerMethods = transform.GetComponentsInChildren<MarkerSpawner>();
-            _markerSpawner = markerSpawnerMethods.First(p => p.spawnMethod == markerSpawnMethod);
+            SetMarkerSpawner();
 
             StartCoroutine(SetupWorld());
         }
 
-        public void ClearWorld()
+        public void SetMarkerSpawner()
+        {
+            var markerSpawnerMethods = transform.GetComponentsInChildren<MarkerSpawner>();
+            _markerSpawner = markerSpawnerMethods.First(p => p.spawnMethod == markerSpawnMethod);
+        }
+
+        public void ClearWorld(bool clearSpawnAreaAndGoals)
         {
             _newAgentID = 0;
-            foreach (Transform child in prefabManager.spawnAreaContainer)
-                Destroy(child.gameObject);
-            foreach (Transform child in prefabManager.goalContainer)
-                Destroy(child.gameObject);
+            
             foreach (Transform child in prefabManager.agentsContainer)
                 Destroy(child.gameObject);
             foreach (Transform child in prefabManager.cellsContainer)
@@ -153,6 +156,14 @@ namespace Biocrowds.Core
             agents = new List<Agent>();
             _cells = new List<Cell>();
             _auxins = new List<Auxin>();
+
+            if (clearSpawnAreaAndGoals)
+            {
+                foreach (Transform child in prefabManager.spawnAreaContainer)
+                    Destroy(child.gameObject);
+                foreach (Transform child in prefabManager.goalContainer)
+                    Destroy(child.gameObject);
+            }
         }
         public void CreateNavMesh()
         {
