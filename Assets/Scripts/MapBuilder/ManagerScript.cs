@@ -6,6 +6,7 @@ using Biocrowds.Core;
 public class ManagerScript : MonoBehaviour
 {
     public World world;
+    public LevelEditorUIController uiController;
 
     [Header("Prefabs")]
     public GameObject spawnerPrefab;

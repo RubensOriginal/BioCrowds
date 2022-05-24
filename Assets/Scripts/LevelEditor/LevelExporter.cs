@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 
 public class LevelExporter : MonoBehaviour
 {
+    public Material invalidMaterial;
     public void ExportLevel(World world, RuntimeOBJImporter objImporter)
     {
         string content = GenerateFileContent(world, objImporter);
@@ -46,6 +47,21 @@ public class LevelExporter : MonoBehaviour
     }
 #endif
 
+    public bool IsValidExport(World world)
+    {
+        var _spawnAreas = FindObjectsOfType<SpawnArea>().ToList();
+        bool valid = true;
+        foreach (SpawnArea sp in _spawnAreas)
+        {
+            if (sp.initialAgentsGoalList.Count == 0)
+            {
+                sp.GetMeshRenderer().material = invalidMaterial;
+                valid = false;
+            }
+        }
+
+        return valid;
+    }
 
     private string GenerateFileContent(World world, RuntimeOBJImporter objImporter)
     {

@@ -122,7 +122,7 @@ namespace Biocrowds.Core
 
             if (navMeshData == null)
             {
-                Debug.Log("Creatin NavMesh Data");
+                //Debug.Log("Creatin NavMesh Data");
                 navMeshData = new NavMeshData();
                 navMeshDataInstance = NavMesh.AddNavMeshData(navMeshData);
             }

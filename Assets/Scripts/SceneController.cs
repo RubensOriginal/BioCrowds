@@ -37,7 +37,7 @@ public class SceneController : MonoBehaviour
     }
     void Start()
     {
-        Debug.Log("Press 0 to load world");
+        //Debug.Log("Press 0 to load world");
     }
 
     void Update()

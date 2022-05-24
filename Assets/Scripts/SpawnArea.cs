@@ -38,8 +38,8 @@ public class SpawnArea : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-            Debug.Log(GetRandomPoint());
+        /*if (Input.GetKeyDown(KeyCode.Alpha9))
+            Debug.Log(GetRandomPoint());*/
     }
 
     public void ResetSpawner()
@@ -79,5 +79,10 @@ public class SpawnArea : MonoBehaviour
     public void ShowMesh(bool _show)
     {
         _meshRenderer.enabled = _show;
+    }
+
+    public MeshRenderer GetMeshRenderer()
+    {
+        return _meshRenderer;
     }
 }

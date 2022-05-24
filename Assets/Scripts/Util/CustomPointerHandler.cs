@@ -10,12 +10,9 @@ public class CustomPointerHandler : MonoBehaviour, IPointerDownHandler, IPointer
     public event Action<PointerEventData> OnPointerDownEvent;
     public event Action<PointerEventData> OnPointerClickEvent;
 
-    public Button button;
-
 
     private void Awake()
     {
-        button = GetComponent<Button>();
     }
     public void OnPointerDown(PointerEventData eventData)
     {

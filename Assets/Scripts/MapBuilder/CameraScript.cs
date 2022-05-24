@@ -21,6 +21,8 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (ms.uiController.IsPopUpPanelOpen())
+            return;
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
         zoom = Input.GetAxis("Mouse ScrollWheel") * 10;
