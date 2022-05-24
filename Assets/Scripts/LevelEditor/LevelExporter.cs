@@ -117,6 +117,24 @@ public class LevelExporter : MonoBehaviour
         {
             JObject _sp = new JObject();
             _sp.Add("transform", _spawnAreas[i].transform.AsJObject());
+
+            _sp.Add("agent_count", _spawnAreas[i].initialNumberOfAgents);
+            _sp.Add("remove_at_goal", _spawnAreas[i].initialRemoveWhenGoalReached);
+            List<int> _goalIndexList = new List<int>();
+            for (int j = 0; j < _spawnAreas[i].initialAgentsGoalList.Count; j++)
+                _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].initialAgentsGoalList[j]));
+            _sp.Add("goal_list", JToken.FromObject(_goalIndexList));
+            _sp.Add("wait_list", JToken.FromObject(_spawnAreas[i].initialWaitList));
+
+            _sp.Add("cycle_lenght", _spawnAreas[i].cycleLenght);
+            _sp.Add("cycle_agent_count", _spawnAreas[i].quantitySpawnedEachCycle);
+            _sp.Add("cycle_remove_at_goal", _spawnAreas[i].repeatingRemoveWhenGoalReached);
+            _goalIndexList = new List<int>();
+            for (int j = 0; j < _spawnAreas[i].repeatingGoalList.Count; j++)
+                _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].repeatingGoalList[j]));
+            _sp.Add("cycle_goal_list", JToken.FromObject(_goalIndexList));
+            _sp.Add("cycle_wait_list", JToken.FromObject(_spawnAreas[i].repeatingWaitList));
+            
             _spawnAreasArray.Add(_sp);
         }
 

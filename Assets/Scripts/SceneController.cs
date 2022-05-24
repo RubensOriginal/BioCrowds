@@ -37,7 +37,7 @@ public class SceneController : MonoBehaviour
     }
     void Start()
     {
-        Debug.Log("Press 1 to load world");
+        Debug.Log("Press 0 to load world");
     }
 
     void Update()
@@ -68,7 +68,7 @@ public class SceneController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1) && !initialized)
+        if (Input.GetKeyDown(KeyCode.Alpha0) && !initialized)
         {
             LoadSimulationWorld();
         }

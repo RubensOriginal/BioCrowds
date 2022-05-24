@@ -95,10 +95,13 @@ public class LevelImporter : MonoBehaviour
 
     private void LoadContent(string text)
     {
+        world.ClearWorld();
+        objImporter.ClearLoadedModels();
+
         JObject content = JObject.Parse(text);
         List<Transform> _goals = new List<Transform>();
         // Terrain - Only 1 terrain for now
-        world.CreateCells();
+        //world.CreateCells();
         var _terrain = world.GetTerrain();
         var _t = content["terrains"][0];
         _terrain.transform.FromJObject(_t["transform"]);
@@ -113,17 +116,24 @@ public class LevelImporter : MonoBehaviour
             Vector3 _goalPos = Vector3Extensions.FromJObject((_goalData[i]["position"]));
             GameObject newGoal = Instantiate(prefabManager.GetGoalPrefab(), _goalPos, Quaternion.identity, prefabManager.goalContainer);
             newGoal.name = "Goal_" + i.ToString();
+
+            Object goalObject = newGoal.AddComponent<Object>();
+
+            goalObject.data.pos = newGoal.transform.position;
+            goalObject.data.rot = newGoal.transform.rotation;
+            goalObject.data.type = Object.Type.Goal;
+            newGoal.layer = 9;
             _goals.Add(newGoal.transform);
         }
 
         // Obstacles
-        var _obstacleData = content["obstacles"] as JArray;
+        /*var _obstacleData = content["obstacles"] as JArray;
         for (int i = 0; i < _goalData.Count; i++)
         {
             GameObject newObstacle = Instantiate(prefabManager.GetObstaclePrefab(), prefabManager.obstacleContainer);
             newObstacle.name = "Obstacle_" + i.ToString();
             newObstacle.transform.FromJObject(_obstacleData[i]["transform"]);
-        }
+        }*/
 
         // SpawnArea
         var _spawnAreaData = content["spawnAreas"] as JArray;
@@ -131,8 +141,34 @@ public class LevelImporter : MonoBehaviour
         {
             GameObject newSpawnArea = Instantiate(prefabManager.GetSpawnAreaPrefab(), prefabManager.spawnAreaContainer);
             newSpawnArea.name = "SpawnArea_" + i.ToString();
-            newSpawnArea.transform.FromJObject(_spawnAreaData[i]["transform"]);
-            world.spawnAreas.Add(newSpawnArea.GetComponent<SpawnArea>());
+            newSpawnArea.transform.position = Vector3Extensions.FromJObject(_spawnAreaData[i]["transform"]["position"]);
+
+            SpawnArea _sp = newSpawnArea.GetComponent<SpawnArea>();
+            _sp.initialNumberOfAgents = _spawnAreaData[i]["agent_count"].ToObject<int>();
+            _sp.initialRemoveWhenGoalReached = _spawnAreaData[i]["remove_at_goal"].ToObject<bool>();
+            var _goalIndex = _spawnAreaData[i]["goal_list"].ToObject<List<int>>();
+            _sp.initialAgentsGoalList = new List<GameObject>();
+            for (int j = 0; j < _goalIndex.Count; j++)
+                _sp.initialAgentsGoalList.Add(_goals[_goalIndex[j]].gameObject);
+            _sp.initialWaitList = _spawnAreaData[i]["wait_list"].ToObject<List<float>>();
+
+            _sp.cycleLenght = _spawnAreaData[i]["cycle_lenght"].ToObject<float>();
+            _sp.quantitySpawnedEachCycle = _spawnAreaData[i]["cycle_agent_count"].ToObject<int>(); 
+            _sp.repeatingRemoveWhenGoalReached = _spawnAreaData[i]["cycle_remove_at_goal"].ToObject<bool>();
+            _goalIndex = _spawnAreaData[i]["goal_list"].ToObject<List<int>>();
+            _sp.repeatingGoalList = new List<GameObject>();
+            for (int j = 0; j < _goalIndex.Count; j++)
+                _sp.repeatingGoalList.Add(_goals[_goalIndex[j]].gameObject);
+
+            _sp.repeatingWaitList = _spawnAreaData[i]["cycle_wait_list"].ToObject<List<float>>();
+
+            Object spawnerObject = newSpawnArea.AddComponent<Object>();
+
+            spawnerObject.data.pos = newSpawnArea.transform.position;
+            spawnerObject.data.rot = newSpawnArea.transform.rotation;
+            spawnerObject.data.type = Object.Type.Spawner;
+            newSpawnArea.layer = 9;
+            world.spawnAreas.Add(_sp);
         }
 
         // LoadedModels
@@ -145,29 +181,25 @@ public class LevelImporter : MonoBehaviour
         }
 
         // Agents
-        var _agentsData = content["agents"] as JArray;
+        /*var _agentsData = content["agents"] as JArray;
         for (int i = 0; i < _agentsData.Count; i++)
         {
-            GameObject newAgentGO = Instantiate(prefabManager.GetAgentPrefab(), prefabManager.agentsContainer);
-            //newAgentT.name = "Agent [" + world.GetNewAgentID() + "]";
-            newAgentGO.transform.position = Vector3Extensions.FromJObject((_agentsData[i]["position"]));
-            Agent newAgent = newAgentGO.GetComponent<Agent>();
-            newAgent.goalsList = new List<GameObject>();
+            List<GameObject> _goalListGO = new List<GameObject>();
+            List<float> _waitList = new List<float>();
             var _goalList = _agentsData[i]["goal_list"] as JArray;
             for (int j = 0; j < _goalList.Count; j++)
             {
-                newAgent.goalsList.Add(_goals[_goalList[j].ToObject<int>()].gameObject);
-                newAgent.goalsWaitList.Add(0f);
+                _goalListGO.Add(_goals[_goalList[j].ToObject<int>()].gameObject);
+                _waitList.Add(0f);
             }
-            world.PrepareAgent(newAgent);
-            newAgent.Goal = newAgent.goalsList[0];
-            newAgent.removeWhenGoalReached = _agentsData[i]["remove_goal_reach"].ToObject<bool>();
+            Agent newAgent = world.SpawnNewAgent(Vector3Extensions.FromJObject((_agentsData[i]["position"])),
+                _agentsData[i]["remove_goal_reach"].ToObject<bool>(),
+                _goalListGO);
+            newAgent.goalsWaitList = _waitList;
+        }*/
 
-            //newAgent.World = world;
-            //world.agents.Add(newAgent);
-        }
         // Auxins
-        var _auxinsData = content["auxins"] as JArray;
+        /*var _auxinsData = content["auxins"] as JArray;
         for (int i = 0; i < _auxinsData.Count; i++)
         {
             GameObject newAuxin = Instantiate(prefabManager.GetAuxinPrefab(), prefabManager.auxinsContainer);
@@ -182,19 +214,10 @@ public class LevelImporter : MonoBehaviour
             //world.Cells[int.Parse(index)].Auxins.Add(newAuxin);
 
 
-        }
+        }*/
 
         world.CreateNavMesh();
-        world._isReady = true;
-
-        /*
-        output.Add("goals", _goalsArray);
-        output.Add("obstacles", _obstaclesArray);
-        output.Add("spawnAreas", _spawnAreasArray);
-        output.Add("loaded_models", _loadedModelsArray);
-        output.Add("agents", _agentsArray);
-        output.Add("auxins", _auxinsArray);
-         */
+        //world._isReady = true;
 
     }
 }

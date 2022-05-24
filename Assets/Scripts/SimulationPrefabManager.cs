@@ -31,12 +31,15 @@ public class SimulationPrefabManager : MonoBehaviour
     public enum SpawnAreaPrefabType
     {
         CUBE_BLUE,
+        CUBE_ICON,
         CUSTOM
     }
 
     public enum GoalPrefabType
     {
         CUBE_LIME,
+        CUBE_ICON,
+        CYLINDER_ICON,
         CUSTOM
     }
 
@@ -69,8 +72,11 @@ public class SimulationPrefabManager : MonoBehaviour
     private GameObject cellQuadUISpritePrefab;
 
     private GameObject spawnAreaCubeBluePrefab;
+    private GameObject spawnAreaCubeIconPrefab;
 
     private GameObject goalCubeLimePrefab;
+    private GameObject goalCubeIconPrefab;
+    private GameObject goalCylinderIconPrefab;
 
     private GameObject obstacleCubeGrayPrefab;
 
@@ -107,8 +113,11 @@ public class SimulationPrefabManager : MonoBehaviour
         cellQuadUISpritePrefab = Resources.Load<GameObject>("Prefabs/Cells/CellQuadUISpritePrefab");
 
         spawnAreaCubeBluePrefab = Resources.Load<GameObject>("Prefabs/SpawnAreas/SpawnAreaCubeBluePrefab");
+        spawnAreaCubeIconPrefab = Resources.Load<GameObject>("Prefabs/SpawnAreas/SpawnAreaCubeIconPrefab");
 
         goalCubeLimePrefab = Resources.Load<GameObject>("Prefabs/Goals/GoalCubeLimePrefab");
+        goalCubeIconPrefab = Resources.Load<GameObject>("Prefabs/Goals/GoalCubeIconPrefab");
+        goalCylinderIconPrefab = Resources.Load<GameObject>("Prefabs/Goals/GoalCylinderIconPrefab");
 
         obstacleCubeGrayPrefab = Resources.Load<GameObject>("Prefabs/Obstacles/ObstacleCubeGrayPrefab");
 
@@ -170,11 +179,13 @@ public class SimulationPrefabManager : MonoBehaviour
 
     public GameObject GetSpawnAreaPrefab()
     {
-        switch (cellPrefabType)
+        switch (spawnAreaPrefabType)
         {
-            case CellPrefabType.QUAD_UI_SPRITE:
+            case SpawnAreaPrefabType.CUBE_BLUE:
                 return spawnAreaCubeBluePrefab;
-            case CellPrefabType.CUSTOM:
+            case SpawnAreaPrefabType.CUBE_ICON:
+                return spawnAreaCubeIconPrefab;
+            case SpawnAreaPrefabType.CUSTOM:
                 return spawnAreaCustomPrefabs[Random.Range(0, spawnAreaCustomPrefabs.Count)];
             default:
                 return spawnAreaCubeBluePrefab;
@@ -183,11 +194,15 @@ public class SimulationPrefabManager : MonoBehaviour
 
     public GameObject GetGoalPrefab()
     {
-        switch (cellPrefabType)
+        switch (goalPrefabType)
         {
-            case CellPrefabType.QUAD_UI_SPRITE:
+            case GoalPrefabType.CUBE_LIME:
                 return goalCubeLimePrefab;
-            case CellPrefabType.CUSTOM:
+            case GoalPrefabType.CUBE_ICON:
+                return goalCubeIconPrefab;
+            case GoalPrefabType.CYLINDER_ICON:
+                return goalCylinderIconPrefab;
+            case GoalPrefabType.CUSTOM:
                 return goalCustomPrefabs[Random.Range(0, goalCustomPrefabs.Count)];
             default:
                 return goalCubeLimePrefab;

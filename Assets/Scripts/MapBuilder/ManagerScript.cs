@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Biocrowds.Core;
 
 public class ManagerScript : MonoBehaviour
 {
+    public World world;
 
     [Header("Prefabs")]
     public GameObject spawnerPrefab;
     public GameObject goalPrefab;
+    public Transform spawnerContainer;
+    public Transform goalContainer;
 
     [Header("Materials")]
     public Material spawnerMaterial;
@@ -21,6 +25,14 @@ public class ManagerScript : MonoBehaviour
     public TMP_InputField numberAgentsInputField;
 
     private MapBuilder mapBuider;
+
+    private void Start()
+    {
+        spawnerPrefab = world.prefabManager.GetSpawnAreaPrefab();
+        goalPrefab = world.prefabManager.GetGoalPrefab();
+        spawnerContainer = world.prefabManager.spawnAreaContainer;
+        goalContainer = world.prefabManager.goalContainer;
+    }
 
     // Update is called once per frame
     void Update()
@@ -61,29 +73,40 @@ public class ManagerScript : MonoBehaviour
 
     public void ChooseCreate()
     {
-        user.manipulatorOption = MouseScript.LevelManupulator.Create;
+        user.SetLevelManipulator(MouseScript.LevelManupulator.Create);
     }
 
     public void ChooseDestroy()
     {
-        user.manipulatorOption = MouseScript.LevelManupulator.Destroy;
+        user.SetLevelManipulator(MouseScript.LevelManupulator.Destroy);
     }
 
     public void ChooseEdit()
     {
-        user.manipulatorOption = MouseScript.LevelManupulator.Edit;
+        if (user.manipulatorOption == MouseScript.LevelManupulator.Link)
+            user.SetLevelManipulator(MouseScript.LevelManupulator.Edit, false);
+        else
+            user.SetLevelManipulator(MouseScript.LevelManupulator.Edit);
     }
 
-    public void ChooseMove()
+    public void ChooseMove(bool value)
     {
-        user.manipulatorOption = MouseScript.LevelManupulator.Move;
+        if (value)
+            user.SetLevelManipulator(MouseScript.LevelManupulator.Move);
     }
 
-    public void ChooseLink()
+    public void ChooseLink(bool val)
     {
         if (user.manipulatorOption == MouseScript.LevelManupulator.Edit)
-            user.manipulatorOption = MouseScript.LevelManupulator.Link;
+            user.SetLevelManipulator(MouseScript.LevelManupulator.Link, false);
         else if (user.manipulatorOption == MouseScript.LevelManupulator.Link)
-            user.manipulatorOption = MouseScript.LevelManupulator.Edit;
+        {
+            if (user.oe.linkToggle.isOn)
+            {
+                user.SetLevelManipulator(MouseScript.LevelManupulator.Edit, false);
+                user.oe.editToggle.isOn = true;
+            }
+
+        }
     }
 }

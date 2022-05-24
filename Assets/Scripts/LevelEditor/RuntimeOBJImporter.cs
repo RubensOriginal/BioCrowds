@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 
 public class RuntimeOBJImporter : MonoBehaviour
 {
+    public Material objectsMaterial;
 	GameObject loadedObject;
 	public Transform loadedModelsContainer;
     public List<LoadedOBJData> loadedModels;
@@ -40,6 +41,13 @@ public class RuntimeOBJImporter : MonoBehaviour
         loadedObject = new OBJLoader().Load(textStream);
         loadedObject.transform.SetParent(loadedModelsContainer);
         loadedObject.transform.position = new Vector3(25f, 0, 20f);
+        foreach(Transform child in loadedObject.transform)
+            {
+                if (child.TryGetComponent(out Renderer renderer))
+                {
+                    renderer.material = objectsMaterial;
+                }
+            }
         yield break;
     }
 #else
@@ -68,6 +76,13 @@ public class RuntimeOBJImporter : MonoBehaviour
             loadedModels.Add(data);
             loadedObject.transform.SetParent(loadedModelsContainer);
 			loadedObject.transform.position = new Vector3(15f, 0, 15f);
+            foreach(Transform child in loadedObject.transform)
+            {
+                if (child.TryGetComponent(out Renderer renderer))
+                {
+                    renderer.material = objectsMaterial;
+                }
+            }
 		}
         yield return null;
         
@@ -100,7 +115,24 @@ public class RuntimeOBJImporter : MonoBehaviour
         newObjData.objData = data;
         loadedModels.Add(newObjData);
         loadedObject.transform.SetParent(loadedModelsContainer);
+        foreach (Transform child in loadedObject.transform)
+        {
+            if (child.TryGetComponent(out Renderer renderer))
+            {
+                renderer.material = objectsMaterial;
+            }
+        }
         return newObjData;
+    }
+
+    public void ClearLoadedModels()
+    {
+        foreach (Transform child in loadedModelsContainer.transform)
+        {
+            child.gameObject.SetActive(false);
+            Destroy(child.gameObject);
+        }
+        loadedModels = new List<LoadedOBJData>();
     }
 
 }

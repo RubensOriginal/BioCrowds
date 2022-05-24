@@ -140,6 +140,10 @@ namespace Biocrowds.Core
         public void ClearWorld()
         {
             _newAgentID = 0;
+            foreach (Transform child in prefabManager.spawnAreaContainer)
+                Destroy(child.gameObject);
+            foreach (Transform child in prefabManager.goalContainer)
+                Destroy(child.gameObject);
             foreach (Transform child in prefabManager.agentsContainer)
                 Destroy(child.gameObject);
             foreach (Transform child in prefabManager.cellsContainer)
@@ -211,100 +215,6 @@ namespace Biocrowds.Core
                 }
             }
         }
-
-        /*private IEnumerator DartThrowing()
-        {
-            //lets set the qntAuxins for each cell according the density estimation
-            float densityToQnt = AUXIN_DENSITY;
-
-            auxinsContainer = new GameObject("Auxins").transform;
-
-            densityToQnt *= 2f / (2.0f * AUXIN_RADIUS);
-            densityToQnt *= 2f / (2.0f * AUXIN_RADIUS);
-
-            
-            int _maxAuxins = (int)Mathf.Floor(densityToQnt);
-
-            //for each cell, we generate its auxins
-            for (int c = 0; c < _cells.Count; c++)
-            {
-                //Dart throwing auxins
-                //use this flag to break the loop if it is taking too long (maybe there is no more space)
-                int flag = 0;
-                for (int i = 0; i < _maxAuxins; i++)
-                {
-                    float x = Random.Range(_cells[c].transform.position.x - 0.99f, _cells[c].transform.position.x + 0.99f);
-                    float z = Random.Range(_cells[c].transform.position.z - 0.99f, _cells[c].transform.position.z + 0.99f);
-
-                    //see if there are auxins in this radius. if not, instantiante
-                    List<Auxin> allAuxinsInCell = _cells[c].Auxins;
-                    bool createAuxin = true;
-                    for (int j = 0; j < allAuxinsInCell.Count; j++)
-                    {
-                        float distanceAASqr = (new Vector3(x, 0f, z) - allAuxinsInCell[j].Position).sqrMagnitude;
-
-                        //if it is too near no need to add another
-                        if (distanceAASqr < AUXIN_RADIUS * AUXIN_RADIUS)
-                        {
-                            createAuxin = false;
-                            break;
-                        }
-                    }
-
-                    //if i have found no auxin, i still need to check if is there obstacles on the way
-                    if (createAuxin)
-                    {
-                        //sphere collider to try to find the obstacles
-                        //NavMeshHit hit;
-                        //createAuxin = NavMesh.Raycast(new Vector3(x, 2f, z), new Vector3(x, -2f, z), out hit, 1 << NavMesh.GetAreaFromName("Walkable")); //NavMesh.GetAreaFromName("Walkable")); // NavMesh.AllAreas);
-                        //createAuxin = NavMesh.SamplePosition(new Vector3(x, 0.0f, z), out hit, 0.1f, 1 << NavMesh.GetAreaFromName("Walkable"));
-                        //bool isBlocked = _obstacleCollider.bounds.Contains(new Vector3(x, 0.0f, z));
-                        Collider[] hitColliders = Physics.OverlapSphere(new Vector3(x, 0f, z), AUXIN_RADIUS + 0.1f, 1 << LayerMask.NameToLayer("Obstacle"));
-                        createAuxin = (hitColliders.Length == 0);
-                    }
-
-                    //check if auxin can be created there
-                    if (createAuxin)
-                    {
-                        Auxin newAuxin = Instantiate(auxinPrefab, new Vector3(x, 0.0f, z), Quaternion.identity, auxinsContainer);
-
-                        //change its name
-                        newAuxin.name = "Auxin [" + c + "][" + i + "]";
-                        //this auxin is from this cell
-                        newAuxin.Cell = _cells[c];
-                        //set position
-                        newAuxin.Position = new Vector3(x, 0f, z);
-
-                        newAuxin.ShowMesh(SceneController.ShowAuxins);
-
-                        _auxins.Add(newAuxin);
-                        //add this auxin to this cell
-                        _cells[c].Auxins.Add(newAuxin);
-
-                        //reset the flag
-                        flag = 0;
-
-                        //speed up the demonstration a little bit...
-                        if (i % 200 == 0)
-                            yield return null;
-                    }
-                    else
-                    {
-                        //else, try again
-                        flag++;
-                        i--;
-                    }
-
-                    //if flag is above qntAuxins (*2 to have some more), break;
-                    if (flag > _maxAuxins * 2)
-                    {
-                        //reset the flag
-                        flag = 0;
-                        break;
-                    }
-                }
-            }
-        }*/
 
         private IEnumerator CreateAgents()
         {
@@ -449,8 +359,7 @@ namespace Biocrowds.Core
             return _cells[_minIndex];
         }
 
-        private void SpawnNewAgent(Vector3 _pos, bool _removeWhenGoalReached, 
-            List<GameObject> _goalList)
+        public Agent SpawnNewAgent(Vector3 _pos, bool _removeWhenGoalReached, List<GameObject> _goalList)
         {
             GameObject newAgent = Instantiate(prefabManager.GetAgentPrefab(), _pos, Quaternion.identity, prefabManager.agentsContainer);
             Agent _agent = newAgent.GetComponent<Agent>();
@@ -459,9 +368,10 @@ namespace Biocrowds.Core
             _agent.Goal = _goalList[0];  //agent goal
             _agent.goalsList = _goalList;
             _agent.removeWhenGoalReached = _removeWhenGoalReached;
+            return _agent;
         }
 
-        private void SpawnNewAgentInArea(SpawnArea _area, bool _isInitialSpawn)
+        public Agent SpawnNewAgentInArea(SpawnArea _area, bool _isInitialSpawn)
         {
             Vector3 _pos = _area.GetRandomPoint();
             GameObject newAgent = Instantiate(prefabManager.GetAgentPrefab(),  _pos, Quaternion.identity, prefabManager.agentsContainer);
@@ -481,6 +391,7 @@ namespace Biocrowds.Core
                 _agent.removeWhenGoalReached = _area.repeatingRemoveWhenGoalReached;
                 _agent.goalsWaitList = _area.repeatingWaitList;
             }
+            return _agent;
         }
 
         public int GetNewAgentID()
@@ -489,7 +400,7 @@ namespace Biocrowds.Core
             return _newAgentID - 1;
         }
 
-        public void ShowAuxinMeshes (bool p_enable)
+        public void ShowAuxinMeshes(bool p_enable)
         {
             foreach (Auxin _a in Auxins)
                 _a.ShowMesh(p_enable);

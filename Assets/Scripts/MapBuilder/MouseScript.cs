@@ -9,7 +9,7 @@ public class MouseScript : MonoBehaviour
 
     [HideInInspector]
     public ItemList itemOption = ItemList.Spawner;
-    [HideInInspector]
+    //[HideInInspector]
     public LevelManupulator manipulatorOption = LevelManupulator.Create;
     [HideInInspector]
     public MeshRenderer mr;
@@ -17,8 +17,10 @@ public class MouseScript : MonoBehaviour
     public ManagerScript ms;
     public ObjectEditor oe;
 
+
     private Vector3 mousePos;
     private bool colliding;
+    private bool hitTerrain;
     private Ray ray;
     private RaycastHit hit;
 
@@ -34,27 +36,36 @@ public class MouseScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mousePos = Input.mousePosition;
-        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-
-        transform.position = new Vector3(
-            Mathf.Clamp(mousePos.x, -50, 50),
-            0.75f,
-            Mathf.Clamp(mousePos.z, -50, 50));
-
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit))
+
+        colliding = false;
+        hitTerrain = false;
+
+        RaycastHit[] hits = Physics.RaycastAll(ray);
+        if (hits.Length > 0)
         {
-            if (hit.collider.gameObject.layer == 9)
+            for (int i = 0; i < hits.Length; i++)
             {
-                colliding = true;
-                // mr.material = badPlace;
+                if (hits[i].collider.gameObject.layer == 9)
+                {
+                    colliding = true;
+                    hit = hits[i];
+                }
+                else if (hits[i].transform.tag == "Terrain")
+                {
+                    hitTerrain = true;
+                }
             }
-            else
-            {
-                colliding = false;
-                // mr.material = goodPlace;
-            }
+        }
+
+        if (hitTerrain)
+        {
+            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            transform.position = new Vector3(
+                Mathf.Clamp(mousePos.x, -50, 50),
+                0.75f,
+                Mathf.Clamp(mousePos.z, -50, 50));
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -62,25 +73,31 @@ public class MouseScript : MonoBehaviour
             if (!EventSystem.current.IsPointerOverGameObject())
             {
                 if (manipulatorOption == LevelManupulator.Create)
-                    CreateObject();
+                {
+                    if (hitTerrain && !colliding)
+                        CreateObject();
+                }
                 else if (manipulatorOption == LevelManupulator.Destroy)
                 {
-                    if (hit.collider.gameObject.layer == 9)
+                    if (colliding)
                         Destroy(hit.collider.gameObject);
 
-                } else if (manipulatorOption == LevelManupulator.Edit)
+                }
+                else if (manipulatorOption == LevelManupulator.Edit)
                 {
-                    if (hit.collider.gameObject.layer == 9)
+                    if (colliding)
                         oe.SelectObject(hit.collider.gameObject);
                     else
                         oe.UnselectObject();
-                } else if (manipulatorOption == LevelManupulator.Link)
+                }
+                else if (manipulatorOption == LevelManupulator.Link)
                 {
-                    if (hit.collider.gameObject.layer == 9 || hit.collider.gameObject.CompareTag("Goal"))
+                    if (colliding || hit.collider.gameObject.CompareTag("Goal"))
                         oe.LinkGoalToSpawner(hit.collider.gameObject);
-                } else if (manipulatorOption == LevelManupulator.Move)
+                }
+                else if (manipulatorOption == LevelManupulator.Move)
                 {
-                    if (hit.collider.gameObject.layer == 9)
+                    if (colliding)
                     {
                         if (!mo.isSelected)
                             mo.SelectObject(hit.collider.gameObject);
@@ -99,7 +116,7 @@ public class MouseScript : MonoBehaviour
         switch (itemOption)
         {
             case ItemList.Spawner:
-                newObject = GameObject.Instantiate(ms.spawnerPrefab);
+                newObject = GameObject.Instantiate(ms.spawnerPrefab, ms.spawnerContainer);
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Spawner";
@@ -111,7 +128,7 @@ public class MouseScript : MonoBehaviour
                 spawnerObject.data.type = Object.Type.Spawner;
                 break;
             case ItemList.Goal:
-                newObject = GameObject.Instantiate(ms.goalPrefab);
+                newObject = GameObject.Instantiate(ms.goalPrefab, ms.goalContainer);
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Goal";
@@ -124,5 +141,20 @@ public class MouseScript : MonoBehaviour
                 break;
 
         }
+    }
+
+    public void SetLevelManipulator(LevelManupulator _manipulator, bool _deselect = true)
+    {
+        if (_manipulator == manipulatorOption)
+            return;
+        manipulatorOption = _manipulator;
+        if (_deselect)
+            DeselectObject();
+    }
+
+    public void DeselectObject()
+    {
+        mo.isSelected = false;
+        oe.UnselectObject();
     }
 }

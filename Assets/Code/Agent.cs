@@ -14,7 +14,7 @@ namespace Biocrowds.Core
 {
     public class Agent : MonoBehaviour
     {
-        private const float UPDATE_NAVMESH_INTERVAL = 1.0f;
+        private const float UPDATE_NAVMESH_INTERVAL = 0.5f;
 
         //agent radius
         public float agentRadius;

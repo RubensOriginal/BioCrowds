@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class MoveObject : MonoBehaviour
 {
-    [HideInInspector]
-    public GameObject gameObject;
+    //[HideInInspector]
+    public GameObject targetGameObject;
 
-    [HideInInspector]
+
+    //[HideInInspector]
     public bool isSelected = false;
 
     private ManagerScript ms;
     private Vector3 originalVector3;
     private Vector3 mousePos;
+
+
+    public GameObject selectionCircle;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +27,7 @@ public class MoveObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        selectionCircle.transform.Rotate(Vector3.forward * 90f * Time.deltaTime);
         if (isSelected)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -33,24 +38,32 @@ public class MoveObject : MonoBehaviour
                 mousePos = Input.mousePosition;
                 mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
-                gameObject.transform.position = new Vector3(
-                    Mathf.Clamp(mousePos.x, -50, 50),
+                targetGameObject.transform.position = new Vector3(
+                    transform.position.x,
                     0.75f,
-                    Mathf.Clamp(mousePos.z, -50, 50));
+                    transform.position.z);
             }
+            selectionCircle.transform.position = new Vector3(
+                transform.position.x,
+                0.1f,
+                transform.position.z);
+        }
+        else
+        {
+            selectionCircle.transform.position = Vector3.one * -1000f;
         }
     }
 
-    public void SelectObject(GameObject gameObject)
+    public void SelectObject(GameObject go)
     {
-        this.gameObject = gameObject;
-        originalVector3 = gameObject.transform.position;
+        targetGameObject = go;
+        originalVector3 = go.transform.position;
         isSelected = true;
     }
 
     public void CancelMoveObject()
     {
         isSelected = false;
-        gameObject.transform.position = originalVector3;
+        targetGameObject.transform.position = originalVector3;
     }
 }

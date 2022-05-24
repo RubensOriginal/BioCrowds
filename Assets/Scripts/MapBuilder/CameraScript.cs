@@ -25,15 +25,16 @@ public class CameraScript : MonoBehaviour
         yAxis = Input.GetAxis("Vertical");
         zoom = Input.GetAxis("Mouse ScrollWheel") * 10;
 
-        transform.Translate(new Vector3 (xAxis * - cameraSpeed.value, yAxis * -cameraSpeed.value, 0.0f));
+        transform.Translate(new Vector3 (xAxis * cameraSpeed.value, yAxis * cameraSpeed.value, 0.0f) * Time.deltaTime * 20.0f);
         transform.position = new Vector3(
-            Mathf.Clamp(transform.position.x, -50, 50),
+            Mathf.Clamp(transform.position.x, 5, 25),
             Mathf.Clamp(transform.position.y, 20, 20),
-            Mathf.Clamp(transform.position.z, -50, 50));
+            Mathf.Clamp(transform.position.z, 5, 25));
 
-        if (zoom < 0 && cam.orthographicSize >= -25)
-            cam.orthographicSize -= zoom * -cameraSpeed.value;
-        if (zoom > 0 && cam.orthographicSize <= -5)
-            cam.orthographicSize += zoom * cameraSpeed.value;
+        if (zoom < 0 && cam.orthographicSize <= 20)
+            cam.orthographicSize += zoom * -cameraSpeed.value;
+        if (zoom > 0 && cam.orthographicSize >= 5)
+            cam.orthographicSize -= zoom * cameraSpeed.value;
+        cam.orthographicSize = Mathf.Clamp(cam.orthographicSize, 5, 20);
     }
 }

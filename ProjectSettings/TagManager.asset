@@ -11,6 +11,7 @@ TagManager:
   - TopCameraZoom
   - SideCamera
   - Spawner
+  - Terrain
   layers:
   - Default
   - TransparentFX
