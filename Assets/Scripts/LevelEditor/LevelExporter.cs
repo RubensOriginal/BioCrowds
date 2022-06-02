@@ -124,13 +124,13 @@ public class LevelExporter : MonoBehaviour
             _a.Add("remove_goal_reach", JToken.FromObject(_agents[i].removeWhenGoalReached));
             _agentsArray.Add(_a);
         }*/
-        for (int i = 0; i < world.Auxins.Count; i++) // Auxins/Markers
+        /*for (int i = 0; i < world.Auxins.Count; i++) // Auxins/Markers
         {
             JObject _a = new JObject();
             _a.Add("position", JArray.FromObject(world.Auxins[i].transform.position.AsList()));
             _a.Add("name", world.Auxins[i].name);
             _auxinsArray.Add(_a);
-        }
+        }*/
         for (int i = 0; i < _goals.Count; i++) // Goals
         {
             JObject _a = new JObject();
@@ -140,7 +140,21 @@ public class LevelExporter : MonoBehaviour
         for (int i = 0; i < _obstacles.Count; i++) // Obstacles
         {
             JObject _o = new JObject();
+            BoxCollider col = _obstacles[i].GetComponent<BoxCollider>();
+            var trans = _obstacles[i].transform;
+            var min = col.center - col.size * 0.5f;
+            var max = col.center + col.size * 0.5f;
+            var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
+            var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
+            var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
+            var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
+            JArray pointList = new JArray();
+            pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
+            pointList.Add(JToken.FromObject(new Vector3(P001.x, P001.z, 0.0f).AsList()));
+            pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
+            pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
             _o.Add("transform", _obstacles[i].transform.AsJObject());
+            _o.Add("point_list", pointList);
             _obstaclesArray.Add(_o);
         }
         for (int i = 0; i < _loadedModels.Count; i++) // Loaded Models

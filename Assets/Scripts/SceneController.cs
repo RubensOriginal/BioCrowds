@@ -71,7 +71,7 @@ public class SceneController : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Alpha0) && !initialized)
         {
-            LoadSimulationWorld();
+            //LoadSimulationWorld();
         }
 #endif
     }
