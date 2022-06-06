@@ -114,13 +114,6 @@ public class LevelEditorUIController : MonoBehaviour
     }
 
     
-
-    private void CreateMarkersButton_OnPointerDownEvent(PointerEventData obj)
-    {
-        eventSystem.SetSelectedGameObject(null);
-        sceneController.LoadSimulationWorld();
-    }
-
     private void ImportOBJButton_OnPointerDownEvent(PointerEventData eventData)
     {
         eventSystem.SetSelectedGameObject(null);
@@ -183,11 +176,6 @@ public class LevelEditorUIController : MonoBehaviour
         //sceneController.LoadSimulationWorld();
     }
 
-    private void ImportOBJButton_OnPointerDownEvent(PointerEventData eventData)
-    {
-        eventSystem.SetSelectedGameObject(null);
-        objImporter.LoadOBJ();
-    }
     private void ConfirmLoadLoadAnywayButton_OnPointerDownEvent(PointerEventData obj)
     {
         levelImporter.ImportLevel(simulationWorld, objImporter);
