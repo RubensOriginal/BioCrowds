@@ -12,6 +12,7 @@ TagManager:
   - SideCamera
   - Spawner
   - Terrain
+  - OBJCollider
   layers:
   - Default
   - TransparentFX

@@ -101,6 +101,7 @@ public class LevelExporter : MonoBehaviour
         var _loadedModels = FindObjectsOfType<LoadedOBJData>().ToList();
         var _goals = GameObject.FindGameObjectsWithTag("Goal").ToList();
         var _obstacles = GameObject.FindGameObjectsWithTag("Obstacle").ToList();
+        var _objCollider = GameObject.FindGameObjectsWithTag("OBJCollider").ToList();
 
         Debug.Log(_agents.Count + " " + world.Auxins.Count);
 
@@ -167,6 +168,26 @@ public class LevelExporter : MonoBehaviour
             pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
             pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
             _o.Add("transform", _obstacles[i].transform.AsJObject());
+            _o.Add("point_list", pointList);
+            _obstaclesArray.Add(_o);
+        }
+        for (int i = 0; i < _objCollider.Count; i++) // OBJ Colliders
+        {
+            JObject _o = new JObject();
+            BoxCollider col = _objCollider[i].GetComponent<BoxCollider>();
+            var trans = _objCollider[i].transform;
+            var min = col.center - col.size * 0.5f;
+            var max = col.center + col.size * 0.5f;
+            var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
+            var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
+            var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
+            var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
+            JArray pointList = new JArray();
+            pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
+            pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
+            pointList.Add(JToken.FromObject(new Vector3(P001.x, P001.z, 0.0f).AsList()));
+            pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
+            _o.Add("transform", _objCollider[i].transform.AsJObject());
             _o.Add("point_list", pointList);
             _obstaclesArray.Add(_o);
         }

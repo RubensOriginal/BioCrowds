@@ -89,6 +89,10 @@ var StandaloneFileBrowserWebGLPlugin = {
     RunScene: function (message) {
         dispatchReactUnityEvent("RunScene", Pointer_stringify(message));
     }
+
+    RunScene: function (message) {
+        dispatchReactUnityEvent("RunScene", Pointer_stringify(message));
+    }
 };
 
 mergeInto(LibraryManager.library, StandaloneFileBrowserWebGLPlugin);

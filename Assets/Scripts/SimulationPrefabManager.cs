@@ -46,6 +46,7 @@ public class SimulationPrefabManager : MonoBehaviour
     public enum ObstaclePrefabType
     {
         CUBE_GRAY,
+        CUBE_ICON,
         CUSTOM
     }
 
@@ -79,6 +80,7 @@ public class SimulationPrefabManager : MonoBehaviour
     private GameObject goalCylinderIconPrefab;
 
     private GameObject obstacleCubeGrayPrefab;
+    private GameObject obstacleCubeIconPrefab;
 
     //---------------- Custom Prefabs ----------------//
     [Header("Custom Prefabs")]
@@ -120,7 +122,7 @@ public class SimulationPrefabManager : MonoBehaviour
         goalCylinderIconPrefab = Resources.Load<GameObject>("Prefabs/Goals/GoalCylinderIconPrefab");
 
         obstacleCubeGrayPrefab = Resources.Load<GameObject>("Prefabs/Obstacles/ObstacleCubeGrayPrefab");
-
+        obstacleCubeIconPrefab = Resources.Load<GameObject>("Prefabs/Obstacles/ObstacleCubeIconPrefab");
     }
 
 
@@ -211,11 +213,13 @@ public class SimulationPrefabManager : MonoBehaviour
 
     public GameObject GetObstaclePrefab()
     {
-        switch (cellPrefabType)
+        switch (obstaclePrefabType)
         {
-            case CellPrefabType.QUAD_UI_SPRITE:
+            case ObstaclePrefabType.CUBE_GRAY:
                 return obstacleCubeGrayPrefab;
-            case CellPrefabType.CUSTOM:
+            case ObstaclePrefabType.CUBE_ICON:
+                return obstacleCubeIconPrefab;
+            case ObstaclePrefabType.CUSTOM:
                 return obstacleCustomPrefabs[Random.Range(0, obstacleCustomPrefabs.Count)];
             default:
                 return obstacleCubeGrayPrefab;

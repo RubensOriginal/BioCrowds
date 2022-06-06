@@ -40,7 +40,7 @@ public class MoveObject : MonoBehaviour
 
                 targetGameObject.transform.position = new Vector3(
                     transform.position.x,
-                    0.75f,
+                    0.5f,
                     transform.position.z);
             }
             selectionCircle.transform.position = new Vector3(

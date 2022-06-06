@@ -5,7 +5,7 @@ public class MouseScript : MonoBehaviour
 {
 
     public enum LevelManupulator {  Create, Move, Edit, Destroy, Link };
-    public enum ItemList { Spawner, Goal };
+    public enum ItemList { Spawner, Goal, Obstacle };
 
     [HideInInspector]
     public ItemList itemOption = ItemList.Spawner;
@@ -138,6 +138,19 @@ public class MouseScript : MonoBehaviour
                 goalObject.data.pos = newObject.transform.position;
                 goalObject.data.rot = newObject.transform.rotation;
                 goalObject.data.type = Object.Type.Goal;
+                break;
+
+            case ItemList.Obstacle:
+                newObject = GameObject.Instantiate(ms.obstaclePrefab, ms.obstacleContainer);
+                newObject.transform.position = transform.position;
+                newObject.layer = 9;
+                newObject.tag = "Obstacle";
+
+                Object obstacleObject = newObject.AddComponent<Object>();
+
+                obstacleObject.data.pos = newObject.transform.position;
+                obstacleObject.data.rot = newObject.transform.rotation;
+                obstacleObject.data.type = Object.Type.Obstacle;
                 break;
 
         }
