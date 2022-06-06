@@ -84,6 +84,10 @@ var StandaloneFileBrowserWebGLPlugin = {
 
             SendMessage(gameObjectName, methodName);
         }
+    },
+
+    RunScene: function (message) {
+        dispatchReactUnityEvent("RunScene", Pointer_stringify(message));
     }
 };
 

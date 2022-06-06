@@ -111,7 +111,7 @@ public class LevelEditorUIController : MonoBehaviour
         eventSystem.SetSelectedGameObject(null);
         if (levelExporter.IsValidExport(sceneController.world))
         {
-            levelExporter.ExportLevel(sceneController.world, objImporter);
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download);
         }
         else
         {
@@ -122,7 +122,13 @@ public class LevelEditorUIController : MonoBehaviour
     private void CreateMarkersButton_OnPointerDownEvent(PointerEventData obj)
     {
         eventSystem.SetSelectedGameObject(null);
-        sceneController.LoadSimulationWorld();
+
+        if (levelExporter.IsValidExport(sceneController.world))
+        {
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene);
+        }
+
+        //sceneController.LoadSimulationWorld();
     }
 
     private void ImportOBJButton_OnPointerDownEvent(PointerEventData eventData)

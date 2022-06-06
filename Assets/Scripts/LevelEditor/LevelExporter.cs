@@ -13,17 +13,30 @@ using System.Runtime.InteropServices;
 
 public class LevelExporter : MonoBehaviour
 {
+    public enum ExportType { Download, RunScene };
+
+    [DllImport("__Internal")]
+    private static extern void RunScene(string message);
+
     public Material invalidMaterial;
-    public void ExportLevel(World world, RuntimeOBJImporter objImporter)
+    public void ExportLevel(World world, RuntimeOBJImporter objImporter, ExportType exportType)
     {
         string content = GenerateFileContent(world, objImporter);
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-        var bytes = Encoding.UTF8.GetBytes(content);
-        DownloadFile(gameObject.name, "OnFileDownload", "SavedScene.json", bytes, bytes.Length);
-#else
-        StartCoroutine(DesktopExportCoroutine(content));
-#endif
+        if (exportType == ExportType.Download)
+        {
+
+        #if UNITY_WEBGL && !UNITY_EDITOR
+                var bytes = Encoding.UTF8.GetBytes(content);
+                DownloadFile(gameObject.name, "OnFileDownload", "SavedScene.json", bytes, bytes.Length);
+        #else
+                    StartCoroutine(DesktopExportCoroutine(content));
+        #endif
+        }
+        else if (exportType == ExportType.RunScene)
+        {
+            RunScene(content);
+        }
     }
 
 
