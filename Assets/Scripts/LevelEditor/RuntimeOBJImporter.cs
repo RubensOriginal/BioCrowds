@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 
 public class RuntimeOBJImporter : MonoBehaviour
 {
+    public List<TextAsset> presets;
     public Material objectsMaterial;
 	GameObject loadedObject;
 	public Transform loadedModelsContainer;
@@ -106,6 +107,11 @@ public class RuntimeOBJImporter : MonoBehaviour
         #endif
     }
 
+    public LoadedOBJData LoadPreset(int index)
+    {
+        return LoadOBJFromString(presets[index].text);
+    }
+
     public LoadedOBJData LoadOBJFromString(string data)
     {
         var textStream = new MemoryStream(Encoding.UTF8.GetBytes(data));
@@ -121,7 +127,14 @@ public class RuntimeOBJImporter : MonoBehaviour
             {
                 renderer.material = objectsMaterial;
             }
+
+            if (child.TryGetComponent(out MeshFilter _))
+            {
+                child.gameObject.AddComponent<BoxCollider>();
+                child.tag = "OBJCollider";
+            }
         }
+        loadedObject.transform.position = new Vector3(15f, 0f, 15f);
         return newObjData;
     }
 

@@ -3,7 +3,7 @@ using System;
 
 public class Object : MonoBehaviour
 {
-    public enum Type { Spawner, Goal };
+    public enum Type { Spawner, Goal, Obstacle };
 
     public struct Data
     {

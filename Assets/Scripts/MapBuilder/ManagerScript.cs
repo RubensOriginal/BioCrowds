@@ -11,14 +11,18 @@ public class ManagerScript : MonoBehaviour
     [Header("Prefabs")]
     public GameObject spawnerPrefab;
     public GameObject goalPrefab;
+    public GameObject obstaclePrefab;
     public Transform spawnerContainer;
     public Transform goalContainer;
+    public Transform obstacleContainer;
 
     [Header("Materials")]
     public Material spawnerMaterial;
     public Material spawnerMaterialSelected;
     public Material goalMaterial;
     public Material goalMaterialSelected;
+    public Material obstacleMaterial;
+    public Material obstacleMaterialSelected;
 
     [Header("Other Gameobjects")]
     public MeshFilter mouseObject;
@@ -31,8 +35,10 @@ public class ManagerScript : MonoBehaviour
     {
         spawnerPrefab = world.prefabManager.GetSpawnAreaPrefab();
         goalPrefab = world.prefabManager.GetGoalPrefab();
+        obstaclePrefab = world.prefabManager.GetObstaclePrefab();
         spawnerContainer = world.prefabManager.spawnAreaContainer;
         goalContainer = world.prefabManager.goalContainer;
+        obstacleContainer = world.prefabManager.obstacleContainer;
     }
 
     // Update is called once per frame
@@ -68,6 +74,11 @@ public class ManagerScript : MonoBehaviour
         mouseObject.mesh = goal.GetComponent<MeshFilter>().mesh;
         Destroy(goal);
         */
+    }
+
+    public void ChooseItemOption(int item)
+    {
+        user.itemOption = (MouseScript.ItemList)item;
     }
 
     // LevelManupulator Options

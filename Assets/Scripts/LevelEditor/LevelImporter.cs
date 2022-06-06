@@ -127,13 +127,20 @@ public class LevelImporter : MonoBehaviour
         }
 
         // Obstacles
-        /*var _obstacleData = content["obstacles"] as JArray;
+        var _obstacleData = content["obstacles"] as JArray;
         for (int i = 0; i < _goalData.Count; i++)
         {
             GameObject newObstacle = Instantiate(prefabManager.GetObstaclePrefab(), prefabManager.obstacleContainer);
             newObstacle.name = "Obstacle_" + i.ToString();
             newObstacle.transform.FromJObject(_obstacleData[i]["transform"]);
-        }*/
+
+            Object goalObject = newObstacle.AddComponent<Object>();
+
+            goalObject.data.pos = newObstacle.transform.position;
+            goalObject.data.rot = newObstacle.transform.rotation;
+            goalObject.data.type = Object.Type.Goal;
+            newObstacle.layer = 9;
+        }
 
         // SpawnArea
         var _spawnAreaData = content["spawnAreas"] as JArray;
