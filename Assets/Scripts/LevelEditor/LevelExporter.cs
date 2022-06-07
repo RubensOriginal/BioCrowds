@@ -62,11 +62,19 @@ public class LevelExporter : MonoBehaviour
 
     public bool IsValidExport(World world)
     {
+        world.CreateNavMesh();
         var _spawnAreas = FindObjectsOfType<SpawnArea>().ToList();
         bool valid = true;
+        var validMaterial = world.prefabManager.GetSpawnAreaPrefab().GetComponent<Renderer>().sharedMaterial;
         foreach (SpawnArea sp in _spawnAreas)
         {
+            sp.GetMeshRenderer().material = validMaterial;
             if (sp.initialAgentsGoalList.Count == 0)
+            {
+                sp.GetMeshRenderer().material = invalidMaterial;
+                valid = false;
+            }
+            if (sp.GetRandomPointInNavmesh().ToString() == Vector3.negativeInfinity.ToString())
             {
                 sp.GetMeshRenderer().material = invalidMaterial;
                 valid = false;
@@ -88,11 +96,10 @@ public class LevelExporter : MonoBehaviour
         JArray _loadedModelsArray = new JArray();
         Debug.Log("Exporing Level");
 
-        //objImporter
-        world.CreateNavMesh();
-        world.CreateCells();
-        world.SetMarkerSpawner();
-        StartCoroutine(world._markerSpawner.CreateMarkers(world.prefabManager.GetAuxinPrefab(), world.prefabManager.auxinsContainer, world.Cells, world.Auxins));
+        
+        //world.CreateCells();
+        //world.SetMarkerSpawner();
+        //StartCoroutine(world._markerSpawner.CreateMarkers(world.prefabManager.GetAuxinPrefab(), world.prefabManager.auxinsContainer, world.Cells, world.Auxins));
         //world.markerSpawnMethod.
 
         var _terrains = FindObjectsOfType<Terrain>().ToList();
@@ -103,7 +110,7 @@ public class LevelExporter : MonoBehaviour
         var _obstacles = GameObject.FindGameObjectsWithTag("Obstacle").ToList();
         var _objCollider = GameObject.FindGameObjectsWithTag("OBJCollider").ToList();
 
-        Debug.Log(_agents.Count + " " + world.Auxins.Count);
+        //Debug.Log(_agents.Count + " " + world.Auxins.Count);
 
         for (int i = 0; i < _terrains.Count; i++) // Terrains
         {
@@ -118,7 +125,7 @@ public class LevelExporter : MonoBehaviour
             for(int j = 0; j < _spawnAreas[i].initialNumberOfAgents; j++)
             {
                 JObject _a = new JObject();
-                _a.Add("position", JArray.FromObject(_spawnAreas[i].GetRandomPoint().AsList()));
+                _a.Add("position", JArray.FromObject(_spawnAreas[i].GetRandomPointInNavmesh().AsList()));
                 List<int> _goalIndexList = new List<int>();
                 for (int k = 0; k < _spawnAreas[i].initialAgentsGoalList.Count; k++)
                     _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].initialAgentsGoalList[k]));

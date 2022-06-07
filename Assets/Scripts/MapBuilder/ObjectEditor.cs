@@ -14,6 +14,7 @@ public class ObjectEditor : MonoBehaviour {
     public ManagerScript ms;
 
     private bool isSelected = false;
+    private MouseScript.ItemList selectedItemType;
 
     public GameObject editCircle;
     public GameObject goalCircle;
@@ -28,7 +29,15 @@ public class ObjectEditor : MonoBehaviour {
         editCircle.transform.Rotate(Vector3.forward * 90f * Time.deltaTime);
         goalCircle.transform.Rotate(Vector3.forward * 90f * Time.deltaTime);
 
-        if (!isSelected)
+       
+        if (isSelected)
+        {
+            var maxScale = Mathf.Max(selectedGameObject.transform.localScale.x, selectedGameObject.transform.localScale.z);
+            editCircle.transform.localScale = Vector3.one * (maxScale * 1.3f);
+            if (selectedItemType != MouseScript.ItemList.Spawner)
+                goalCircle.transform.position = Vector3.one * -1000f;
+        }
+        else
         {
             editCircle.transform.position = Vector3.one * -1000f;
             goalCircle.transform.position = Vector3.one * -1000f;
@@ -39,6 +48,10 @@ public class ObjectEditor : MonoBehaviour {
     {
         return isSelected;
     }
+    public MouseScript.ItemList GetSelectedItemType()
+    {
+        return selectedItemType;
+    }
 
     public void SelectObject(GameObject go)
     {
@@ -47,11 +60,14 @@ public class ObjectEditor : MonoBehaviour {
             if (isSelected)
                 UnselectObject();
             selectedGameObject = go;
+            selectedItemType = MouseScript.ItemList.Spawner;
             selectedGameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterialSelected;
             editCircle.transform.position = new Vector3(
                 selectedGameObject.transform.position.x,
                 0.1f,
                 selectedGameObject.transform.position.z);
+            var maxScale = Mathf.Max(selectedGameObject.transform.localScale.x, selectedGameObject.transform.localScale.z);
+            editCircle.transform.localScale = Vector3.one * (maxScale * 1.3f);
             SpawnArea sp = go.GetComponent<SpawnArea>();
             if (sp.initialAgentsGoalList.Count != 0)
             {
@@ -68,24 +84,91 @@ public class ObjectEditor : MonoBehaviour {
             isSelected = true;
             ms.numberAgentsInputField.text = go.GetComponent<SpawnArea>().initialNumberOfAgents.ToString();
         }
+        else if (go.tag == "Obstacle")
+        {
+            if (isSelected)
+                UnselectObject();
+            selectedGameObject = go;
+            selectedItemType = MouseScript.ItemList.Obstacle;
+            selectedGameObject.GetComponent<MeshRenderer>().material = ms.obstacleMaterialSelected;
+            editCircle.transform.position = new Vector3(
+                selectedGameObject.transform.position.x,
+                0.1f,
+                selectedGameObject.transform.position.z);
+
+            goalCircle.transform.position = Vector3.one * -1000f;
+            ms.obstacleWidthInputField.text = selectedGameObject.transform.localScale.x.ToString();
+            ms.obstacleHeigthInputField.text = selectedGameObject.transform.localScale.z.ToString();
+            ms.obstacleAngleInputField.text = selectedGameObject.transform.localRotation.eulerAngles.y.ToString();
+            isSelected = true;
+        }
+
     }
 
     public void UnselectObject()
     {
         if (selectedGameObject == null)
             return;
-        selectedGameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterial;
-        if (selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList.Count != 0)
-            selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList[0].GetComponent<MeshRenderer>().material = ms.goalMaterial;
+        if (selectedItemType == MouseScript.ItemList.Spawner)
+        {
+            selectedGameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterial;
+            if (selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList.Count != 0)
+                selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList[0].GetComponent<MeshRenderer>().material = ms.goalMaterial;
+        }
+        else if (selectedItemType == MouseScript.ItemList.Obstacle)
+        {
+            selectedGameObject.GetComponent<MeshRenderer>().material = ms.obstacleMaterial;
+        }
         isSelected = false;
     }
 
     public void UpdateNumberAgents()
     {
-        if (ms.numberAgentsInputField.text != "" && (ms.user.manipulatorOption == MouseScript.LevelManupulator.Edit || ms.user.manipulatorOption == MouseScript.LevelManupulator.Link))
-            if (Int32.TryParse(ms.numberAgentsInputField.text, out int numberAgentsInt))
-                selectedGameObject.GetComponent<SpawnArea>().initialNumberOfAgents = numberAgentsInt;
-            
+        if (int.TryParse(ms.numberAgentsInputField.text, out int numberAgentsInt))
+        {
+            int clampValue = Mathf.Clamp(numberAgentsInt, 0, 20);
+            selectedGameObject.GetComponent<SpawnArea>().initialNumberOfAgents = clampValue;
+            if (clampValue != numberAgentsInt)
+                ms.numberAgentsInputField.text = clampValue.ToString();
+        }
+    }
+
+    public void UpdateObstacleWidth(string text)
+    {
+        if (float.TryParse(text, out float value))
+        {
+            float clampValue = Mathf.Clamp(value, 2, 20);
+
+            Vector3 size = selectedGameObject.transform.localScale;
+            size.x = clampValue;
+            selectedGameObject.transform.localScale = size;
+
+            if (clampValue != value)
+                ms.obstacleWidthInputField.text = clampValue.ToString();
+        }
+    }
+
+    public void UpdateObstacleHeigth(string text)
+    {
+        if (float.TryParse(text, out float value))
+        {
+            float clampValue = Mathf.Clamp(value, 2, 20);
+
+            Vector3 size = selectedGameObject.transform.localScale;
+            size.z = clampValue;
+            selectedGameObject.transform.localScale = size;
+
+            if (clampValue != value)
+                ms.obstacleHeigthInputField.text = clampValue.ToString();
+        }
+    }
+
+    public void UpdateObstacleAngleSlide(float value)
+    {
+        Vector3 rot = selectedGameObject.transform.localRotation.eulerAngles;
+        rot.y = value;
+        selectedGameObject.transform.localRotation = Quaternion.Euler(rot);
+        ms.obstacleAngleInputField.text = ((int)value).ToString();
     }
 
     public void LinkGoalToSpawner(GameObject gameObject)
@@ -105,6 +188,7 @@ public class ObjectEditor : MonoBehaviour {
                 spawnArea.initialAgentsGoalList.Add(gameObject);
                 spawnArea.initialAgentsGoalList[0].GetComponent<MeshRenderer>().material = ms.goalMaterialSelected;
             }
+            selectedGameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterialSelected;
             goalCircle.transform.position = new Vector3(
                     spawnArea.initialAgentsGoalList[0].transform.position.x,
                     0.1f,

@@ -33,7 +33,8 @@ public class MoveObject : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 CancelMoveObject();
-            } else
+            } 
+            else
             {
                 mousePos = Input.mousePosition;
                 mousePos = Camera.main.ScreenToWorldPoint(mousePos);
@@ -47,6 +48,8 @@ public class MoveObject : MonoBehaviour
                 transform.position.x,
                 0.1f,
                 transform.position.z);
+            var maxScale = Mathf.Max(targetGameObject.transform.localScale.x, targetGameObject.transform.localScale.z);
+            selectionCircle.transform.localScale = Vector3.one * (maxScale * 1.3f);
         }
         else
         {

@@ -28,6 +28,9 @@ public class ManagerScript : MonoBehaviour
     public MeshFilter mouseObject;
     public MouseScript user;
     public TMP_InputField numberAgentsInputField;
+    public TMP_InputField obstacleWidthInputField;
+    public TMP_InputField obstacleHeigthInputField;
+    public TMP_InputField obstacleAngleInputField;
 
     private MapBuilder mapBuider;
 
@@ -55,34 +58,16 @@ public class ManagerScript : MonoBehaviour
     }
 
     // ItemList Options
-
-    public void ChooseSpawner()
-    {
-        user.itemOption = MouseScript.ItemList.Spawner;
-        /*
-        GameObject spawner = GameObject.Instantiate(spawnerPrefab);
-        mouseObject.mesh = spawner.GetComponent<MeshFilter>().mesh;
-        Destroy(spawner);
-        */
-    }
-
-    public void ChooseGoal()
-    {
-        user.itemOption = MouseScript.ItemList.Goal;
-        /*
-        GameObject goal = GameObject.Instantiate(goalPrefab);
-        mouseObject.mesh = goal.GetComponent<MeshFilter>().mesh;
-        Destroy(goal);
-        */
-    }
-
     public void ChooseItemOption(int item)
     {
         user.itemOption = (MouseScript.ItemList)item;
     }
+    public void ChooseItemOption(MouseScript.ItemList item)
+    {
+        user.itemOption = item;
+    }
 
     // LevelManupulator Options
-
     public void ChooseCreate()
     {
         user.SetLevelManipulator(MouseScript.LevelManupulator.Create);
@@ -120,5 +105,18 @@ public class ManagerScript : MonoBehaviour
             }
 
         }
+    }
+
+    public bool HasInputFieldFocused()
+    {
+        if (numberAgentsInputField.isFocused)
+            return true;
+        if (obstacleWidthInputField.isFocused)
+            return true;
+        if (obstacleHeigthInputField.isFocused)
+            return true;
+        if (obstacleAngleInputField.isFocused)
+            return true;
+        return false;
     }
 }

@@ -82,7 +82,7 @@ public class LevelEditorUIController : MonoBehaviour
 
     private void Update()
     {
-        if (!agentNumberInputField.isFocused && !IsPopUpPanelOpen())
+        if (!levelEditorManager.HasInputFieldFocused() && !IsPopUpPanelOpen())
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))
                 actionToggles[0].isOn = true;
@@ -105,13 +105,28 @@ public class LevelEditorUIController : MonoBehaviour
         objectsPanel.gameObject.SetActive(mode == MouseScript.LevelManupulator.Create ? true : false);
         if ((mode == MouseScript.LevelManupulator.Edit || mode == MouseScript.LevelManupulator.Link) &&
             levelEditorManager.user.oe.GetSelected())
-            editSpawnerPanel.gameObject.SetActive(true);
+        {
+            if (levelEditorManager.user.oe.GetSelectedItemType() == MouseScript.ItemList.Spawner)
+            {
+                editSpawnerPanel.gameObject.SetActive(true);
+                editObstaclePanel.gameObject.SetActive(false);
+            }
+            else if (levelEditorManager.user.oe.GetSelectedItemType() == MouseScript.ItemList.Obstacle)
+            {
+                editSpawnerPanel.gameObject.SetActive(false);
+                editObstaclePanel.gameObject.SetActive(true);
+            }
+        }
         else
+        {
             editSpawnerPanel.gameObject.SetActive(false);
+            editObstaclePanel.gameObject.SetActive(false);
+        }
 
         importOBJButton.gameObject.SetActive(objImporter.loadedModels.Count == 0);
         clearOBJButton.gameObject.SetActive(objImporter.loadedModels.Count > 0);
     }
+
 
     
     private void ImportOBJButton_OnPointerDownEvent(PointerEventData eventData)

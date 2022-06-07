@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
+using UnityEngine.AI;
 
 public class SpawnArea : MonoBehaviour
 {
@@ -76,6 +78,26 @@ public class SpawnArea : MonoBehaviour
         
         return _collider.ClosestPoint(point);
     }
+
+    public Vector3 GetRandomPointInNavmesh(float height = 0.0f)
+    {
+        Vector3 point = new Vector3();
+        for (int i = 0; i < 50; i++)
+        {
+            point = new Vector3(
+                Random.Range(_collider.bounds.min.x, _collider.bounds.max.x),
+                height,
+                Random.Range(_collider.bounds.min.z, _collider.bounds.max.z)
+            );
+
+            if (NavMesh.SamplePosition(point, out NavMeshHit hit, 0.1f, 1 << NavMesh.GetAreaFromName("Walkable")))
+            {
+                return _collider.ClosestPoint(hit.position);
+            }
+        }
+        return Vector3.negativeInfinity;
+    }
+
     public void ShowMesh(bool _show)
     {
         _meshRenderer.enabled = _show;
