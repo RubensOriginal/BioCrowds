@@ -84,7 +84,7 @@ public class LevelImporter : MonoBehaviour
 
             using var fs = new FileStream(paths[0], FileMode.Open);
             string content = new StreamReader(fs).ReadToEnd();
-            Debug.Log(content);
+            //Debug.Log(content);
             LoadContent(content);
         }
         yield return null;
@@ -128,8 +128,11 @@ public class LevelImporter : MonoBehaviour
 
         // Obstacles
         var _obstacleData = content["obstacles"] as JArray;
-        for (int i = 0; i < _goalData.Count; i++)
+        for (int i = 0; i < _obstacleData.Count; i++)
         {
+            if (_obstacleData[i]["from_obj"].ToObject<bool>())
+                continue;
+
             GameObject newObstacle = Instantiate(prefabManager.GetObstaclePrefab(), prefabManager.obstacleContainer);
             newObstacle.name = "Obstacle_" + i.ToString();
             newObstacle.transform.FromJObject(_obstacleData[i]["transform"]);

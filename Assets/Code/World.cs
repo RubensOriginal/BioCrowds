@@ -163,6 +163,8 @@ namespace Biocrowds.Core
                     Destroy(child.gameObject);
                 foreach (Transform child in prefabManager.goalContainer)
                     Destroy(child.gameObject);
+                foreach (Transform child in prefabManager.obstacleContainer)
+                    Destroy(child.gameObject);
             }
         }
         public void CreateNavMesh()

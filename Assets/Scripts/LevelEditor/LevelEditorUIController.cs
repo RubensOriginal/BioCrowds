@@ -12,6 +12,15 @@ public class LevelEditorUIController : MonoBehaviour
     public SceneController sceneController;
     public EventSystem eventSystem;
 
+    [SerializeField] private World simulationWorld;
+    [SerializeField] private RuntimeOBJImporter objImporter;
+    [SerializeField] private LevelExporter levelExporter;
+    [SerializeField] private LevelImporter levelImporter;
+    [SerializeField] private ManagerScript levelEditorManager;
+
+    //--------------------------------------
+    // Save/Load/Run
+    [Header("Save/Load/Run")]
     public CustomPointerHandler saveSceneButton;
     public CustomPointerHandler loadSceneButton;
     public CustomPointerHandler runSceneButton;
@@ -22,26 +31,36 @@ public class LevelEditorUIController : MonoBehaviour
 
     public CustomPointerHandler saveFailedContinueButton;
 
+    public CustomPointerHandler simulationRunningContinueButton;
+
+    //--------------------------------------
+    // Actions
+    [Header("Actions")]
+    public List<Toggle> actionToggles;
+
+    //--------------------------------------
+    // Create Objects/Presets
+    [Header("Create Objects/Presets")]
     public CustomPointerHandler importOBJButton;
     public CustomPointerHandler clearOBJButton;
     public CustomPointerHandler confirmPresetButton;
     public CustomPointerHandler cancelPresetButton;
-
-    public List<Toggle> actionToggles;
+        
     public ToggleGroup  presetToggleGroup;
     public List<Toggle> presetToggles;
+
+    //--------------------------------------
+    // Edit Objects
+    [Header("Edit Objects")]
     public TMP_InputField agentNumberInputField;
 
-    [SerializeField] private TMP_Text errorMessage;
-    [SerializeField] private World simulationWorld;
-    [SerializeField] private RuntimeOBJImporter objImporter;
-    [SerializeField] private LevelExporter levelExporter;
-    [SerializeField] private LevelImporter levelImporter;
-    [SerializeField] private ManagerScript levelEditorManager;
-
+    //--------------------------------------
+    // Panels
+    [Header("Panels")]
     public RectTransform loadPresetPanel;
     public RectTransform confirmLoadPanel;
     public RectTransform saveFailedPanel;
+    public RectTransform simulationRunningPanel;
     public RectTransform objectsPanel;
     public RectTransform editSpawnerPanel;
     public RectTransform editObstaclePanel;
@@ -52,6 +71,7 @@ public class LevelEditorUIController : MonoBehaviour
         loadPresetPanel.gameObject.SetActive(false);
         confirmLoadPanel.gameObject.SetActive(false);
         saveFailedPanel.gameObject.SetActive(false);
+        simulationRunningPanel.gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -63,7 +83,7 @@ public class LevelEditorUIController : MonoBehaviour
 
         importOBJButton.OnPointerDownEvent += ImportOBJButton_OnPointerDownEvent;
         clearOBJButton.OnPointerDownEvent += ClearOBJButton_OnPointerDownEvent;
-        runSceneButton.OnPointerDownEvent += CreateMarkersButton_OnPointerDownEvent;
+        runSceneButton.OnPointerDownEvent += RunSceneButton_OnPointerDownEvent;
         saveSceneButton.OnPointerDownEvent += SaveSceneButton_OnPointerDownEvent;
         loadSceneButton.OnPointerDownEvent += LoadSceneButton_OnPointerDownEvent;
 
@@ -72,6 +92,8 @@ public class LevelEditorUIController : MonoBehaviour
         confirmLoadCancelButton.OnPointerDownEvent += ConfirmLoadCancelButton_OnPointerDownEvent;
 
         saveFailedContinueButton.OnPointerDownEvent += SaveFailedContinueButton_OnPointerDownEvent;
+
+        simulationRunningContinueButton.OnPointerDownEvent += SimulationRunningContinueButton_OnPointerDownEvent;
 
         confirmPresetButton.OnPointerDownEvent += ConfirmPresetButton_OnPointerDownEvent;
         cancelPresetButton.OnPointerDownEvent += CancelPresetButton_OnPointerDownEvent;
@@ -179,7 +201,7 @@ public class LevelEditorUIController : MonoBehaviour
         }
     }
 
-    private void CreateMarkersButton_OnPointerDownEvent(PointerEventData obj)
+    private void RunSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
         eventSystem.SetSelectedGameObject(null);
 
@@ -191,8 +213,7 @@ public class LevelEditorUIController : MonoBehaviour
         {
             saveFailedPanel.gameObject.SetActive(true);
         }
-
-        //sceneController.LoadSimulationWorld();
+        simulationRunningPanel.gameObject.SetActive(true);
     }
 
     private void ConfirmLoadLoadAnywayButton_OnPointerDownEvent(PointerEventData obj)
@@ -211,10 +232,15 @@ public class LevelEditorUIController : MonoBehaviour
         saveFailedPanel.gameObject.SetActive(false);
     }
 
+    private void SimulationRunningContinueButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        simulationRunningPanel.gameObject.SetActive(false);
+    }
+
     public bool IsPopUpPanelOpen()
     {
         if (loadPresetPanel.gameObject.activeSelf || confirmLoadPanel.gameObject.activeSelf 
-            || saveFailedPanel.gameObject.activeSelf)
+            || saveFailedPanel.gameObject.activeSelf || simulationRunningPanel.gameObject.activeSelf)
             return true;
         return false;
     }

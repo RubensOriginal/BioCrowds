@@ -183,6 +183,7 @@ public class LevelExporter : MonoBehaviour
             pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
             _o.Add("transform", _obstacles[i].transform.AsJObject());
             _o.Add("point_list", pointList);
+            _o.Add("from_obj", JToken.FromObject(false));
             _obstaclesArray.Add(_o);
         }
         for (int i = 0; i < _objCollider.Count; i++) // OBJ Colliders
@@ -203,6 +204,7 @@ public class LevelExporter : MonoBehaviour
             pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
             _o.Add("transform", _objCollider[i].transform.AsJObject());
             _o.Add("point_list", pointList);
+            _o.Add("from_obj", JToken.FromObject(true));
             _obstaclesArray.Add(_o);
         }
         for (int i = 0; i < _loadedModels.Count; i++) // Loaded Models
