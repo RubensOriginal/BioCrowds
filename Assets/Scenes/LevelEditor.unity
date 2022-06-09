@@ -1789,15 +1789,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneController: {fileID: 341301015}
   eventSystem: {fileID: 1776557174}
-  importOBJButton: {fileID: 1467452789}
-  clearOBJButton: {fileID: 1576694030}
-  createMarkersButton: {fileID: 1991553804}
   saveSceneButton: {fileID: 1702562538}
   loadSceneButton: {fileID: 266975424}
+  runSceneButton: {fileID: 1991553804}
   confirmLoadSaveSceneButton: {fileID: 1406910881}
   confirmLoadLoadAnywayButton: {fileID: 1314084141}
   confirmLoadCancelButton: {fileID: 2024094855}
   saveFailedContinueButton: {fileID: 1203973583}
+  importOBJButton: {fileID: 1467452789}
+  clearOBJButton: {fileID: 1576694030}
   confirmPresetButton: {fileID: 399332918}
   cancelPresetButton: {fileID: 1672644394}
   actionToggles:
