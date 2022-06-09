@@ -2018,6 +2018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b6e8ae5e44b29d4d9809a3cbccea089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneController: {fileID: 341301015}
   invalidMaterial: {fileID: 2100000, guid: 6d45b87d51072f54a98eab4014bab041, type: 2}
 --- !u!1 &197477690
 GameObject:
@@ -3632,8 +3633,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   world: {fileID: 1639241294}
-  _showCells: 1
-  _showAuxins: 1
+  _showCells: 0
+  _showAuxins: 0
   _showAuxinVector: 1
   _showSpawnAreas: 1
   _showNavMeshCorners: 1
@@ -5569,7 +5570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &535363580
 Transform:
   m_ObjectHideFlags: 0
@@ -8316,7 +8317,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &901292662
 Transform:
   m_ObjectHideFlags: 0
@@ -14361,7 +14362,7 @@ PrefabInstance:
     - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}
       propertyPath: MAX_AGENTS
-      value: 20
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 114285194632179770, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}
@@ -14528,7 +14529,7 @@ PrefabInstance:
     - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}
       propertyPath: agentsPrefabType
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7634937405858234510, guid: 3d322bc9d9d73524b9a1ca068bbf97c7,
         type: 3}

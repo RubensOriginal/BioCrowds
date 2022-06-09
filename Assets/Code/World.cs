@@ -189,6 +189,7 @@ namespace Biocrowds.Core
             Debug.Log(_auxins.Count/_cells.Count);
 
             //create our agents
+            spawnAreas = FindObjectsOfType<SpawnArea>().ToList();
             yield return StartCoroutine(CreateAgents());
 
             //wait a little bit to start moving

@@ -12,11 +12,9 @@ public class LevelEditorUIController : MonoBehaviour
     public SceneController sceneController;
     public EventSystem eventSystem;
 
-    public CustomPointerHandler importOBJButton;
-    public CustomPointerHandler clearOBJButton;
-    public CustomPointerHandler createMarkersButton;
     public CustomPointerHandler saveSceneButton;
     public CustomPointerHandler loadSceneButton;
+    public CustomPointerHandler runSceneButton;
 
     public CustomPointerHandler confirmLoadSaveSceneButton;
     public CustomPointerHandler confirmLoadLoadAnywayButton;
@@ -24,6 +22,8 @@ public class LevelEditorUIController : MonoBehaviour
 
     public CustomPointerHandler saveFailedContinueButton;
 
+    public CustomPointerHandler importOBJButton;
+    public CustomPointerHandler clearOBJButton;
     public CustomPointerHandler confirmPresetButton;
     public CustomPointerHandler cancelPresetButton;
 
@@ -63,7 +63,7 @@ public class LevelEditorUIController : MonoBehaviour
 
         importOBJButton.OnPointerDownEvent += ImportOBJButton_OnPointerDownEvent;
         clearOBJButton.OnPointerDownEvent += ClearOBJButton_OnPointerDownEvent;
-        createMarkersButton.OnPointerDownEvent += CreateMarkersButton_OnPointerDownEvent;
+        runSceneButton.OnPointerDownEvent += CreateMarkersButton_OnPointerDownEvent;
         saveSceneButton.OnPointerDownEvent += SaveSceneButton_OnPointerDownEvent;
         loadSceneButton.OnPointerDownEvent += LoadSceneButton_OnPointerDownEvent;
 
@@ -186,6 +186,10 @@ public class LevelEditorUIController : MonoBehaviour
         if (levelExporter.IsValidExport(sceneController.world))
         {
             levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene);
+        }
+        else
+        {
+            saveFailedPanel.gameObject.SetActive(true);
         }
 
         //sceneController.LoadSimulationWorld();

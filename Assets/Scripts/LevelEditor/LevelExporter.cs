@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 
 public class LevelExporter : MonoBehaviour
 {
+    public SceneController sceneController;
     public enum ExportType { Download, RunScene };
 
     [DllImport("__Internal")]
@@ -35,7 +36,13 @@ public class LevelExporter : MonoBehaviour
         }
         else if (exportType == ExportType.RunScene)
         {
+        #if UNITY_WEBGL && !UNITY_EDITOR
             RunScene(content);
+        #else
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = 60;
+            sceneController.LoadSimulationWorld();
+        #endif
         }
     }
 

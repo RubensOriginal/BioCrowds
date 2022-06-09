@@ -79,7 +79,7 @@ public class SceneController : MonoBehaviour
     public void LoadSimulationWorld()
     {
         if (initialized)
-            world.ClearWorld(true);
+            world.ClearWorld(false);
 
         Debug.Log("Loading World");
 
