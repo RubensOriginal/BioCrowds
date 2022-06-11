@@ -24,6 +24,7 @@ public class LevelEditorUIController : MonoBehaviour
     public CustomPointerHandler saveSceneButton;
     public CustomPointerHandler loadSceneButton;
     public CustomPointerHandler runSceneButton;
+    public RectTransform        simulationRunningLabel;
 
     public CustomPointerHandler confirmLoadSaveSceneButton;
     public CustomPointerHandler confirmLoadLoadAnywayButton;
@@ -208,12 +209,14 @@ public class LevelEditorUIController : MonoBehaviour
         if (levelExporter.IsValidExport(sceneController.world))
         {
             levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene);
+            simulationRunningPanel.gameObject.SetActive(true);
+            runSceneButton.gameObject.SetActive(false);
+            simulationRunningLabel.gameObject.SetActive(true);
         }
         else
         {
             saveFailedPanel.gameObject.SetActive(true);
         }
-        simulationRunningPanel.gameObject.SetActive(true);
     }
 
     private void ConfirmLoadLoadAnywayButton_OnPointerDownEvent(PointerEventData obj)
@@ -235,6 +238,12 @@ public class LevelEditorUIController : MonoBehaviour
     private void SimulationRunningContinueButton_OnPointerDownEvent(PointerEventData obj)
     {
         simulationRunningPanel.gameObject.SetActive(false);
+    }
+
+    public void SimulationFinishedRunning(bool finished)
+    {
+        runSceneButton.gameObject.SetActive(true);
+        simulationRunningLabel.gameObject.SetActive(false);
     }
 
     public bool IsPopUpPanelOpen()
