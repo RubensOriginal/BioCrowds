@@ -81,6 +81,12 @@ public class LevelExporter : MonoBehaviour
                 sp.GetMeshRenderer().material = invalidMaterial;
                 valid = false;
             }
+            if (sp.initialAgentsGoalList.Count == 1 && sp.initialAgentsGoalList[0] == null)
+            {
+                sp.GetMeshRenderer().material = invalidMaterial;
+                sp.initialAgentsGoalList.Clear();
+                valid = false;
+            }
             if (sp.GetRandomPointInNavmesh().ToString() == Vector3.negativeInfinity.ToString())
             {
                 sp.GetMeshRenderer().material = invalidMaterial;

@@ -69,6 +69,9 @@ public class ObjectEditor : MonoBehaviour {
             var maxScale = Mathf.Max(selectedGameObject.transform.localScale.x, selectedGameObject.transform.localScale.z);
             editCircle.transform.localScale = Vector3.one * (maxScale * 1.3f);
             SpawnArea sp = go.GetComponent<SpawnArea>();
+            if (sp.initialAgentsGoalList[0] == null)
+                sp.initialAgentsGoalList.Clear();
+
             if (sp.initialAgentsGoalList.Count != 0)
             {
                 sp.initialAgentsGoalList[0].GetComponent<MeshRenderer>().material = ms.goalMaterialSelected;
