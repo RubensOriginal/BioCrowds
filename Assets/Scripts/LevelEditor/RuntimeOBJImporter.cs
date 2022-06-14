@@ -41,7 +41,6 @@ public class RuntimeOBJImporter : MonoBehaviour
         var textStream = new MemoryStream(Encoding.UTF8.GetBytes(loader.text));
         loadedObject = new OBJLoader().Load(textStream);
         loadedObject.transform.SetParent(loadedModelsContainer);
-        loadedObject.transform.position = new Vector3(25f, 0, 20f);
         foreach(Transform child in loadedObject.transform)
             {
                 if (child.TryGetComponent(out Renderer renderer))
@@ -76,7 +75,6 @@ public class RuntimeOBJImporter : MonoBehaviour
             }
             loadedModels.Add(data);
             loadedObject.transform.SetParent(loadedModelsContainer);
-			loadedObject.transform.position = new Vector3(15f, 0, 15f);
             foreach(Transform child in loadedObject.transform)
             {
                 if (child.TryGetComponent(out Renderer renderer))
@@ -121,6 +119,7 @@ public class RuntimeOBJImporter : MonoBehaviour
         newObjData.objData = data;
         loadedModels.Add(newObjData);
         loadedObject.transform.SetParent(loadedModelsContainer);
+        loadedObject.transform.localScale = new Vector3(-1f, 0.1f, 1f);
         foreach (Transform child in loadedObject.transform)
         {
             if (child.TryGetComponent(out Renderer renderer))
