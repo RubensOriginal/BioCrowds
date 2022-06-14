@@ -134,7 +134,7 @@ public class RuntimeOBJImporter : MonoBehaviour
                 child.tag = "OBJCollider";
             }
         }
-        loadedObject.transform.position = new Vector3(15f, 0f, 15f);
+        //loadedObject.transform.position = new Vector3(15f, 0f, 15f);
         return newObjData;
     }
 
