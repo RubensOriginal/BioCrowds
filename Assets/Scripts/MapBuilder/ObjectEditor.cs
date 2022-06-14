@@ -129,7 +129,7 @@ public class ObjectEditor : MonoBehaviour {
     {
         if (int.TryParse(ms.numberAgentsInputField.text, out int numberAgentsInt))
         {
-            int clampValue = Mathf.Clamp(numberAgentsInt, 0, 20);
+            int clampValue = Mathf.Clamp(numberAgentsInt, 1, 10);
             selectedGameObject.GetComponent<SpawnArea>().initialNumberOfAgents = clampValue;
             if (clampValue != numberAgentsInt)
                 ms.numberAgentsInputField.text = clampValue.ToString();
