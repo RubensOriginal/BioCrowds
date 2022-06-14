@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SFB;
+using UnityEngine.Events;
 
 public class LevelImporter : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class LevelImporter : MonoBehaviour
     private RuntimeOBJImporter objImporter;
 
     public ExtensionFilter[] extensions;
+
+
+    [SerializeField]
+    private UnityEvent OnInvalidLoad;
 
 
     private void Start()
@@ -69,6 +74,11 @@ public class LevelImporter : MonoBehaviour
     {
         var loader = new WWW(url);
         yield return loader;
+        if (!IsValidImport(loader.text))
+        {
+            OnInvalidLoad.Invoke();
+            yield break;
+        }
         LoadContent(loader.text);
         yield break;
     }
@@ -79,12 +89,17 @@ public class LevelImporter : MonoBehaviour
         var paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
         if (paths.Length > 0)
         {
-            for (int i = 0; i < paths.Length; i++)
-                Debug.Log("Now Importing: " + " " + paths[0]);
+            //for (int i = 0; i < paths.Length; i++)
+            //    Debug.Log("Now Importing: " + " " + paths[0]);
 
             using var fs = new FileStream(paths[0], FileMode.Open);
             string content = new StreamReader(fs).ReadToEnd();
-            //Debug.Log(content);
+
+            if (!IsValidImport(content))
+            {
+                OnInvalidLoad.Invoke();
+                yield break;
+            }
             LoadContent(content);
         }
         yield return null;
@@ -92,7 +107,20 @@ public class LevelImporter : MonoBehaviour
     }
 #endif
 
-
+    public bool IsValidImport(string text)
+    {
+        if (!text.Contains("terrains"))
+            return false;
+        if (!text.Contains("goals"))
+            return false;
+        if (!text.Contains("obstacles"))
+            return false;
+        if (!text.Contains("spawnAreas"))
+            return false;
+        if (!text.Contains("loaded_models"))
+            return false;
+        return true;
+    }
     private void LoadContent(string text)
     {
         world.ClearWorld(true);

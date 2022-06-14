@@ -31,6 +31,7 @@ public class LevelEditorUIController : MonoBehaviour
     public CustomPointerHandler confirmLoadCancelButton;
 
     public CustomPointerHandler saveFailedContinueButton;
+    public CustomPointerHandler loadFailedContinueButton;
 
     public CustomPointerHandler simulationRunningContinueButton;
 
@@ -61,6 +62,7 @@ public class LevelEditorUIController : MonoBehaviour
     public RectTransform loadPresetPanel;
     public RectTransform confirmLoadPanel;
     public RectTransform saveFailedPanel;
+    public RectTransform loadFailedPanel;
     public RectTransform simulationRunningPanel;
     public RectTransform objectsPanel;
     public RectTransform editSpawnerPanel;
@@ -72,6 +74,7 @@ public class LevelEditorUIController : MonoBehaviour
         loadPresetPanel.gameObject.SetActive(false);
         confirmLoadPanel.gameObject.SetActive(false);
         saveFailedPanel.gameObject.SetActive(false);
+        loadFailedPanel.gameObject.SetActive(false);
         simulationRunningPanel.gameObject.SetActive(false);
     }
 
@@ -93,6 +96,7 @@ public class LevelEditorUIController : MonoBehaviour
         confirmLoadCancelButton.OnPointerDownEvent += ConfirmLoadCancelButton_OnPointerDownEvent;
 
         saveFailedContinueButton.OnPointerDownEvent += SaveFailedContinueButton_OnPointerDownEvent;
+        loadFailedContinueButton.OnPointerDownEvent += LoadFailedContinueButton_OnPointerDownEvent;
 
         simulationRunningContinueButton.OnPointerDownEvent += SimulationRunningContinueButton_OnPointerDownEvent;
 
@@ -101,6 +105,7 @@ public class LevelEditorUIController : MonoBehaviour
 
         
     }
+
 
 
     private void Update()
@@ -235,6 +240,11 @@ public class LevelEditorUIController : MonoBehaviour
         saveFailedPanel.gameObject.SetActive(false);
     }
 
+    private void LoadFailedContinueButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        loadFailedPanel.gameObject.SetActive(false);
+    }
+
     private void SimulationRunningContinueButton_OnPointerDownEvent(PointerEventData obj)
     {
         simulationRunningPanel.gameObject.SetActive(false);
@@ -246,10 +256,16 @@ public class LevelEditorUIController : MonoBehaviour
         simulationRunningLabel.gameObject.SetActive(false);
     }
 
+    public void InvalidImport()
+    {
+        loadFailedPanel.gameObject.SetActive(true);
+    }
+
     public bool IsPopUpPanelOpen()
     {
         if (loadPresetPanel.gameObject.activeSelf || confirmLoadPanel.gameObject.activeSelf 
-            || saveFailedPanel.gameObject.activeSelf || simulationRunningPanel.gameObject.activeSelf)
+            || saveFailedPanel.gameObject.activeSelf || simulationRunningPanel.gameObject.activeSelf 
+            || loadFailedPanel.gameObject.activeSelf)
             return true;
         return false;
     }
