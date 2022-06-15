@@ -94,6 +94,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnAreaCubeIconPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 3273120303996692357, guid: 252d6642907e87e4aaad28c7ad02504d,
+        type: 3}
+      propertyPath: quantitySpawnedEachCycle
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3273120303996692359, guid: 252d6642907e87e4aaad28c7ad02504d,
         type: 3}
       propertyPath: m_CastShadows

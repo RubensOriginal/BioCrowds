@@ -62,6 +62,8 @@ public class MoveObject : MonoBehaviour
         targetGameObject = go;
         originalVector3 = go.transform.position;
         isSelected = true;
+        if (go.tag == "Goal")
+            go.GetComponent<MeshRenderer>().material = ms.world.prefabManager.GetGoalPrefab().GetComponent<MeshRenderer>().sharedMaterial;
     }
 
     public void CancelMoveObject()

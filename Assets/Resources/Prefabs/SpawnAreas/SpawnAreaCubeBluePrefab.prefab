@@ -69,6 +69,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
         type: 3}
+      propertyPath: quantitySpawnedEachCycle
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3211918698737073743, guid: bb2431132316b8041a8a6879b436a83a,
+        type: 3}
       propertyPath: initialAgentsGoalList.Array.size
       value: 0
       objectReference: {fileID: 0}

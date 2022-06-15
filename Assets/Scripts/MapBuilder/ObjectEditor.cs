@@ -68,8 +68,9 @@ public class ObjectEditor : MonoBehaviour {
                 selectedGameObject.transform.position.z);
             var maxScale = Mathf.Max(selectedGameObject.transform.localScale.x, selectedGameObject.transform.localScale.z);
             editCircle.transform.localScale = Vector3.one * (maxScale * 1.3f);
+
             SpawnArea sp = go.GetComponent<SpawnArea>();
-            if (sp.initialAgentsGoalList[0] == null)
+            if (sp.initialAgentsGoalList.Count == 1 && sp.initialAgentsGoalList[0] == null)
                 sp.initialAgentsGoalList.Clear();
 
             if (sp.initialAgentsGoalList.Count != 0)
@@ -84,6 +85,7 @@ public class ObjectEditor : MonoBehaviour {
             {
                 goalCircle.transform.position = Vector3.one * -1000f;
             }
+
             isSelected = true;
             ms.numberAgentsInputField.text = go.GetComponent<SpawnArea>().initialNumberOfAgents.ToString();
         }
@@ -115,7 +117,8 @@ public class ObjectEditor : MonoBehaviour {
         if (selectedItemType == MouseScript.ItemList.Spawner)
         {
             selectedGameObject.GetComponent<MeshRenderer>().material = ms.spawnerMaterial;
-            if (selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList.Count != 0)
+            if (selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList.Count != 0 
+                && selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList[0] != null)
                 selectedGameObject.GetComponent<SpawnArea>().initialAgentsGoalList[0].GetComponent<MeshRenderer>().material = ms.goalMaterial;
         }
         else if (selectedItemType == MouseScript.ItemList.Obstacle)

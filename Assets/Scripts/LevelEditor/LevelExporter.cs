@@ -69,13 +69,16 @@ public class LevelExporter : MonoBehaviour
 
     public bool IsValidExport(World world)
     {
+        bool valid = true;
         world.CreateNavMesh();
         var _spawnAreas = FindObjectsOfType<SpawnArea>().ToList();
-        bool valid = true;
-        var validMaterial = world.prefabManager.GetSpawnAreaPrefab().GetComponent<Renderer>().sharedMaterial;
+        var _goals = GameObject.FindGameObjectsWithTag("Goal").ToList();
+        var validMaterialSA = world.prefabManager.GetSpawnAreaPrefab().GetComponent<Renderer>().sharedMaterial;
+        var validMaterialGoal = world.prefabManager.GetGoalPrefab().GetComponent<Renderer>().sharedMaterial;
+
         foreach (SpawnArea sp in _spawnAreas)
         {
-            sp.GetMeshRenderer().material = validMaterial;
+            sp.GetMeshRenderer().material = validMaterialSA;
             if (sp.initialAgentsGoalList.Count == 0)
             {
                 sp.GetMeshRenderer().material = invalidMaterial;
@@ -90,6 +93,16 @@ public class LevelExporter : MonoBehaviour
             if (sp.GetRandomPointInNavmesh().ToString() == Vector3.negativeInfinity.ToString())
             {
                 sp.GetMeshRenderer().material = invalidMaterial;
+                valid = false;
+            }
+        }
+        foreach (GameObject go in _goals)
+        {
+            go.GetComponent<MeshRenderer>().material = validMaterialGoal;
+            var point = new Vector3(go.transform.position.x, 0f, go.transform.position.z);
+            if (!NavMesh.SamplePosition(point, out NavMeshHit hit, 0.1f, 1 << NavMesh.GetAreaFromName("Walkable")))
+            {
+                go.GetComponent<MeshRenderer>().material = invalidMaterial;
                 valid = false;
             }
         }
