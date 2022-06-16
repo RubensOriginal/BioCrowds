@@ -137,6 +137,11 @@ public class ObjectEditor : MonoBehaviour {
             if (clampValue != numberAgentsInt)
                 ms.numberAgentsInputField.text = clampValue.ToString();
         }
+        else if (string.IsNullOrEmpty(ms.numberAgentsInputField.text))
+        {
+            selectedGameObject.GetComponent<SpawnArea>().initialNumberOfAgents = 1;
+            ms.numberAgentsInputField.text = 1.ToString();
+        }
     }
 
     public void UpdateObstacleWidth(string text)
@@ -152,6 +157,15 @@ public class ObjectEditor : MonoBehaviour {
             if (clampValue != value)
                 ms.obstacleWidthInputField.text = clampValue.ToString();
         }
+
+        else if (string.IsNullOrEmpty(text))
+        {
+            Vector3 size = selectedGameObject.transform.localScale;
+            size.x = 2;
+            selectedGameObject.transform.localScale = size;
+
+            ms.obstacleWidthInputField.text = 2.ToString();
+        }
     }
 
     public void UpdateObstacleHeigth(string text)
@@ -166,6 +180,15 @@ public class ObjectEditor : MonoBehaviour {
 
             if (clampValue != value)
                 ms.obstacleHeigthInputField.text = clampValue.ToString();
+        }
+
+        else if (string.IsNullOrEmpty(text))
+        {
+            Vector3 size = selectedGameObject.transform.localScale;
+            size.z = 2;
+            selectedGameObject.transform.localScale = size;
+
+            ms.obstacleWidthInputField.text = 2.ToString();
         }
     }
 
