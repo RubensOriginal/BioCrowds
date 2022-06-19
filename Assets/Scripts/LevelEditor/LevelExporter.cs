@@ -4,6 +4,7 @@ using Biocrowds.Core;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 using SFB;
 using System.Collections;
@@ -13,6 +14,7 @@ using UnityEngine.AI;
 
 public class LevelExporter : MonoBehaviour
 {
+    private DateTime timeStamp;
     public SceneController sceneController;
     public enum ExportType { Download, RunScene };
 
@@ -108,6 +110,11 @@ public class LevelExporter : MonoBehaviour
         }
 
         return valid;
+    }
+
+    private void Awake()
+    {
+        timeStamp = DateTime.UtcNow;
     }
 
     private string GenerateFileContent(World world, RuntimeOBJImporter objImporter)
@@ -298,6 +305,7 @@ public class LevelExporter : MonoBehaviour
             _spawnAreasArray.Add(_sp);
         }
 
+        output.Add("time_stamp", timeStamp.ToLongTimeString() + ":" + timeStamp.Millisecond.ToString());
         output.Add("terrains", _terrainsArray);
         output.Add("goals", _goalsArray);
         output.Add("obstacles", _obstaclesArray);

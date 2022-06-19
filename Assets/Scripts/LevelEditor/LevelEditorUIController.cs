@@ -36,6 +36,12 @@ public class LevelEditorUIController : MonoBehaviour
     public CustomPointerHandler simulationRunningContinueButton;
 
     //--------------------------------------
+    // Clear
+    public CustomPointerHandler clearSceneButton;
+    public CustomPointerHandler confirmClearButton;
+    public CustomPointerHandler cancelClearButton;
+
+    //--------------------------------------
     // Actions
     [Header("Actions")]
     public List<Toggle> actionToggles;
@@ -61,6 +67,7 @@ public class LevelEditorUIController : MonoBehaviour
     [Header("Panels")]
     public RectTransform loadPresetPanel;
     public RectTransform confirmLoadPanel;
+    public RectTransform confirmClearPanel;
     public RectTransform saveFailedPanel;
     public RectTransform loadFailedPanel;
     public RectTransform simulationRunningPanel;
@@ -73,6 +80,7 @@ public class LevelEditorUIController : MonoBehaviour
         levelEditorManager.world = sceneController.world;
         loadPresetPanel.gameObject.SetActive(false);
         confirmLoadPanel.gameObject.SetActive(false);
+        confirmClearPanel.gameObject.SetActive(false);
         saveFailedPanel.gameObject.SetActive(false);
         loadFailedPanel.gameObject.SetActive(false);
         simulationRunningPanel.gameObject.SetActive(false);
@@ -95,6 +103,10 @@ public class LevelEditorUIController : MonoBehaviour
         confirmLoadLoadAnywayButton.OnPointerDownEvent += ConfirmLoadLoadAnywayButton_OnPointerDownEvent;
         confirmLoadCancelButton.OnPointerDownEvent += ConfirmLoadCancelButton_OnPointerDownEvent;
 
+        clearSceneButton.OnPointerDownEvent += ClearSceneButton_OnPointerDownEvent;
+        confirmClearButton.OnPointerDownEvent += ConfirmClearButton_OnPointerDownEvent;
+        cancelClearButton.OnPointerDownEvent += CancelClearButton_OnPointerDownEvent;
+
         saveFailedContinueButton.OnPointerDownEvent += SaveFailedContinueButton_OnPointerDownEvent;
         loadFailedContinueButton.OnPointerDownEvent += LoadFailedContinueButton_OnPointerDownEvent;
 
@@ -106,7 +118,8 @@ public class LevelEditorUIController : MonoBehaviour
         
     }
 
-
+    
+    
 
     private void Update()
     {
@@ -261,11 +274,30 @@ public class LevelEditorUIController : MonoBehaviour
         loadFailedPanel.gameObject.SetActive(true);
     }
 
+    private void ClearSceneButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        eventSystem.SetSelectedGameObject(null);
+        confirmClearPanel.gameObject.SetActive(true);
+    }
+    private void ConfirmClearButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        actionToggles[0].isOn = true;
+        eventSystem.SetSelectedGameObject(null);
+        sceneController.world.ClearWorld(true);
+        objImporter.ClearLoadedModels();
+        confirmClearPanel.gameObject.SetActive(false);
+    }
+    private void CancelClearButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        eventSystem.SetSelectedGameObject(null);
+        confirmClearPanel.gameObject.SetActive(false);
+    }
+
     public bool IsPopUpPanelOpen()
     {
         if (loadPresetPanel.gameObject.activeSelf || confirmLoadPanel.gameObject.activeSelf 
             || saveFailedPanel.gameObject.activeSelf || simulationRunningPanel.gameObject.activeSelf 
-            || loadFailedPanel.gameObject.activeSelf)
+            || loadFailedPanel.gameObject.activeSelf || confirmClearPanel.gameObject.activeSelf)
             return true;
         return false;
     }

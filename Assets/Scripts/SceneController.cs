@@ -64,8 +64,8 @@ public class SceneController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("Reloading Scene");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //Debug.Log("Reloading Scene");
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
 #if UNITY_EDITOR
