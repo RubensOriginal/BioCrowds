@@ -17,6 +17,7 @@ public class LevelEditorUIController : MonoBehaviour
     [SerializeField] private LevelExporter levelExporter;
     [SerializeField] private LevelImporter levelImporter;
     [SerializeField] private ManagerScript levelEditorManager;
+    [SerializeField] private ObjectEditor  objEditor;
 
     //--------------------------------------
     // Save/Load/Run
@@ -75,6 +76,11 @@ public class LevelEditorUIController : MonoBehaviour
     public RectTransform editSpawnerPanel;
     public RectTransform editObstaclePanel;
 
+    //--------------------------------------
+    // Hints
+    public RectTransform editObjectHint;
+    public RectTransform editGoalHint;
+
     private void Awake()
     {
         levelEditorManager.world = sceneController.world;
@@ -84,6 +90,9 @@ public class LevelEditorUIController : MonoBehaviour
         saveFailedPanel.gameObject.SetActive(false);
         loadFailedPanel.gameObject.SetActive(false);
         simulationRunningPanel.gameObject.SetActive(false);
+
+        editObjectHint.gameObject.SetActive(false);
+        editGoalHint.gameObject.SetActive(false);
     }
 
     // Start is called before the first frame update
@@ -139,6 +148,9 @@ public class LevelEditorUIController : MonoBehaviour
         {
             confirmLoadPanel.gameObject.SetActive(false);
             saveFailedPanel.gameObject.SetActive(false);
+            confirmClearPanel.gameObject.SetActive(false);
+            simulationRunningPanel.gameObject.SetActive(false);
+            loadFailedPanel.gameObject.SetActive(false);
         }
 
         var mode = levelEditorManager.user.manipulatorOption;
@@ -163,6 +175,20 @@ public class LevelEditorUIController : MonoBehaviour
             editSpawnerPanel.gameObject.SetActive(false);
             editObstaclePanel.gameObject.SetActive(false);
         }
+
+
+        if (mode == MouseScript.LevelManupulator.Edit && !objEditor.GetSelected())
+        {
+            editObjectHint.gameObject.SetActive(true);
+        }
+        else
+        {
+            editObjectHint.gameObject.SetActive(false);
+        }
+
+        editGoalHint.gameObject.SetActive(mode == MouseScript.LevelManupulator.Link ? true : false);
+        
+
 
         importOBJButton.gameObject.SetActive(objImporter.loadedModels.Count == 0);
         clearOBJButton.gameObject.SetActive(objImporter.loadedModels.Count > 0);

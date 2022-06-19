@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ObjectEditor : MonoBehaviour {
 
-    [HideInInspector]
+
     public GameObject selectedGameObject;
     public Toggle editToggle;
     public Toggle linkToggle;
