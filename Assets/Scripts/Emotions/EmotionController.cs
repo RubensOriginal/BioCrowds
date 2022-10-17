@@ -40,13 +40,17 @@ public class EmotionController : MonoBehaviour
             {
                 // 0 - Close Left / 7 - Close Right
                 face.SetBlendShapeWeight(0, 90);
+                eyelashes.SetBlendShapeWeight(0, 90);
                 face.SetBlendShapeWeight(7, 90);
+                eyelashes.SetBlendShapeWeight(7, 90);
                 timeCloseOpenStage++;
             } else if (timeCloseOpenStage == 2)
             {
-                if (internalTimeEyes > 0.1) { 
-                    face.SetBlendShapeWeight(0, 0.0f);
-                    face.SetBlendShapeWeight(7, 0.0f);
+                if (internalTimeEyes > 0.1) {
+                    face.SetBlendShapeWeight(0, 0);
+                    eyelashes.SetBlendShapeWeight(0, 0);
+                    face.SetBlendShapeWeight(7, 0);
+                    eyelashes.SetBlendShapeWeight(7, 0);
                     timeCloseOpenStage = 0;
                 } else
                 {
