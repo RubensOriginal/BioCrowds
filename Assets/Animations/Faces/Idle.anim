@@ -42,7 +42,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browDownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -70,7 +70,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browDownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -98,7 +98,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browInnerUp
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -126,7 +126,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browOuterUpLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -154,7 +154,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browOuterUpRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -182,7 +182,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.cheekPuff
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -210,7 +210,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.cheekSquintLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -238,7 +238,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.cheekSquintRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -266,7 +266,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeBlinkLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -294,7 +294,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeBlinkRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -322,7 +322,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookDownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -350,7 +350,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookDownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -378,7 +378,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookInLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -406,7 +406,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookInRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -434,7 +434,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookOutLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -462,7 +462,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookOutRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -490,7 +490,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookUpLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -518,7 +518,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookUpRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -526,7 +526,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 40
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -535,7 +535,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 40
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -546,7 +546,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeSquintLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -574,7 +574,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeSquintRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -602,7 +602,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeWideLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -630,7 +630,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeWideRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -658,7 +658,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawForward
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -686,7 +686,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -714,7 +714,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawOpen
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -742,7 +742,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -770,7 +770,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthClose
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -798,7 +798,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthDimpleLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -826,7 +826,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthDimpleRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -854,7 +854,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthFrownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -882,7 +882,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthFrownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -910,7 +910,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthFunnel
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -938,7 +938,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -966,7 +966,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthLowerDownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -994,7 +994,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthLowerDownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1022,7 +1022,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthPressLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1050,7 +1050,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthPressRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1078,7 +1078,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthPucker
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1106,7 +1106,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1134,7 +1134,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthRollLower
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1162,7 +1162,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthRollUpper
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1190,7 +1190,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthShrugLower
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1218,7 +1218,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthShrugUpper
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1246,7 +1246,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthSmileLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1274,7 +1274,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthSmileRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1302,7 +1302,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthStretchLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1330,7 +1330,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthStretchRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1358,7 +1358,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthUpperUpLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1386,7 +1386,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthUpperUpRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1414,7 +1414,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.noseSneerLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1442,7 +1442,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.noseSneerRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1470,7 +1470,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.tongueOut
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -1482,364 +1482,364 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3066150191
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1555957629
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3186092482
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 181950301
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3792244359
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3791455331
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1628708155
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1186137760
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 931550794
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1642583361
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3792541384
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1652866189
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 4138379329
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 4143194167
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3093273373
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 2489829595
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1567507266
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1867953510
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 235957664
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 553732124
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 784806141
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 888910344
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 2105686213
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3252796351
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 536272755
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 2898703423
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1218123493
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3435681924
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 499152120
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 101362108
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 889720471
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3612441625
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1046404055
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 149538760
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1651398876
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 2118245420
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3313489574
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 208714442
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 4015055413
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 2618002338
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 4241370909
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 538961656
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1088045639
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 953645942
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1317533931
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1819093624
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 2842390461
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 1118201102
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 270758139
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 2258865831
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3220008540
       script: {fileID: 0}
       typeID: 137
       customType: 20
       isPPtrCurve: 0
     - serializedVersion: 2
-      path: 0
+      path: 2770785369
       attribute: 3487147743
       script: {fileID: 0}
       typeID: 137
@@ -1892,7 +1892,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browDownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1920,7 +1920,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browDownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1948,7 +1948,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browInnerUp
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -1976,7 +1976,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browOuterUpLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2004,7 +2004,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.browOuterUpRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2032,7 +2032,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.cheekPuff
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2060,7 +2060,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.cheekSquintLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2088,7 +2088,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.cheekSquintRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2116,7 +2116,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeBlinkLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2144,7 +2144,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeBlinkRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2172,7 +2172,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookDownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2200,7 +2200,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookDownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2228,7 +2228,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookInLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2256,7 +2256,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookInRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2284,7 +2284,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookOutLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2312,7 +2312,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookOutRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2340,7 +2340,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookUpLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2368,7 +2368,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeLookUpRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2376,7 +2376,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0
+        value: 40
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2385,7 +2385,7 @@ AnimationClip:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0
+        value: 40
         inSlope: 0
         outSlope: 0
         tangentMode: 136
@@ -2396,7 +2396,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeSquintLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2424,7 +2424,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeSquintRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2452,7 +2452,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeWideLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2480,7 +2480,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.eyeWideRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2508,7 +2508,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawForward
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2536,7 +2536,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2564,7 +2564,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawOpen
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2592,7 +2592,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.jawRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2620,7 +2620,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthClose
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2648,7 +2648,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthDimpleLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2676,7 +2676,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthDimpleRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2704,7 +2704,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthFrownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2732,7 +2732,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthFrownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2760,7 +2760,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthFunnel
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2788,7 +2788,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2816,7 +2816,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthLowerDownLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2844,7 +2844,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthLowerDownRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2872,7 +2872,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthPressLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2900,7 +2900,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthPressRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2928,7 +2928,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthPucker
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2956,7 +2956,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -2984,7 +2984,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthRollLower
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3012,7 +3012,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthRollUpper
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3040,7 +3040,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthShrugLower
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3068,7 +3068,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthShrugUpper
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3096,7 +3096,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthSmileLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3124,7 +3124,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthSmileRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3152,7 +3152,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthStretchLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3180,7 +3180,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthStretchRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3208,7 +3208,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthUpperUpLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3236,7 +3236,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.mouthUpperUpRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3264,7 +3264,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.noseSneerLeft
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3292,7 +3292,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.noseSneerRight
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   - curve:
@@ -3320,7 +3320,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: blendShape.tongueOut
-    path: 
+    path: Face
     classID: 137
     script: {fileID: 0}
   m_EulerEditorCurves: []

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using System.Linq;
 
 public class EmotionAnimationController : MonoBehaviour
 {
@@ -18,11 +19,7 @@ public class EmotionAnimationController : MonoBehaviour
 
         faceAnimators = new List<Animator>();
 
-        foreach(Transform child in transform)
-        {
-            if (child.GetComponent<Animator>() != null)
-                faceAnimators.Add(child.GetComponent<Animator>());
-        }
+        faceAnimators = GetComponentsInChildren<Animator>().ToList();
         
     }
 
