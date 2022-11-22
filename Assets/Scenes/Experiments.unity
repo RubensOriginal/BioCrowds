@@ -51270,6 +51270,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9200210366883936642, guid: 424e129a07cea0b44a7e6716ec1f7870,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 424e129a07cea0b44a7e6716ec1f7870,
         type: 3}
       propertyPath: m_RootOrder
@@ -51325,10 +51330,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3338134403700605823, guid: 424e129a07cea0b44a7e6716ec1f7870,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 52
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 424e129a07cea0b44a7e6716ec1f7870,
         type: 3}
       propertyPath: m_Name
       value: Leonard_Final
+      objectReference: {fileID: 0}
+    - target: {fileID: 3245454150414979290, guid: 424e129a07cea0b44a7e6716ec1f7870,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 52
+      objectReference: {fileID: 0}
+    - target: {fileID: 6868716418057165105, guid: 424e129a07cea0b44a7e6716ec1f7870,
+        type: 3}
+      propertyPath: m_BlendShapeWeights.Array.size
+      value: 52
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 424e129a07cea0b44a7e6716ec1f7870, type: 3}
