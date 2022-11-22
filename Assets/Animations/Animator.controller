@@ -124,13 +124,13 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: Walking
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_DefaultBool: 1
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Body
@@ -228,7 +228,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -4274770991410265338, guid: ecab4eb2cd1daf44998773a27cfd6b46,
+  m_Motion: {fileID: -4274770991410265338, guid: fedaeecf91113e044923fb9b64f250f6,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
@@ -256,7 +256,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -8945691123924629249, guid: 9a91c6f1e5b73ca40b1687ec6cc040cb,
+  m_Motion: {fileID: -8945691123924629249, guid: 8903d3389f90ebb4087c4d0dc0c1afce,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
