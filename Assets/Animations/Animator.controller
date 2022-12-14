@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Fear
+    m_ConditionEvent: fear
     m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4641725766204305323}
@@ -34,7 +34,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Smile
+    m_ConditionEvent: smile
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8579192848042335139}
@@ -74,7 +74,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Sad
+    m_ConditionEvent: sad
     m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4641725766204305323}
@@ -141,7 +141,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Smile
     m_Mirror: 0
-  m_BlendParameter: Smile
+  m_BlendParameter: smile
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -250,7 +250,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Smile
     m_Mirror: 0
-  m_BlendParameter: Surprise
+  m_BlendParameter: surprise
   m_BlendParameterY: Smile
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -281,7 +281,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Smile
     m_Mirror: 0
-  m_BlendParameter: Sad
+  m_BlendParameter: sad
   m_BlendParameterY: Smile
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -322,7 +322,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Surprise
+    m_ConditionEvent: surprise
     m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4641725766204305323}
@@ -347,7 +347,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Smile
+    m_ConditionEvent: smile
     m_EventTreshold: 0.01
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4641725766204305323}
@@ -387,7 +387,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Smile
     m_Mirror: 0
-  m_BlendParameter: Fear
+  m_BlendParameter: fear
   m_BlendParameterY: Smile
   m_MinThreshold: 0
   m_MaxThreshold: 1
@@ -441,7 +441,7 @@ AnimatorState:
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
-  m_CycleOffsetParameter: Smile
+  m_CycleOffsetParameter: smile
   m_TimeParameter: 
 --- !u!1101 &-616172638374703360
 AnimatorStateTransition:
@@ -500,25 +500,25 @@ AnimatorController:
   m_Name: Animator
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Smile
+  - m_Name: smile
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Sad
+  - m_Name: sad
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Fear
+  - m_Name: fear
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Surprise
+  - m_Name: surprise
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -528,7 +528,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 0
+    m_DefaultBool: 1
     m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
@@ -628,7 +628,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Surprise
+    m_ConditionEvent: surprise
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 764803672776933527}
@@ -679,7 +679,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Fear
+    m_ConditionEvent: fear
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6808928376170653774}
@@ -752,7 +752,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Sad
+    m_ConditionEvent: sad
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -863350735635304450}
@@ -1064,7 +1064,7 @@ AnimatorState:
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: Smile
+  m_TimeParameter: smile
 --- !u!206 &9194341199117878128
 BlendTree:
   m_ObjectHideFlags: 1
