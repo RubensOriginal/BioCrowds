@@ -1821,7 +1821,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 155736674}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &155736678
 Behaviour:
   m_ObjectHideFlags: 0
@@ -1966,7 +1966,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163776247}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2116,8 +2116,9 @@ MonoBehaviour:
   editObstaclePanel: {fileID: 1379658780}
   editObjectHint: {fileID: 451129056}
   editGoalHint: {fileID: 1578199943}
-  mainCamera: {fileID: 155736674}
   cameras: []
+  mainTestLevel: {fileID: 1627891575}
+  testLevels: []
 --- !u!1 &187534729
 GameObject:
   m_ObjectHideFlags: 0

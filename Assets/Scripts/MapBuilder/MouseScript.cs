@@ -1,5 +1,6 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEditor;
 
 public class MouseScript : MonoBehaviour
 {
@@ -36,77 +37,85 @@ public class MouseScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        colliding = false;
-        hitTerrain = false;
-
-        RaycastHit[] hits = Physics.RaycastAll(ray);
-        if (hits.Length > 0)
+        for (int i = 0; i < ms.uiController.cameras.Count; i++)
         {
-            for (int i = 0; i < hits.Length; i++)
+            Camera camera = ms.uiController.cameras[i];
+            GameObject testLevel = ms.uiController.testLevels[i];
+
+            ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            colliding = false;
+            hitTerrain = false;
+
+            RaycastHit[] hits = Physics.RaycastAll(ray);
+            if (hits.Length > 0)
             {
-                if (hits[i].collider.gameObject.layer == 9)
+                for (int j = 0; j < hits.Length; j++)
                 {
-                    colliding = true;
-                    hit = hits[i];
-                }
-                else if (hits[i].transform.tag == "Terrain")
-                {
-                    hitTerrain = true;
-                }
-            }
-        }
-
-        if (hitTerrain)
-        {
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            transform.position = new Vector3(
-                Mathf.Clamp(mousePos.x, -50, 50),
-                0.50f,
-                Mathf.Clamp(mousePos.z, -50, 50));
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                if (manipulatorOption == LevelManupulator.Create)
-                {
-                    if (hitTerrain && !colliding)
-                        CreateObject();
-                }
-                else if (manipulatorOption == LevelManupulator.Destroy)
-                {
-                    if (colliding)
-                        Destroy(hit.collider.gameObject);
-
-                }
-                else if (manipulatorOption == LevelManupulator.Edit)
-                {
-                    if (colliding)
-                        oe.SelectObject(hit.collider.gameObject);
-                    else
-                        oe.UnselectObject();
-                }
-                else if (manipulatorOption == LevelManupulator.Link)
-                {
-                    if (colliding || hit.collider.gameObject.CompareTag("Goal"))
-                        oe.LinkGoalToSpawner(hit.collider.gameObject);
-                }
-                else if (manipulatorOption == LevelManupulator.Move)
-                {
-                    if (colliding)
+                    if (hits[j].collider.gameObject.layer == 9)
                     {
-                        if (!mo.isSelected)
-                            mo.SelectObject(hit.collider.gameObject);
-                        else
-                            mo.isSelected = false;
+                        colliding = true;
+                        hit = hits[j];
+                    }
+                    else if (hits[j].transform.tag == "Terrain")
+                    {
+                        hitTerrain = true;
                     }
                 }
-
             }
+
+            if (hitTerrain)
+            {
+                mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+
+                transform.position = new Vector3(
+                    Mathf.Clamp(mousePos.x, -50 + testLevel.transform.position.x, 50 + testLevel.transform.position.x),
+                    0.50f,
+                    Mathf.Clamp(mousePos.z, -50 + testLevel.transform.position.z, 50 + testLevel.transform.position.z));
+            }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    if (manipulatorOption == LevelManupulator.Create)
+                    {
+                        if (hitTerrain && !colliding)
+                            CreateObject();
+                    }
+                    else if (manipulatorOption == LevelManupulator.Destroy)
+                    {
+                        if (colliding)
+                            Destroy(hit.collider.gameObject);
+
+                    }
+                    else if (manipulatorOption == LevelManupulator.Edit)
+                    {
+                        if (colliding)
+                            oe.SelectObject(hit.collider.gameObject);
+                        else
+                            oe.UnselectObject();
+                    }
+                    else if (manipulatorOption == LevelManupulator.Link)
+                    {
+                        if (colliding || hit.collider.gameObject.CompareTag("Goal"))
+                            oe.LinkGoalToSpawner(hit.collider.gameObject);
+                    }
+                    else if (manipulatorOption == LevelManupulator.Move)
+                    {
+                        if (colliding)
+                        {
+                            if (!mo.isSelected)
+                                mo.SelectObject(hit.collider.gameObject);
+                            else
+                                mo.isSelected = false;
+                        }
+                    }
+
+                }
+            }
+
         }
     }
 
