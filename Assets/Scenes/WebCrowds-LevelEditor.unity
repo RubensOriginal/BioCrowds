@@ -1966,7 +1966,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163776247}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2117,6 +2117,7 @@ MonoBehaviour:
   editObjectHint: {fileID: 451129056}
   editGoalHint: {fileID: 1578199943}
   cameras: []
+  currrentCamera: {fileID: 0}
   mainTestLevel: {fileID: 1627891575}
   testLevels: []
 --- !u!1 &187534729

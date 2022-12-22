@@ -25,6 +25,7 @@ public class MouseScript : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
     private RaycastHit terrainHit;
+    private Transform testLevel;
 
     public MoveObject mo;
 
@@ -42,7 +43,7 @@ public class MouseScript : MonoBehaviour
         for (int i = 0; i < ms.uiController.cameras.Count; i++)
         {
             Camera camera = ms.uiController.cameras[i];
-            GameObject testLevel = ms.uiController.testLevels[i];
+            // GameObject testLevel = ms.uiController.testLevels[i];
 
             ray = camera.ScreenPointToRay(Input.mousePosition);
 
@@ -69,7 +70,8 @@ public class MouseScript : MonoBehaviour
 
             if (hitTerrain)
             {
-                ms.uiController.currrentCamera = terrainHit.collider.gameObject.transform.parent.parent.GetComponentInChildren<Camera>();
+                testLevel = terrainHit.collider.gameObject.transform.parent.parent;
+                ms.uiController.currrentCamera = testLevel.GetComponentInChildren<Camera>();
 
                 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
 
@@ -129,7 +131,7 @@ public class MouseScript : MonoBehaviour
         switch (itemOption)
         {
             case ItemList.Spawner:
-                newObject = GameObject.Instantiate(ms.spawnerPrefab, ms.spawnerContainer);
+                newObject = GameObject.Instantiate(ms.spawnerPrefab, testLevel.Find("SpawnAreas"));
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Spawner";
@@ -141,7 +143,7 @@ public class MouseScript : MonoBehaviour
                 spawnerObject.data.type = Object.Type.Spawner;
                 break;
             case ItemList.Goal:
-                newObject = GameObject.Instantiate(ms.goalPrefab, ms.goalContainer);
+                newObject = GameObject.Instantiate(ms.goalPrefab, testLevel.Find("Goals"));
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Goal";
@@ -154,7 +156,7 @@ public class MouseScript : MonoBehaviour
                 break;
 
             case ItemList.Obstacle:
-                newObject = GameObject.Instantiate(ms.obstaclePrefab, ms.obstacleContainer);
+                newObject = GameObject.Instantiate(ms.obstaclePrefab, testLevel.Find("NavMeshSurface").Find("Obstacles"));
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Obstacle";
