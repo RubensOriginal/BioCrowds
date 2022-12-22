@@ -25,7 +25,7 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ms.uiController.IsPopUpPanelOpen() || ms.uiController.currrentCamera != cam)
+        if (ms.uiController.IsPopUpPanelOpen() || ms.uiController.currrentCamera != cam || !cam.enabled)
             return;
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");

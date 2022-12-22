@@ -91,6 +91,9 @@ public class LevelEditorUIController : MonoBehaviour
     public GameObject mainTestLevel;
     public List<GameObject> testLevels;
 
+    [HideInInspector]
+    public bool isZoom { get; private set; }
+
 
     private void Awake()
     {
@@ -143,6 +146,8 @@ public class LevelEditorUIController : MonoBehaviour
 
         if (!cameras.Contains(mainTestLevel.GetComponentInChildren<Camera>()))
             cameras.Add(mainTestLevel.GetComponentInChildren<Camera>());
+
+        isZoom = false;
 
     }
 
@@ -292,7 +297,7 @@ public class LevelEditorUIController : MonoBehaviour
         testLevels.Add(newTestLevel);
 
         cameras.Add(newTestLevel.GetComponentInChildren<Camera>());
-        resizeCameras();
+        ResizeCameras();
 
         removeAlternativeButton.gameObject.SetActive(true);
         if (testLevels.Count == 4)
@@ -306,7 +311,7 @@ public class LevelEditorUIController : MonoBehaviour
         testLevels.Remove(removedTestLevel);
         Destroy(removedTestLevel);
 
-        resizeCameras();
+        ResizeCameras();
 
         createAlternativesButton.gameObject.SetActive(true);
         if (testLevels.Count == 1)
@@ -378,34 +383,55 @@ public class LevelEditorUIController : MonoBehaviour
         return false;
     }
 
-    private void resizeCameras()
+    public void ResizeCameras()
     {
+        isZoom = false;
+
+        foreach (Camera camera in cameras) {
+            if (!camera.enabled)
+                camera.enabled = true;
+                
+        }
+
         switch (cameras.Count)
         {
             case 1:
-                resizeCamera(cameras[0], 0.0f, 0.0f, 1.0f, 1.0f);
+                ResizeCamera(cameras[0], 0.0f, 0.0f, 1.0f, 1.0f);
                 break;
             case 2:
-                resizeCamera(cameras[0], 0.0f, 0.0f, 0.5f, 1.0f);
-                resizeCamera(cameras[1], 0.5f, 0.0f, 0.5f, 1.0f);
+                ResizeCamera(cameras[0], 0.0f, 0.0f, 0.5f, 1.0f);
+                ResizeCamera(cameras[1], 0.5f, 0.0f, 0.5f, 1.0f);
                 break;
             case 3:
-                resizeCamera(cameras[0], 0.0f, 0.5f, 0.5f, 0.5f);
-                resizeCamera(cameras[1], 0.5f, 0.5f, 0.5f, 0.5f);
-                resizeCamera(cameras[2], 0.0f, 0.0f, 1.0f, 0.5f);
+                ResizeCamera(cameras[0], 0.0f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[1], 0.5f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[2], 0.0f, 0.0f, 1.0f, 0.5f);
                 break;
             case 4:
-                resizeCamera(cameras[0], 0.0f, 0.5f, 0.5f, 0.5f);
-                resizeCamera(cameras[1], 0.5f, 0.5f, 0.5f, 0.5f);
-                resizeCamera(cameras[2], 0.0f, 0.0f, 0.5f, 0.5f);
-                resizeCamera(cameras[3], 0.5f, 0.0f, 0.5f, 0.5f);
+                ResizeCamera(cameras[0], 0.0f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[1], 0.5f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[2], 0.0f, 0.0f, 0.5f, 0.5f);
+                ResizeCamera(cameras[3], 0.5f, 0.0f, 0.5f, 0.5f);
                 break;
         }
     }
 
-    private void resizeCamera(Camera camera, float x, float y, float width, float height)
+    private void ResizeCamera(Camera camera, float x, float y, float width, float height)
     {
         camera.rect = new Rect(x, y, width, height);
+    }
+
+    public void ZoomCamera(Camera camera)
+    {
+        isZoom = true;
+
+        camera.rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+
+        foreach (Camera cameraref in cameras)
+        {
+            if (camera != cameraref)
+                cameraref.enabled = false;
+        }
     }
 
 }

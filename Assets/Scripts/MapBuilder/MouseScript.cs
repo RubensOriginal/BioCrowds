@@ -26,6 +26,7 @@ public class MouseScript : MonoBehaviour
     private RaycastHit hit;
     private RaycastHit terrainHit;
     private Transform testLevel;
+    private bool isRun;
 
     public MoveObject mo;
 
@@ -34,6 +35,7 @@ public class MouseScript : MonoBehaviour
     {
         mr = GetComponent<MeshRenderer>();
         mo = GetComponent<MoveObject>();
+        isRun = false;
     }
 
     // Update is called once per frame
@@ -81,7 +83,7 @@ public class MouseScript : MonoBehaviour
                     Mathf.Clamp(mousePos.z, -50 + testLevel.transform.position.z, 50 + testLevel.transform.position.z));
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && ms.uiController.currrentCamera.enabled)
             {
                 if (!EventSystem.current.IsPointerOverGameObject())
                 {
@@ -121,8 +123,21 @@ public class MouseScript : MonoBehaviour
 
                 }
             }
-
+            else if (Input.GetMouseButtonDown(1) && !isRun)
+            {
+                if (ms.uiController.isZoom)
+                {
+                    ms.uiController.ResizeCameras();
+                }
+                else
+                {
+                    ms.uiController.ZoomCamera(ms.uiController.currrentCamera);
+                }
+                isRun = true;
+            }
         }
+
+        isRun = false;
     }
 
     void CreateObject()
