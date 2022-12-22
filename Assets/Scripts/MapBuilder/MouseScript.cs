@@ -69,8 +69,6 @@ public class MouseScript : MonoBehaviour
 
             if (hitTerrain)
             {
-                Debug.Log(terrainHit.collider.gameObject.transform.parent.parent.name);
-
                 ms.uiController.currrentCamera = terrainHit.collider.gameObject.transform.parent.parent.GetComponentInChildren<Camera>();
 
                 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
