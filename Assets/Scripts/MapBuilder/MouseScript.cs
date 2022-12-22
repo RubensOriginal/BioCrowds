@@ -24,6 +24,7 @@ public class MouseScript : MonoBehaviour
     private bool hitTerrain;
     private Ray ray;
     private RaycastHit hit;
+    private RaycastHit terrainHit;
 
     public MoveObject mo;
 
@@ -61,12 +62,17 @@ public class MouseScript : MonoBehaviour
                     else if (hits[j].transform.tag == "Terrain")
                     {
                         hitTerrain = true;
+                        terrainHit = hits[j];
                     }
                 }
             }
 
             if (hitTerrain)
             {
+                Debug.Log(terrainHit.collider.gameObject.transform.parent.parent.name);
+
+                ms.uiController.currrentCamera = terrainHit.collider.gameObject.transform.parent.parent.GetComponentInChildren<Camera>();
+
                 mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
 
                 transform.position = new Vector3(

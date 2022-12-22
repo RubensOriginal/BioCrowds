@@ -85,6 +85,7 @@ public class LevelEditorUIController : MonoBehaviour
 
     [Header("Cameras")]
     public List<Camera> cameras;
+    public Camera currrentCamera;
 
     [Header("Test Level")]
     public GameObject mainTestLevel;

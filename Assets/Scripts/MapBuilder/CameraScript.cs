@@ -20,14 +20,12 @@ public class CameraScript : MonoBehaviour
         cam = GetComponent<Camera>();
 
         scPos = transform.parent.parent.transform.Find("SceneController").position;
-
-        Debug.Log(scPos.x);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ms.uiController.IsPopUpPanelOpen())
+        if (ms.uiController.IsPopUpPanelOpen() || ms.uiController.currrentCamera != cam)
             return;
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
