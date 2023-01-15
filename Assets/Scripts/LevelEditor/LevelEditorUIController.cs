@@ -262,7 +262,7 @@ public class LevelEditorUIController : MonoBehaviour
         eventSystem.SetSelectedGameObject(null);
         if (levelExporter.IsValidExport(sceneController.world))
         {
-            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download);
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download, testLevels);
         }
         else
         {
@@ -276,7 +276,7 @@ public class LevelEditorUIController : MonoBehaviour
 
         if (levelExporter.IsValidExport(sceneController.world))
         {
-            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene);
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene, testLevels);
             simulationRunningPanel.gameObject.SetActive(true);
             runSceneButton.gameObject.SetActive(false);
             simulationRunningLabel.gameObject.SetActive(true);
