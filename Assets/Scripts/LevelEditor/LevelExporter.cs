@@ -88,14 +88,12 @@ public class LevelExporter : MonoBehaviour
             {
                 sp.GetMeshRenderer().material = invalidMaterial;
                 valid = false;
-                Debug.Log("Here 1");
             }
             if (sp.initialAgentsGoalList.Count == 1 && sp.initialAgentsGoalList[0] == null)
             {
                 sp.GetMeshRenderer().material = invalidMaterial;
                 sp.initialAgentsGoalList.Clear();
                 valid = false;
-                Debug.Log("Here 2");
             }
 
             Debug.Log(sp.GetRandomPointInNavmesh().ToString());
@@ -104,8 +102,6 @@ public class LevelExporter : MonoBehaviour
             {
                 sp.GetMeshRenderer().material = invalidMaterial;
                 valid = false;
-                Debug.Log("Here 3");
-
             }
         }
         foreach (GameObject go in _goals)
@@ -116,7 +112,6 @@ public class LevelExporter : MonoBehaviour
             {
                 go.GetComponent<MeshRenderer>().material = invalidMaterial;
                 valid = false;
-                Debug.Log("Here 4");
             }
         }
 
@@ -191,7 +186,7 @@ public class LevelExporter : MonoBehaviour
         {
             if (_goals[i].transform.parent.parent.gameObject == testLevel) { 
                 JObject _a = new JObject();
-                _a.Add("position", JArray.FromObject(_goals[i].transform.position.AsList()));
+                _a.Add("position", JArray.FromObject((_goals[i].transform.position - testLevel.transform.position).AsList()));
                 _goalsArray.Add(_a);
             }
         }
@@ -222,13 +217,13 @@ public class LevelExporter : MonoBehaviour
 
                         if (foundPath)
                         {
-                            _a.Add("position", JArray.FromObject(_pos.AsList()));
+                            _a.Add("position", JArray.FromObject((_pos - testLevel.transform.position).AsList()));
                             _a.Add("goal_list", JToken.FromObject(_goalIndexList));
                             _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
                             JArray cornerList = new JArray();
                             foreach (var _c in _navMeshPath.corners)
                             {
-                                cornerList.Add(JToken.FromObject(_c.AsList()));
+                                cornerList.Add(JToken.FromObject((_c - testLevel.transform.position).AsList()));
                             }
                             _a.Add("path_planning_goals", cornerList);
                             _agentsArray.Add(_a);
@@ -236,14 +231,14 @@ public class LevelExporter : MonoBehaviour
                         }
                         else if (k == 9)
                         {
-                            _a.Add("position", JArray.FromObject(_pos.AsList()));
+                            _a.Add("position", JArray.FromObject((_pos - testLevel.transform.position).AsList()));
                             _a.Add("goal_list", JToken.FromObject(_goalIndexList));
                             _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
 
                             JArray cornerList = new JArray();
                             foreach (var _c in _navMeshPath.corners)
                             {
-                                cornerList.Add(JToken.FromObject(_c.AsList()));
+                                cornerList.Add(JToken.FromObject((_c - testLevel.transform.position).AsList()));
                             }
                             _a.Add("path_planning_goals", cornerList);
                             _agentsArray.Add(_a);
@@ -282,10 +277,10 @@ public class LevelExporter : MonoBehaviour
                 var trans = _obstacles[i].transform;
                 var min = col.center - col.size * 0.5f;
                 var max = col.center + col.size * 0.5f;
-                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
-                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
-                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
-                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
+                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z) - testLevel.transform.position);
+                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z) - testLevel.transform.position);
+                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z) - testLevel.transform.position);
+                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z) - testLevel.transform.position);
                 JArray pointList = new JArray();
                 pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
                 pointList.Add(JToken.FromObject(new Vector3(P001.x, P001.z, 0.0f).AsList()));
@@ -307,10 +302,10 @@ public class LevelExporter : MonoBehaviour
                 var trans = _objCollider[i].transform;
                 var min = col.center - col.size * 0.5f;
                 var max = col.center + col.size * 0.5f;
-                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
-                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
-                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
-                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
+                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z) - testLevel.transform.position);
+                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z) - testLevel.transform.position);
+                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z) - testLevel.transform.position);
+                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z) - testLevel.transform.position);
                 JArray pointList = new JArray();
                 pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
                 pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
