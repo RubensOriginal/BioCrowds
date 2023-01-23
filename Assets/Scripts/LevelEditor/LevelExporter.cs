@@ -72,7 +72,7 @@ public class LevelExporter : MonoBehaviour
     }
 #endif
 
-    public bool IsValidExport(World world)
+    public bool IsValidExport(World world, List<GameObject> testLevels)
     {
         bool valid = true;
         world.CreateNavMesh();
@@ -113,6 +113,34 @@ public class LevelExporter : MonoBehaviour
                 go.GetComponent<MeshRenderer>().material = invalidMaterial;
                 valid = false;
             }
+        }
+
+        List<int> _agentsPerTestLevel = new List<int>();
+
+
+
+        for (int i = 0; i < testLevels.Count; i++)
+        {
+            int numberAgents = 0;
+            for (int j = 0; j < _spawnAreas.Count; j++) // Agents (sampling points)
+            {
+                if (_spawnAreas[j].transform.parent.parent.gameObject == testLevels[i])
+                {
+                    for (int k = 0; k < _spawnAreas[j].initialNumberOfAgents; k++)
+                    {
+                        numberAgents++;
+                    }
+                }
+            }
+
+            if (_agentsPerTestLevel.Count > 0)
+            {
+                if (_agentsPerTestLevel[_agentsPerTestLevel.Count - 1] != numberAgents)
+                {
+                    valid = false;
+                }
+            }
+            _agentsPerTestLevel.Add(numberAgents);
         }
 
         return valid;
@@ -217,6 +245,7 @@ public class LevelExporter : MonoBehaviour
 
                         if (foundPath)
                         {
+                            Debug.Log("I found a path");
                             _a.Add("position", JArray.FromObject((_pos - testLevel.transform.position).AsList()));
                             _a.Add("goal_list", JToken.FromObject(_goalIndexList));
                             _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
@@ -231,6 +260,7 @@ public class LevelExporter : MonoBehaviour
                         }
                         else if (k == 9)
                         {
+                            Debug.Log("9 ... 9 ... 9 ... 9 ... 9 hours ");
                             _a.Add("position", JArray.FromObject((_pos - testLevel.transform.position).AsList()));
                             _a.Add("goal_list", JToken.FromObject(_goalIndexList));
                             _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));

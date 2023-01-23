@@ -25,6 +25,7 @@ public class MouseScript : MonoBehaviour
     private Ray ray;
     private RaycastHit hit;
     private RaycastHit terrainHit;
+    private Camera currentCamera;
     private Transform testLevel;
     private bool isRun;
 
@@ -41,6 +42,8 @@ public class MouseScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        colliding = false;
+        hitTerrain = false;
 
         for (int i = 0; i < ms.uiController.cameras.Count; i++)
         {
@@ -48,9 +51,6 @@ public class MouseScript : MonoBehaviour
             // GameObject testLevel = ms.uiController.testLevels[i];
 
             ray = camera.ScreenPointToRay(Input.mousePosition);
-
-            colliding = false;
-            hitTerrain = false;
 
             RaycastHit[] hits = Physics.RaycastAll(ray);
             if (hits.Length > 0)
@@ -61,21 +61,24 @@ public class MouseScript : MonoBehaviour
                     {
                         colliding = true;
                         hit = hits[j];
+                        currentCamera = camera;
                     }
                     else if (hits[j].transform.tag == "Terrain")
                     {
                         hitTerrain = true;
                         terrainHit = hits[j];
+                        currentCamera = camera;
                     }
                 }
             }
+        }
 
             if (hitTerrain)
             {
                 testLevel = terrainHit.collider.gameObject.transform.parent.parent;
                 ms.uiController.currrentCamera = testLevel.GetComponentInChildren<Camera>();
 
-                mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
+                mousePos = currentCamera.ScreenToWorldPoint(Input.mousePosition);
 
                 transform.position = new Vector3(
                     Mathf.Clamp(mousePos.x, -50 + testLevel.transform.position.x, 50 + testLevel.transform.position.x),
@@ -135,7 +138,6 @@ public class MouseScript : MonoBehaviour
                 }
                 isRun = true;
             }
-        }
 
         isRun = false;
     }

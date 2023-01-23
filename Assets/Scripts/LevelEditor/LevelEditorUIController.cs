@@ -260,7 +260,7 @@ public class LevelEditorUIController : MonoBehaviour
     private void SaveSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
         eventSystem.SetSelectedGameObject(null);
-        if (levelExporter.IsValidExport(sceneController.world))
+        if (levelExporter.IsValidExport(sceneController.world, testLevels))
         {
             levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download, testLevels);
         }
@@ -274,7 +274,7 @@ public class LevelEditorUIController : MonoBehaviour
     {
         eventSystem.SetSelectedGameObject(null);
 
-        if (levelExporter.IsValidExport(sceneController.world))
+        if (levelExporter.IsValidExport(sceneController.world, testLevels))
         {
             levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene, testLevels);
             simulationRunningPanel.gameObject.SetActive(true);
