@@ -174,21 +174,21 @@ public class LevelExporter : MonoBehaviour
 
         for (int i = 0; i < _terrains.Count; i++) // Terrains
         {
-            if (_terrains[i].transform.parent.gameObject == testLevel)
-            {
+            // if (_terrains[i].transform.parent.gameObject == testLevel)
+            // {
                 JObject _t = new JObject();
                 _t.Add("transform", _terrains[i].transform.AsJObject());
                 _t.Add("terrain_size", JArray.FromObject(_terrains[i].terrainData.size.AsList()));
                 _terrainsArray.Add(_t);
-            }
+            // }
         }
         for (int i = 0; i < _goals.Count; i++) // Goals
         {
-            if (_goals[i].transform.parent.parent.gameObject == testLevel) { 
+            // if (_goals[i].transform.parent.parent.gameObject == testLevel) { 
                 JObject _a = new JObject();
                 _a.Add("position", JArray.FromObject((_goals[i].transform.position - testLevel.transform.position).AsList()));
                 _goalsArray.Add(_a);
-            }
+            // }
         }
         for (int i = 0; i < _spawnAreas.Count; i++) // Agents (sampling points)
         {
@@ -277,15 +277,15 @@ public class LevelExporter : MonoBehaviour
                 var trans = _obstacles[i].transform;
                 var min = col.center - col.size * 0.5f;
                 var max = col.center + col.size * 0.5f;
-                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z) - testLevel.transform.position);
-                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z) - testLevel.transform.position);
-                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z) - testLevel.transform.position);
-                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z) - testLevel.transform.position);
+                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
+                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
+                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
+                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
                 JArray pointList = new JArray();
-                pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
-                pointList.Add(JToken.FromObject(new Vector3(P001.x, P001.z, 0.0f).AsList()));
-                pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
-                pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P000.x, P000.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P001.x, P001.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P101.x, P101.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P100.x, P100.z, 0.0f) - testLevel.transform.position).AsList()));
                 _o.Add("transform", _obstacles[i].transform.AsJObject());
                 _o.Add("point_list", pointList);
                 _o.Add("from_obj", JToken.FromObject(false));
@@ -302,15 +302,15 @@ public class LevelExporter : MonoBehaviour
                 var trans = _objCollider[i].transform;
                 var min = col.center - col.size * 0.5f;
                 var max = col.center + col.size * 0.5f;
-                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z) - testLevel.transform.position);
-                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z) - testLevel.transform.position);
-                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z) - testLevel.transform.position);
-                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z) - testLevel.transform.position);
+                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
+                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
+                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
+                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
                 JArray pointList = new JArray();
-                pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
-                pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
-                pointList.Add(JToken.FromObject(new Vector3(P001.x, P001.z, 0.0f).AsList()));
-                pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P100.x, P100.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P101.x, P101.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P001.x, P001.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P000.x, P000.z, 0.0f) - testLevel.transform.position).AsList()));
                 _o.Add("transform", _objCollider[i].transform.AsJObject());
                 _o.Add("point_list", pointList);
                 _o.Add("from_obj", JToken.FromObject(true));
