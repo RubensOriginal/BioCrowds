@@ -11,6 +11,7 @@ using System.Collections;
 using System.Text;
 using System.Runtime.InteropServices;
 using UnityEngine.AI;
+using Unity.AI.Navigation;
 
 public class LevelExporter : MonoBehaviour
 {

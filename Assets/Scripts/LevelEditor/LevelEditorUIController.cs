@@ -278,9 +278,9 @@ public class LevelEditorUIController : MonoBehaviour
         {
             levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene, testLevels);
             simulationRunningPanel.gameObject.SetActive(true);
-            runSceneButton.gameObject.SetActive(false);
-            simulationRunningLabel.gameObject.SetActive(true);
-        }
+            // runSceneButton.gameObject.SetActive(false);
+            // simulationRunningLabel.gameObject.SetActive(true);
+        } 
         else
         {
             saveFailedPanel.gameObject.SetActive(true);
