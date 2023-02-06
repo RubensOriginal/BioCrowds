@@ -12,6 +12,8 @@ using System.Text;
 using System.Runtime.InteropServices;
 using UnityEngine.AI;
 using Unity.AI.Navigation;
+using System.Threading;
+using Assets.Scripts.LevelEditor;
 
 public class LevelExporter : MonoBehaviour
 {
@@ -28,7 +30,7 @@ public class LevelExporter : MonoBehaviour
 
         if (exportType == ExportType.Download)
         {
-            string content = GenerateFileContent(world, objImporter, testLevels[0], 0);
+            string content = GenerateFileContent(world, objImporter, testLevels[0], 0, true);
 
 #if UNITY_WEBGL && !UNITY_EDITOR
                 var bytes = Encoding.UTF8.GetBytes(content);
@@ -116,35 +118,27 @@ public class LevelExporter : MonoBehaviour
             }
         }
 
-        List<int> _agentsPerTestLevel = new List<int>();
+        return valid;
+    }
 
-
-
-        for (int i = 0; i < testLevels.Count; i++)
+    public bool IsValidCassol(World world, List<GameObject> testLevels)
+    {
+        // var _spawnAreas = FindObjectsOfType<SpawnArea>().ToList();
+        
+        try
         {
-            int numberAgents = 0;
-            for (int j = 0; j < _spawnAreas.Count; j++) // Agents (sampling points)
-            {
-                if (_spawnAreas[j].transform.parent.parent.gameObject == testLevels[i])
-                {
-                    for (int k = 0; k < _spawnAreas[j].initialNumberOfAgents; k++)
-                    {
-                        numberAgents++;
-                    }
-                }
-            }
+            SceneDataChecker dataChecker = new SceneDataChecker();
 
-            if (_agentsPerTestLevel.Count > 0)
-            {
-                if (_agentsPerTestLevel[_agentsPerTestLevel.Count - 1] != numberAgents)
-                {
-                    valid = false;
-                }
-            }
-            _agentsPerTestLevel.Add(numberAgents);
+            dataChecker.CheckNumberAgentsInTestLevels(testLevels)
+                .CheckNumberOfGoals(testLevels);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
         }
 
-        return valid;
     }
 
     private void Awake()
@@ -160,7 +154,7 @@ public class LevelExporter : MonoBehaviour
 
         for (int i = 0; i < testLevels.Count; i++)
         {
-            sb.Append(GenerateFileContent(world, objImporter, testLevels[i], i));
+            sb.Append(GenerateFileContent(world, objImporter, testLevels[i], i,  IsValidCassol(world, testLevels)));
 
             if (i != testLevels.Count - 1)
             {
@@ -174,7 +168,7 @@ public class LevelExporter : MonoBehaviour
         return sb.ToString();
     }
 
-    private string GenerateFileContent(World world, RuntimeOBJImporter objImporter, GameObject testLevel, int testLevelId)
+    private string GenerateFileContent(World world, RuntimeOBJImporter objImporter, GameObject testLevel, int testLevelId, Boolean isCassolValid)
     {
         JObject output = new JObject();
         JArray _terrainsArray = new JArray();
@@ -394,6 +388,7 @@ public class LevelExporter : MonoBehaviour
         output.Add("loaded_models", _loadedModelsArray);
         output.Add("agents", _agentsArray);
         output.Add("auxins", _auxinsArray);
+        output.Add("isCassolValid", isCassolValid);
 
         world.ClearWorld(false);
 
