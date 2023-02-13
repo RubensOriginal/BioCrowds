@@ -1,5 +1,6 @@
 using UnityEngine.EventSystems;
 using UnityEngine;
+using UnityEditor;
 
 public class MouseScript : MonoBehaviour
 {
@@ -23,6 +24,10 @@ public class MouseScript : MonoBehaviour
     private bool hitTerrain;
     private Ray ray;
     private RaycastHit hit;
+    private RaycastHit terrainHit;
+    private Camera currentCamera;
+    private Transform testLevel;
+    private bool isRun;
 
     public MoveObject mo;
 
@@ -31,83 +36,110 @@ public class MouseScript : MonoBehaviour
     {
         mr = GetComponent<MeshRenderer>();
         mo = GetComponent<MoveObject>();
+        isRun = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
         colliding = false;
         hitTerrain = false;
 
-        RaycastHit[] hits = Physics.RaycastAll(ray);
-        if (hits.Length > 0)
+        for (int i = 0; i < ms.uiController.cameras.Count; i++)
         {
-            for (int i = 0; i < hits.Length; i++)
+            Camera camera = ms.uiController.cameras[i];
+            // GameObject testLevel = ms.uiController.testLevels[i];
+
+            ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            RaycastHit[] hits = Physics.RaycastAll(ray);
+            if (hits.Length > 0)
             {
-                if (hits[i].collider.gameObject.layer == 9)
+                for (int j = 0; j < hits.Length; j++)
                 {
-                    colliding = true;
-                    hit = hits[i];
-                }
-                else if (hits[i].transform.tag == "Terrain")
-                {
-                    hitTerrain = true;
-                }
-            }
-        }
-
-        if (hitTerrain)
-        {
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            transform.position = new Vector3(
-                Mathf.Clamp(mousePos.x, -50, 50),
-                0.50f,
-                Mathf.Clamp(mousePos.z, -50, 50));
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                if (manipulatorOption == LevelManupulator.Create)
-                {
-                    if (hitTerrain && !colliding)
-                        CreateObject();
-                }
-                else if (manipulatorOption == LevelManupulator.Destroy)
-                {
-                    if (colliding)
-                        Destroy(hit.collider.gameObject);
-
-                }
-                else if (manipulatorOption == LevelManupulator.Edit)
-                {
-                    if (colliding)
-                        oe.SelectObject(hit.collider.gameObject);
-                    else
-                        oe.UnselectObject();
-                }
-                else if (manipulatorOption == LevelManupulator.Link)
-                {
-                    if (colliding || hit.collider.gameObject.CompareTag("Goal"))
-                        oe.LinkGoalToSpawner(hit.collider.gameObject);
-                }
-                else if (manipulatorOption == LevelManupulator.Move)
-                {
-                    if (colliding)
+                    if (hits[j].collider.gameObject.layer == 9)
                     {
-                        if (!mo.isSelected)
-                            mo.SelectObject(hit.collider.gameObject);
-                        else
-                            mo.isSelected = false;
+                        colliding = true;
+                        hit = hits[j];
+                        currentCamera = camera;
+                    }
+                    else if (hits[j].transform.tag == "Terrain")
+                    {
+                        hitTerrain = true;
+                        terrainHit = hits[j];
+                        currentCamera = camera;
                     }
                 }
-
             }
         }
+
+            if (hitTerrain)
+            {
+                testLevel = terrainHit.collider.gameObject.transform.parent.parent;
+                ms.uiController.currrentCamera = testLevel.GetComponentInChildren<Camera>();
+
+                mousePos = currentCamera.ScreenToWorldPoint(Input.mousePosition);
+
+                transform.position = new Vector3(
+                    Mathf.Clamp(mousePos.x, -50 + testLevel.transform.position.x, 50 + testLevel.transform.position.x),
+                    0.50f,
+                    Mathf.Clamp(mousePos.z, -50 + testLevel.transform.position.z, 50 + testLevel.transform.position.z));
+            }
+
+            if (Input.GetMouseButtonDown(0) && ms.uiController.currrentCamera.enabled)
+            {
+                if (!EventSystem.current.IsPointerOverGameObject())
+                {
+                    if (manipulatorOption == LevelManupulator.Create)
+                    {
+                        if (hitTerrain && !colliding)
+                            CreateObject();
+                    }
+                    else if (manipulatorOption == LevelManupulator.Destroy)
+                    {
+                        if (colliding)
+                            Destroy(hit.collider.gameObject);
+
+                    }
+                    else if (manipulatorOption == LevelManupulator.Edit)
+                    {
+                        if (colliding)
+                            oe.SelectObject(hit.collider.gameObject);
+                        else
+                            oe.UnselectObject();
+                    }
+                    else if (manipulatorOption == LevelManupulator.Link)
+                    {
+                        if (colliding || hit.collider.gameObject.CompareTag("Goal"))
+                            oe.LinkGoalToSpawner(hit.collider.gameObject);
+                    }
+                    else if (manipulatorOption == LevelManupulator.Move)
+                    {
+                        if (colliding)
+                        {
+                            if (!mo.isSelected)
+                                mo.SelectObject(hit.collider.gameObject);
+                            else
+                                mo.isSelected = false;
+                        }
+                    }
+
+                }
+            }
+            else if (Input.GetMouseButtonDown(1) && !isRun)
+            {
+                if (ms.uiController.isZoom)
+                {
+                    ms.uiController.ResizeCameras();
+                }
+                else
+                {
+                    ms.uiController.ZoomCamera(ms.uiController.currrentCamera);
+                }
+                isRun = true;
+            }
+
+        isRun = false;
     }
 
     void CreateObject()
@@ -116,7 +148,7 @@ public class MouseScript : MonoBehaviour
         switch (itemOption)
         {
             case ItemList.Spawner:
-                newObject = GameObject.Instantiate(ms.spawnerPrefab, ms.spawnerContainer);
+                newObject = GameObject.Instantiate(ms.spawnerPrefab, testLevel.Find("SpawnAreas"));
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Spawner";
@@ -128,7 +160,7 @@ public class MouseScript : MonoBehaviour
                 spawnerObject.data.type = Object.Type.Spawner;
                 break;
             case ItemList.Goal:
-                newObject = GameObject.Instantiate(ms.goalPrefab, ms.goalContainer);
+                newObject = GameObject.Instantiate(ms.goalPrefab, testLevel.Find("Goals"));
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Goal";
@@ -141,7 +173,7 @@ public class MouseScript : MonoBehaviour
                 break;
 
             case ItemList.Obstacle:
-                newObject = GameObject.Instantiate(ms.obstaclePrefab, ms.obstacleContainer);
+                newObject = GameObject.Instantiate(ms.obstaclePrefab, testLevel.Find("NavMeshSurface").Find("Obstacles"));
                 newObject.transform.position = transform.position;
                 newObject.layer = 9;
                 newObject.tag = "Obstacle";

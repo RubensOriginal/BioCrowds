@@ -26,6 +26,8 @@ public class LevelEditorUIController : MonoBehaviour
     public CustomPointerHandler loadSceneButton;
     public CustomPointerHandler runSceneButton;
     public RectTransform        simulationRunningLabel;
+    public CustomPointerHandler createAlternativesButton;
+    public CustomPointerHandler removeAlternativeButton;
 
     public CustomPointerHandler confirmLoadSaveSceneButton;
     public CustomPointerHandler confirmLoadLoadAnywayButton;
@@ -81,6 +83,18 @@ public class LevelEditorUIController : MonoBehaviour
     public RectTransform editObjectHint;
     public RectTransform editGoalHint;
 
+    [Header("Cameras")]
+    public List<Camera> cameras;
+    public Camera currrentCamera;
+
+    [Header("Test Level")]
+    public GameObject mainTestLevel;
+    public List<GameObject> testLevels;
+
+    [HideInInspector]
+    public bool isZoom { get; private set; }
+
+
     private void Awake()
     {
         levelEditorManager.world = sceneController.world;
@@ -90,6 +104,7 @@ public class LevelEditorUIController : MonoBehaviour
         saveFailedPanel.gameObject.SetActive(false);
         loadFailedPanel.gameObject.SetActive(false);
         simulationRunningPanel.gameObject.SetActive(false);
+        removeAlternativeButton.gameObject.SetActive(false);
 
         editObjectHint.gameObject.SetActive(false);
         editGoalHint.gameObject.SetActive(false);
@@ -107,6 +122,8 @@ public class LevelEditorUIController : MonoBehaviour
         runSceneButton.OnPointerDownEvent += RunSceneButton_OnPointerDownEvent;
         saveSceneButton.OnPointerDownEvent += SaveSceneButton_OnPointerDownEvent;
         loadSceneButton.OnPointerDownEvent += LoadSceneButton_OnPointerDownEvent;
+        createAlternativesButton.OnPointerDownEvent += CreateAlternativesButton_OnPointerDownEvent;
+        removeAlternativeButton.OnPointerDownEvent += RemoveAlternativeButton_OnPointerDownEvent;
 
         confirmLoadSaveSceneButton.OnPointerDownEvent += SaveSceneButton_OnPointerDownEvent;
         confirmLoadLoadAnywayButton.OnPointerDownEvent += ConfirmLoadLoadAnywayButton_OnPointerDownEvent;
@@ -124,7 +141,14 @@ public class LevelEditorUIController : MonoBehaviour
         confirmPresetButton.OnPointerDownEvent += ConfirmPresetButton_OnPointerDownEvent;
         cancelPresetButton.OnPointerDownEvent += CancelPresetButton_OnPointerDownEvent;
 
-        
+        if (!testLevels.Contains(mainTestLevel))
+            testLevels.Add(mainTestLevel);
+
+        if (!cameras.Contains(mainTestLevel.GetComponentInChildren<Camera>()))
+            cameras.Add(mainTestLevel.GetComponentInChildren<Camera>());
+
+        isZoom = false;
+
     }
 
     
@@ -236,9 +260,9 @@ public class LevelEditorUIController : MonoBehaviour
     private void SaveSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
         eventSystem.SetSelectedGameObject(null);
-        if (levelExporter.IsValidExport(sceneController.world))
+        if (levelExporter.IsValidExport(sceneController.world, testLevels))
         {
-            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download);
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download, testLevels);
         }
         else
         {
@@ -250,17 +274,48 @@ public class LevelEditorUIController : MonoBehaviour
     {
         eventSystem.SetSelectedGameObject(null);
 
-        if (levelExporter.IsValidExport(sceneController.world))
+        if (levelExporter.IsValidExport(sceneController.world, testLevels))
         {
-            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene);
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene, testLevels);
             simulationRunningPanel.gameObject.SetActive(true);
-            runSceneButton.gameObject.SetActive(false);
-            simulationRunningLabel.gameObject.SetActive(true);
-        }
+            // runSceneButton.gameObject.SetActive(false);
+            // simulationRunningLabel.gameObject.SetActive(true);
+        } 
         else
         {
             saveFailedPanel.gameObject.SetActive(true);
         }
+    }
+
+    private void CreateAlternativesButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        if (testLevels.Count == 4)
+            throw new System.Exception("It is not possible to create more alternatives");
+
+        GameObject newTestLevel = Instantiate(mainTestLevel, new Vector3(testLevels.Count * 100, 0, 0), new Quaternion());
+        newTestLevel.name = "TestLevel " + (testLevels.Count + 1);
+        testLevels.Add(newTestLevel);
+
+        cameras.Add(newTestLevel.GetComponentInChildren<Camera>());
+        ResizeCameras();
+
+        removeAlternativeButton.gameObject.SetActive(true);
+        if (testLevels.Count == 4)
+            createAlternativesButton.gameObject.SetActive(false);
+    }
+
+    private void RemoveAlternativeButton_OnPointerDownEvent(PointerEventData obj)
+    {
+        GameObject removedTestLevel = testLevels[testLevels.Count - 1];
+        cameras.Remove(cameras[cameras.Count - 1]);
+        testLevels.Remove(removedTestLevel);
+        Destroy(removedTestLevel);
+
+        ResizeCameras();
+
+        createAlternativesButton.gameObject.SetActive(true);
+        if (testLevels.Count == 1)
+            removeAlternativeButton.gameObject.SetActive(false);
     }
 
     private void ConfirmLoadLoadAnywayButton_OnPointerDownEvent(PointerEventData obj)
@@ -289,7 +344,7 @@ public class LevelEditorUIController : MonoBehaviour
         simulationRunningPanel.gameObject.SetActive(false);
     }
 
-    public void SimulationFinishedRunning(bool finished)
+    public void SimulationFinishedRunning()
     {
         runSceneButton.gameObject.SetActive(true);
         simulationRunningLabel.gameObject.SetActive(false);
@@ -327,4 +382,56 @@ public class LevelEditorUIController : MonoBehaviour
             return true;
         return false;
     }
+
+    public void ResizeCameras()
+    {
+        isZoom = false;
+
+        foreach (Camera camera in cameras) {
+            if (!camera.enabled)
+                camera.enabled = true;
+                
+        }
+
+        switch (cameras.Count)
+        {
+            case 1:
+                ResizeCamera(cameras[0], 0.0f, 0.0f, 1.0f, 1.0f);
+                break;
+            case 2:
+                ResizeCamera(cameras[0], 0.0f, 0.0f, 0.5f, 1.0f);
+                ResizeCamera(cameras[1], 0.5f, 0.0f, 0.5f, 1.0f);
+                break;
+            case 3:
+                ResizeCamera(cameras[0], 0.0f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[1], 0.5f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[2], 0.0f, 0.0f, 1.0f, 0.5f);
+                break;
+            case 4:
+                ResizeCamera(cameras[0], 0.0f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[1], 0.5f, 0.5f, 0.5f, 0.5f);
+                ResizeCamera(cameras[2], 0.0f, 0.0f, 0.5f, 0.5f);
+                ResizeCamera(cameras[3], 0.5f, 0.0f, 0.5f, 0.5f);
+                break;
+        }
+    }
+
+    private void ResizeCamera(Camera camera, float x, float y, float width, float height)
+    {
+        camera.rect = new Rect(x, y, width, height);
+    }
+
+    public void ZoomCamera(Camera camera)
+    {
+        isZoom = true;
+
+        camera.rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+
+        foreach (Camera cameraref in cameras)
+        {
+            if (camera != cameraref)
+                cameraref.enabled = false;
+        }
+    }
+
 }

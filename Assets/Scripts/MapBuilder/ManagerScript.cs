@@ -12,9 +12,12 @@ public class ManagerScript : MonoBehaviour
     public GameObject spawnerPrefab;
     public GameObject goalPrefab;
     public GameObject obstaclePrefab;
+    public GameObject cameraPrefab;
     public Transform spawnerContainer;
     public Transform goalContainer;
     public Transform obstacleContainer;
+    public Transform cameraContainer;
+
 
     [Header("Materials")]
     public Material spawnerMaterial;

@@ -11,6 +11,9 @@ using System.Collections;
 using System.Text;
 using System.Runtime.InteropServices;
 using UnityEngine.AI;
+using Unity.AI.Navigation;
+using System.Threading;
+using Assets.Scripts.LevelEditor;
 
 public class LevelExporter : MonoBehaviour
 {
@@ -22,25 +25,28 @@ public class LevelExporter : MonoBehaviour
     private static extern void RunScene(string message);
 
     public Material invalidMaterial;
-    public void ExportLevel(World world, RuntimeOBJImporter objImporter, ExportType exportType)
+    public void ExportLevel(World world, RuntimeOBJImporter objImporter, ExportType exportType, List<GameObject> testLevels)
     {
-        string content = GenerateFileContent(world, objImporter);
 
         if (exportType == ExportType.Download)
         {
+            string content = GenerateFileContent(world, objImporter, testLevels[0], 0, true);
 
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
                 var bytes = Encoding.UTF8.GetBytes(content);
                 DownloadFile(gameObject.name, "OnFileDownload", "SavedScene.json", bytes, bytes.Length);
-        #else
-                StartCoroutine(DesktopExportCoroutine(content));
+#else
+            StartCoroutine(DesktopExportCoroutine(content));
         #endif
         }
         else if (exportType == ExportType.RunScene)
         {
-        #if UNITY_WEBGL && !UNITY_EDITOR
+            // string content = GenerateFileContent(world, objImporter);
+            string content = GenerateArrayJsonContent(world, objImporter, testLevels);
+
+#if UNITY_WEBGL && !UNITY_EDITOR
             RunScene(content);
-        #else
+#else
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 60;
             sceneController.LoadSimulationWorld();
@@ -69,7 +75,7 @@ public class LevelExporter : MonoBehaviour
     }
 #endif
 
-    public bool IsValidExport(World world)
+    public bool IsValidExport(World world, List<GameObject> testLevels)
     {
         bool valid = true;
         world.CreateNavMesh();
@@ -92,6 +98,9 @@ public class LevelExporter : MonoBehaviour
                 sp.initialAgentsGoalList.Clear();
                 valid = false;
             }
+
+            Debug.Log(sp.GetRandomPointInNavmesh().ToString());
+
             if (sp.GetRandomPointInNavmesh().ToString() == Vector3.negativeInfinity.ToString())
             {
                 sp.GetMeshRenderer().material = invalidMaterial;
@@ -112,12 +121,54 @@ public class LevelExporter : MonoBehaviour
         return valid;
     }
 
+    public bool IsValidCassol(World world, List<GameObject> testLevels)
+    {
+        // var _spawnAreas = FindObjectsOfType<SpawnArea>().ToList();
+        
+        try
+        {
+            SceneDataChecker dataChecker = new SceneDataChecker();
+
+            dataChecker.CheckNumberAgentsInTestLevels(testLevels)
+                .CheckNumberOfGoals(testLevels);
+
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+    }
+
     private void Awake()
     {
         timeStamp = DateTime.UtcNow;
     }
 
-    private string GenerateFileContent(World world, RuntimeOBJImporter objImporter)
+    private string GenerateArrayJsonContent(World world, RuntimeOBJImporter objImporter, List<GameObject> testLevels)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        sb.Append("[");
+
+        for (int i = 0; i < testLevels.Count; i++)
+        {
+            sb.Append(GenerateFileContent(world, objImporter, testLevels[i], i,  IsValidCassol(world, testLevels)));
+
+            if (i != testLevels.Count - 1)
+            {
+                sb.Append(",");
+            }
+        }
+
+        sb.Append("]");
+
+
+        return sb.ToString();
+    }
+
+    private string GenerateFileContent(World world, RuntimeOBJImporter objImporter, GameObject testLevel, int testLevelId, Boolean isCassolValid)
     {
         JObject output = new JObject();
         JArray _terrainsArray = new JArray();
@@ -146,22 +197,30 @@ public class LevelExporter : MonoBehaviour
 
         for (int i = 0; i < _terrains.Count; i++) // Terrains
         {
-            JObject _t = new JObject();
-            _t.Add("transform", _terrains[i].transform.AsJObject());
-            _t.Add("terrain_size", JArray.FromObject(_terrains[i].terrainData.size.AsList()));
-            _terrainsArray.Add(_t);
+            // if (_terrains[i].transform.parent.gameObject == testLevel)
+            // {
+                JObject _t = new JObject();
+                _t.Add("transform", _terrains[i].transform.AsJObject());
+                _t.Add("terrain_size", JArray.FromObject(_terrains[i].terrainData.size.AsList()));
+                _terrainsArray.Add(_t);
+            // }
         }
         for (int i = 0; i < _goals.Count; i++) // Goals
         {
-            JObject _a = new JObject();
-            _a.Add("position", JArray.FromObject(_goals[i].transform.position.AsList()));
-            _goalsArray.Add(_a);
+            // if (_goals[i].transform.parent.parent.gameObject == testLevel) { 
+                JObject _a = new JObject();
+                _a.Add("position", JArray.FromObject((_goals[i].transform.position - testLevel.transform.position).AsList()));
+                _goalsArray.Add(_a);
+            // }
         }
         for (int i = 0; i < _spawnAreas.Count; i++) // Agents (sampling points)
         {
-            for (int j = 0; j < _spawnAreas[i].initialNumberOfAgents; j++)
+            if (_spawnAreas[i].transform.parent.parent.gameObject == testLevel)
             {
-                if (_agentsArray.Count == 100)
+                for (int j = 0; j < _spawnAreas[i].initialNumberOfAgents; j++)
+                {
+                
+                    if (_agentsArray.Count == 100)
                     continue;
 
                 JObject _a = new JObject();
@@ -172,42 +231,45 @@ public class LevelExporter : MonoBehaviour
 
                 NavMeshPath _navMeshPath = new NavMeshPath();
 
-                for (int k = 0; k < 10; k++) // 10 tries to find path
-                {
-                    var _pos = _spawnAreas[i].GetRandomPointInNavmesh();
-
-                    bool foundPath = NavMesh.CalculatePath(_pos, _goals[_goalIndexList.Last()].transform.position,
-                        NavMesh.AllAreas, _navMeshPath);
-
-                    if (foundPath)
+                    for (int k = 0; k < 10; k++) // 10 tries to find path
                     {
-                        _a.Add("position", JArray.FromObject(_pos.AsList()));
-                        _a.Add("goal_list", JToken.FromObject(_goalIndexList));
-                        _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
-                        JArray cornerList = new JArray();
-                        foreach (var _c in _navMeshPath.corners)
+                        var _pos = _spawnAreas[i].GetRandomPointInNavmesh();
+
+                        bool foundPath = NavMesh.CalculatePath(_pos, _goals[_goalIndexList.Last()].transform.position,
+                            NavMesh.AllAreas, _navMeshPath);
+
+                        if (foundPath)
                         {
-                            cornerList.Add(JToken.FromObject(_c.AsList()));
+                            Debug.Log("I found a path");
+                            _a.Add("position", JArray.FromObject((_pos - testLevel.transform.position).AsList()));
+                            _a.Add("goal_list", JToken.FromObject(_goalIndexList));
+                            _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
+                            JArray cornerList = new JArray();
+                            foreach (var _c in _navMeshPath.corners)
+                            {
+                                cornerList.Add(JToken.FromObject((_c - testLevel.transform.position).AsList()));
+                            }
+                            _a.Add("path_planning_goals", cornerList);
+                            _agentsArray.Add(_a);
+                            break;
                         }
-                        _a.Add("path_planning_goals", cornerList);
-                        _agentsArray.Add(_a);
-                        break;
-                    }
-                    else if (k == 9)
-                    {
-                        _a.Add("position", JArray.FromObject(_pos.AsList()));
-                        _a.Add("goal_list", JToken.FromObject(_goalIndexList));
-                        _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
-                        
-                        JArray cornerList = new JArray();
-                        foreach (var _c in _navMeshPath.corners)
+                        else if (k == 9)
                         {
-                            cornerList.Add(JToken.FromObject(_c.AsList()));
+                            Debug.Log("9 ... 9 ... 9 ... 9 ... 9 hours ");
+                            _a.Add("position", JArray.FromObject((_pos - testLevel.transform.position).AsList()));
+                            _a.Add("goal_list", JToken.FromObject(_goalIndexList));
+                            _a.Add("remove_goal_reach", JToken.FromObject(_spawnAreas[i].initialRemoveWhenGoalReached));
+
+                            JArray cornerList = new JArray();
+                            foreach (var _c in _navMeshPath.corners)
+                            {
+                                cornerList.Add(JToken.FromObject((_c - testLevel.transform.position).AsList()));
+                            }
+                            _a.Add("path_planning_goals", cornerList);
+                            _agentsArray.Add(_a);
+                            Debug.Log("Error!");
+                            break;
                         }
-                        _a.Add("path_planning_goals", cornerList);
-                        _agentsArray.Add(_a);
-                        Debug.Log("Error!");
-                        break;
                     }
                 }
             }
@@ -233,79 +295,92 @@ public class LevelExporter : MonoBehaviour
         
         for (int i = 0; i < _obstacles.Count; i++) // Obstacles
         {
-            JObject _o = new JObject();
-            BoxCollider col = _obstacles[i].GetComponent<BoxCollider>();
-            var trans = _obstacles[i].transform;
-            var min = col.center - col.size * 0.5f;
-            var max = col.center + col.size * 0.5f;
-            var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
-            var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
-            var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
-            var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
-            JArray pointList = new JArray();
-            pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
-            pointList.Add(JToken.FromObject(new Vector3(P001.x, P001.z, 0.0f).AsList()));
-            pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
-            pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
-            _o.Add("transform", _obstacles[i].transform.AsJObject());
-            _o.Add("point_list", pointList);
-            _o.Add("from_obj", JToken.FromObject(false));
-            _obstaclesArray.Add(_o);
+            if (_obstacles[i].transform.parent.parent.parent.gameObject == testLevel)
+            {
+                JObject _o = new JObject();
+                BoxCollider col = _obstacles[i].GetComponent<BoxCollider>();
+                var trans = _obstacles[i].transform;
+                var min = col.center - col.size * 0.5f;
+                var max = col.center + col.size * 0.5f;
+                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
+                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
+                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
+                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
+                JArray pointList = new JArray();
+                pointList.Add(JToken.FromObject((new Vector3(P000.x, P000.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P001.x, P001.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P101.x, P101.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P100.x, P100.z, 0.0f) - testLevel.transform.position).AsList()));
+                _o.Add("transform", _obstacles[i].transform.AsJObject());
+                _o.Add("point_list", pointList);
+                _o.Add("from_obj", JToken.FromObject(false));
+                _obstaclesArray.Add(_o);
+            }
         }
+
         for (int i = 0; i < _objCollider.Count; i++) // OBJ Colliders
         {
-            JObject _o = new JObject();
-            BoxCollider col = _objCollider[i].GetComponent<BoxCollider>();
-            var trans = _objCollider[i].transform;
-            var min = col.center - col.size * 0.5f;
-            var max = col.center + col.size * 0.5f;
-            var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
-            var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
-            var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
-            var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
-            JArray pointList = new JArray();
-            pointList.Add(JToken.FromObject(new Vector3(P100.x, P100.z, 0.0f).AsList()));
-            pointList.Add(JToken.FromObject(new Vector3(P101.x, P101.z, 0.0f).AsList()));
-            pointList.Add(JToken.FromObject(new Vector3(P001.x, P001.z, 0.0f).AsList()));
-            pointList.Add(JToken.FromObject(new Vector3(P000.x, P000.z, 0.0f).AsList()));
-            _o.Add("transform", _objCollider[i].transform.AsJObject());
-            _o.Add("point_list", pointList);
-            _o.Add("from_obj", JToken.FromObject(true));
-            _obstaclesArray.Add(_o);
+            if (_objCollider[i].transform.parent.parent.parent.parent.parent.gameObject == testLevel)
+            {
+                JObject _o = new JObject();
+                BoxCollider col = _objCollider[i].GetComponent<BoxCollider>();
+                var trans = _objCollider[i].transform;
+                var min = col.center - col.size * 0.5f;
+                var max = col.center + col.size * 0.5f;
+                var P000 = trans.TransformPoint(new Vector3(min.x, min.y, min.z));
+                var P001 = trans.TransformPoint(new Vector3(min.x, min.y, max.z));
+                var P101 = trans.TransformPoint(new Vector3(max.x, min.y, max.z));
+                var P100 = trans.TransformPoint(new Vector3(max.x, min.y, min.z));
+                JArray pointList = new JArray();
+                pointList.Add(JToken.FromObject((new Vector3(P100.x, P100.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P101.x, P101.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P001.x, P001.z, 0.0f) - testLevel.transform.position).AsList()));
+                pointList.Add(JToken.FromObject((new Vector3(P000.x, P000.z, 0.0f) - testLevel.transform.position).AsList()));
+                _o.Add("transform", _objCollider[i].transform.AsJObject());
+                _o.Add("point_list", pointList);
+                _o.Add("from_obj", JToken.FromObject(true));
+                _obstaclesArray.Add(_o);
+            }
         }
         for (int i = 0; i < _loadedModels.Count; i++) // Loaded Models
         {
-            JObject _lm = new JObject();
-            _lm.Add("transform", _loadedModels[i].transform.AsJObject());
-            _lm.Add("data", _loadedModels[i].objData);
-            _loadedModelsArray.Add(_lm);
+            if (_loadedModels[i].transform.parent.parent.parent.gameObject == testLevel)
+            {
+                JObject _lm = new JObject();
+                _lm.Add("transform", _loadedModels[i].transform.AsJObject());
+                _lm.Add("data", _loadedModels[i].objData);
+                _loadedModelsArray.Add(_lm);
+            }
         }
         for (int i = 0; i < _spawnAreas.Count; i++) // Spawn Areas
         {
-            JObject _sp = new JObject();
-            _sp.Add("transform", _spawnAreas[i].transform.AsJObject());
+            if (_spawnAreas[i].transform.parent.parent.gameObject == testLevel)
+            {
+                JObject _sp = new JObject();
+                _sp.Add("transform", _spawnAreas[i].transform.AsJObject());
 
-            _sp.Add("agent_count", _spawnAreas[i].initialNumberOfAgents);
-            _sp.Add("remove_at_goal", _spawnAreas[i].initialRemoveWhenGoalReached);
-            List<int> _goalIndexList = new List<int>();
-            for (int j = 0; j < _spawnAreas[i].initialAgentsGoalList.Count; j++)
-                _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].initialAgentsGoalList[j]));
-            _sp.Add("goal_list", JToken.FromObject(_goalIndexList));
-            _sp.Add("wait_list", JToken.FromObject(_spawnAreas[i].initialWaitList));
+                _sp.Add("agent_count", _spawnAreas[i].initialNumberOfAgents);
+                _sp.Add("remove_at_goal", _spawnAreas[i].initialRemoveWhenGoalReached);
+                List<int> _goalIndexList = new List<int>();
+                for (int j = 0; j < _spawnAreas[i].initialAgentsGoalList.Count; j++)
+                    _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].initialAgentsGoalList[j]));
+                _sp.Add("goal_list", JToken.FromObject(_goalIndexList));
+                _sp.Add("wait_list", JToken.FromObject(_spawnAreas[i].initialWaitList));
 
-            _sp.Add("cycle_lenght", _spawnAreas[i].cycleLenght);
-            _sp.Add("cycle_agent_count", _spawnAreas[i].quantitySpawnedEachCycle);
-            _sp.Add("cycle_remove_at_goal", _spawnAreas[i].repeatingRemoveWhenGoalReached);
-            _goalIndexList = new List<int>();
-            for (int j = 0; j < _spawnAreas[i].repeatingGoalList.Count; j++)
-                _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].repeatingGoalList[j]));
-            _sp.Add("cycle_goal_list", JToken.FromObject(_goalIndexList));
-            _sp.Add("cycle_wait_list", JToken.FromObject(_spawnAreas[i].repeatingWaitList));
-            
-            _spawnAreasArray.Add(_sp);
+                _sp.Add("cycle_lenght", _spawnAreas[i].cycleLenght);
+                _sp.Add("cycle_agent_count", _spawnAreas[i].quantitySpawnedEachCycle);
+                _sp.Add("cycle_remove_at_goal", _spawnAreas[i].repeatingRemoveWhenGoalReached);
+                _goalIndexList = new List<int>();
+                for (int j = 0; j < _spawnAreas[i].repeatingGoalList.Count; j++)
+                    _goalIndexList.Add(_goals.IndexOf(_spawnAreas[i].repeatingGoalList[j]));
+                _sp.Add("cycle_goal_list", JToken.FromObject(_goalIndexList));
+                _sp.Add("cycle_wait_list", JToken.FromObject(_spawnAreas[i].repeatingWaitList));
+
+                _spawnAreasArray.Add(_sp);
+            }
         }
 
-        output.Add("time_stamp", timeStamp.ToLongTimeString() + ":" + timeStamp.Millisecond.ToString());
+        output.Add("time_stamp", timeStamp.ToLongTimeString() + ":" + (timeStamp.Millisecond + testLevelId).ToString());
         output.Add("terrains", _terrainsArray);
         output.Add("goals", _goalsArray);
         output.Add("obstacles", _obstaclesArray);
@@ -313,6 +388,7 @@ public class LevelExporter : MonoBehaviour
         output.Add("loaded_models", _loadedModelsArray);
         output.Add("agents", _agentsArray);
         output.Add("auxins", _auxinsArray);
+        output.Add("isCassolValid", isCassolValid);
 
         world.ClearWorld(false);
 
