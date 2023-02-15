@@ -88,8 +88,8 @@ public class LevelEditorUIController : MonoBehaviour
     public Camera currrentCamera;
 
     [Header("Test Level")]
-    public GameObject mainTestLevel;
-    public List<GameObject> testLevels;
+    public SimulationScenario mainSimulationScenario;
+    public List<SimulationScenario> simulationScenarios;
 
     [HideInInspector]
     public bool isZoom { get; private set; }
@@ -141,11 +141,11 @@ public class LevelEditorUIController : MonoBehaviour
         confirmPresetButton.OnPointerDownEvent += ConfirmPresetButton_OnPointerDownEvent;
         cancelPresetButton.OnPointerDownEvent += CancelPresetButton_OnPointerDownEvent;
 
-        if (!testLevels.Contains(mainTestLevel))
-            testLevels.Add(mainTestLevel);
+        if (!simulationScenarios.Contains(mainSimulationScenario))
+            simulationScenarios.Add(mainSimulationScenario);
 
-        if (!cameras.Contains(mainTestLevel.GetComponentInChildren<Camera>()))
-            cameras.Add(mainTestLevel.GetComponentInChildren<Camera>());
+        if (!cameras.Contains(mainSimulationScenario.GetComponentInChildren<Camera>()))
+            cameras.Add(mainSimulationScenario.GetComponentInChildren<Camera>());
 
         isZoom = false;
 
@@ -260,9 +260,9 @@ public class LevelEditorUIController : MonoBehaviour
     private void SaveSceneButton_OnPointerDownEvent(PointerEventData obj)
     {
         eventSystem.SetSelectedGameObject(null);
-        if (levelExporter.IsValidExport(sceneController.world, testLevels))
+        if (levelExporter.IsValidExport(sceneController.world, simulationScenarios))
         {
-            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download, testLevels);
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.Download, simulationScenarios);
         }
         else
         {
@@ -274,9 +274,9 @@ public class LevelEditorUIController : MonoBehaviour
     {
         eventSystem.SetSelectedGameObject(null);
 
-        if (levelExporter.IsValidExport(sceneController.world, testLevels))
+        if (levelExporter.IsValidExport(sceneController.world, simulationScenarios))
         {
-            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene, testLevels);
+            levelExporter.ExportLevel(sceneController.world, objImporter, LevelExporter.ExportType.RunScene, simulationScenarios);
             simulationRunningPanel.gameObject.SetActive(true);
             // runSceneButton.gameObject.SetActive(false);
             // simulationRunningLabel.gameObject.SetActive(true);
@@ -289,32 +289,32 @@ public class LevelEditorUIController : MonoBehaviour
 
     private void CreateAlternativesButton_OnPointerDownEvent(PointerEventData obj)
     {
-        if (testLevels.Count == 4)
+        if (simulationScenarios.Count == 4)
             throw new System.Exception("It is not possible to create more alternatives");
 
-        GameObject newTestLevel = Instantiate(mainTestLevel, new Vector3(testLevels.Count * 100, 0, 0), new Quaternion());
-        newTestLevel.name = "TestLevel " + (testLevels.Count + 1);
-        testLevels.Add(newTestLevel);
+        GameObject newTestLevel = Instantiate(mainSimulationScenario.gameObject, new Vector3(simulationScenarios.Count * 100, 0, 0), new Quaternion());
+        newTestLevel.name = "SimulationScenario" + (simulationScenarios.Count + 1);
+        simulationScenarios.Add(newTestLevel.GetComponent<SimulationScenario>());
 
         cameras.Add(newTestLevel.GetComponentInChildren<Camera>());
         ResizeCameras();
 
         removeAlternativeButton.gameObject.SetActive(true);
-        if (testLevels.Count == 4)
+        if (simulationScenarios.Count == 4)
             createAlternativesButton.gameObject.SetActive(false);
     }
 
     private void RemoveAlternativeButton_OnPointerDownEvent(PointerEventData obj)
     {
-        GameObject removedTestLevel = testLevels[testLevels.Count - 1];
+        SimulationScenario removedScenario = simulationScenarios[simulationScenarios.Count - 1];
         cameras.Remove(cameras[cameras.Count - 1]);
-        testLevels.Remove(removedTestLevel);
-        Destroy(removedTestLevel);
+        simulationScenarios.Remove(removedScenario);
+        Destroy(removedScenario.gameObject);
 
         ResizeCameras();
 
         createAlternativesButton.gameObject.SetActive(true);
-        if (testLevels.Count == 1)
+        if (simulationScenarios.Count == 1)
             removeAlternativeButton.gameObject.SetActive(false);
     }
 

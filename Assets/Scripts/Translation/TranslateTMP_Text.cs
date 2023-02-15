@@ -5,7 +5,7 @@ using TMPro;
 
 public class TranslateTMP_Text : MonoBehaviour
 {
-    public static Language language = Language.PT_BR;
+    public static Language language = Language.EN_US;
     public enum Language
     {
         EN_US,
