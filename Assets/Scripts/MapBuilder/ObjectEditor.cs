@@ -22,6 +22,7 @@ public class ObjectEditor : MonoBehaviour {
     public void Awake()
     {
         selectedGameObject = null;
+
     }
 
     public void Update()

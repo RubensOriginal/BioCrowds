@@ -161,29 +161,17 @@ public class LevelExporter : MonoBehaviour
 
     private JObject GenerateArrayJsonContent(World world, List<SimulationScenario> testLevels)
     {
-       // StringBuilder sb = new StringBuilder();
-
         var scenarios = new JArray();
-        var output = new JObject();
-        //sb.Append("[");
         var cassolValid = IsValidCassol(world, testLevels);
 
         for (int i = 0; i < testLevels.Count; i++)
         {
             scenarios.Add(SimulationScenarioToJSON(testLevels, i, cassolValid));
-            //sb.Append(SimulationScenarioToJSON(testLevels[i], i,  IsValidCassol(world, testLevels)));
-
-            //if (i != testLevels.Count - 1)
-            //{
-            //    sb.Append(",");
-            //}
         }
+
+        var output = new JObject();
         output.Add("scenarios", scenarios);
         return output;
-        //sb.Append("]");
-
-
-        //return sb.ToString();
     }
 
     private JObject SimulationScenarioToJSON(List<SimulationScenario> scenarios, int scenarioIndex, bool isCassolValid)
@@ -203,7 +191,7 @@ public class LevelExporter : MonoBehaviour
 
         var _terrains = FindObjectsOfType<Terrain>().ToList();
         var _spawnAreas = scenario.spawnAreasContainer.GetComponentsInChildren<SpawnArea>().ToList();
-        var _loadedModels = FindObjectsOfType<LoadedOBJData>().ToList();
+        var _loadedModels = scenario.importedModelsContainer.GetComponentsInChildren<LoadedOBJData>().ToList();
         var _goals =  GameObject.FindGameObjectsWithTag("Goal").ToList();
         var _obstacles = scenario.obstaclesContainer.FindChildrenWithTag("Obstacle").ToList();
         var _objCollider = new List<GameObject>();

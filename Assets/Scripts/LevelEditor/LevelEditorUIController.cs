@@ -17,7 +17,7 @@ public class LevelEditorUIController : MonoBehaviour
     [SerializeField] private LevelExporter levelExporter;
     [SerializeField] private LevelImporter levelImporter;
     [SerializeField] private ManagerScript levelEditorManager;
-    [SerializeField] private ObjectEditor  objEditor;
+    [SerializeField] private ObjectEditor objEditor;
 
     //--------------------------------------
     // Save/Load/Run
@@ -25,7 +25,7 @@ public class LevelEditorUIController : MonoBehaviour
     public CustomPointerHandler saveSceneButton;
     public CustomPointerHandler loadSceneButton;
     public CustomPointerHandler runSceneButton;
-    public RectTransform        simulationRunningLabel;
+    public RectTransform simulationRunningLabel;
     public CustomPointerHandler createAlternativesButton;
     public CustomPointerHandler removeAlternativeButton;
 
@@ -56,8 +56,8 @@ public class LevelEditorUIController : MonoBehaviour
     public CustomPointerHandler clearOBJButton;
     public CustomPointerHandler confirmPresetButton;
     public CustomPointerHandler cancelPresetButton;
-        
-    public ToggleGroup  presetToggleGroup;
+
+    public ToggleGroup presetToggleGroup;
     public List<Toggle> presetToggles;
 
     //--------------------------------------
@@ -65,6 +65,12 @@ public class LevelEditorUIController : MonoBehaviour
     [Header("Edit Objects")]
     public TMP_InputField agentNumberInputField;
 
+    //--------------------------------------
+    // Hints
+    [Header("Terrain Options")]
+    public RectTransform editTerrainSizePanel;
+    public TMP_InputField terrainWidthInputField;
+    public TMP_InputField terrainHeightInputField;
     //--------------------------------------
     // Panels
     [Header("Panels")]
@@ -96,6 +102,7 @@ public class LevelEditorUIController : MonoBehaviour
 
     [HideInInspector]
     public bool isZoom { get; private set; }
+
 
 
     private void Awake()
@@ -144,6 +151,8 @@ public class LevelEditorUIController : MonoBehaviour
         confirmPresetButton.OnPointerDownEvent += ConfirmPresetButton_OnPointerDownEvent;
         cancelPresetButton.OnPointerDownEvent += CancelPresetButton_OnPointerDownEvent;
 
+        
+
         if (simulationScenarios.Count == 0)
         {
             if (mainSimulationScenario != null)
@@ -157,10 +166,17 @@ public class LevelEditorUIController : MonoBehaviour
 
         isZoom = false;
 
+        terrainWidthInputField.onEndEdit.AddListener(OnEditTerrainWidth);
+        terrainHeightInputField.onEndEdit.AddListener(OnEditTerrainHeight);
+        foreach (SimulationScenario scenario in simulationScenarios)
+        {
+            scenario.world.UpateTerrainSize(new Vector3(30f, 600f, 30f));
+        }
+
     }
 
-    
-    
+
+
 
     private void Update()
     {
@@ -219,15 +235,23 @@ public class LevelEditorUIController : MonoBehaviour
         }
 
         editGoalHint.gameObject.SetActive(mode == MouseScript.LevelManupulator.Link ? true : false);
-        
+
 
 
         importOBJButton.gameObject.SetActive(objImporter.loadedModels.Count == 0);
         clearOBJButton.gameObject.SetActive(objImporter.loadedModels.Count > 0);
+
+
+        if (Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.T))
+        {
+            editTerrainSizePanel.gameObject.SetActive(!editTerrainSizePanel.gameObject.activeSelf);
+            terrainWidthInputField.text = mainSimulationScenario.terrain.terrainData.size.x.ToString();
+            terrainHeightInputField.text = mainSimulationScenario.terrain.terrainData.size.z.ToString();
+        }
     }
 
 
-    
+
     private void ImportOBJButton_OnPointerDownEvent(PointerEventData eventData)
     {
         eventSystem.SetSelectedGameObject(null);
@@ -237,7 +261,8 @@ public class LevelEditorUIController : MonoBehaviour
     private void ClearOBJButton_OnPointerDownEvent(PointerEventData obj)
     {
         eventSystem.SetSelectedGameObject(null);
-        objImporter.ClearLoadedModels();
+        //objImporter.ClearLoadedModels();
+        objImporter.ClearAllLoadedModels();
     }
 
     private void ConfirmPresetButton_OnPointerDownEvent(PointerEventData obj)
@@ -288,7 +313,7 @@ public class LevelEditorUIController : MonoBehaviour
             simulationRunningPanel.gameObject.SetActive(true);
             // runSceneButton.gameObject.SetActive(false);
             // simulationRunningLabel.gameObject.SetActive(true);
-        } 
+        }
         else
         {
             saveFailedPanel.gameObject.SetActive(true);
@@ -300,7 +325,7 @@ public class LevelEditorUIController : MonoBehaviour
         if (simulationScenarios.Count == 4)
             throw new System.Exception("It is not possible to create more alternatives");
 
-        GameObject newTestLevel = Instantiate(mainSimulationScenario.gameObject, new Vector3(simulationScenarios.Count * 100, 0, 0), new Quaternion());
+        GameObject newTestLevel = Instantiate(mainSimulationScenario.gameObject, new Vector3(simulationScenarios.Count * 1000, 0, 0), new Quaternion());
         newTestLevel.name = "SimulationScenario" + (simulationScenarios.Count + 1);
         simulationScenarios.Add(newTestLevel.GetComponent<SimulationScenario>());
 
@@ -328,7 +353,8 @@ public class LevelEditorUIController : MonoBehaviour
 
     public void RemoveAllAlternatives()
     {
-        foreach (SimulationScenario sm in simulationScenarios) {
+        foreach (SimulationScenario sm in simulationScenarios)
+        {
             Destroy(sm.gameObject);
         }
         mainSimulationScenario = null;
@@ -340,7 +366,7 @@ public class LevelEditorUIController : MonoBehaviour
     {
         createAlternativesButton.gameObject.SetActive(true);
 
-        GameObject newAlternative = Instantiate(simulationScenarioPrefab, new Vector3(simulationScenarios.Count * 100, 0, 0), new Quaternion());
+        GameObject newAlternative = Instantiate(simulationScenarioPrefab, new Vector3(simulationScenarios.Count * 1000, 0, 0), new Quaternion());
         newAlternative.name = "SimulationScenario" + (simulationScenarios.Count + 1);
         var simulationScenario = newAlternative.GetComponent<SimulationScenario>();
         simulationScenarios.Add(simulationScenario);
@@ -408,8 +434,15 @@ public class LevelEditorUIController : MonoBehaviour
     {
         actionToggles[0].isOn = true;
         eventSystem.SetSelectedGameObject(null);
-        sceneController.world.ClearWorld(true);
-        objImporter.ClearLoadedModels();
+        objImporter.ClearAllLoadedModels();
+        RemoveAllAlternatives();
+        CreateNewAlternative();
+        foreach (SimulationScenario scenario in simulationScenarios)
+        {
+            scenario.world.UpateTerrainSize(new Vector3(30f, 600f, 30f));
+        }
+        removeAlternativeButton.gameObject.SetActive(false);
+        createAlternativesButton.gameObject.SetActive(true);
         confirmClearPanel.gameObject.SetActive(false);
     }
     private void CancelClearButton_OnPointerDownEvent(PointerEventData obj)
@@ -420,8 +453,8 @@ public class LevelEditorUIController : MonoBehaviour
 
     public bool IsPopUpPanelOpen()
     {
-        if (loadPresetPanel.gameObject.activeSelf || confirmLoadPanel.gameObject.activeSelf 
-            || saveFailedPanel.gameObject.activeSelf || simulationRunningPanel.gameObject.activeSelf 
+        if (loadPresetPanel.gameObject.activeSelf || confirmLoadPanel.gameObject.activeSelf
+            || saveFailedPanel.gameObject.activeSelf || simulationRunningPanel.gameObject.activeSelf
             || loadFailedPanel.gameObject.activeSelf || confirmClearPanel.gameObject.activeSelf)
             return true;
         return false;
@@ -431,10 +464,11 @@ public class LevelEditorUIController : MonoBehaviour
     {
         isZoom = false;
 
-        foreach (Camera camera in cameras) {
+        foreach (Camera camera in cameras)
+        {
             if (!camera.enabled)
                 camera.enabled = true;
-                
+
         }
 
         switch (cameras.Count)
@@ -478,4 +512,47 @@ public class LevelEditorUIController : MonoBehaviour
         }
     }
 
+    public void OnEditTerrainWidth(string text)
+    {
+        Vector3 terrainSize = mainSimulationScenario.terrain.terrainData.size;
+
+        if (int.TryParse(text, out int value))
+        {
+            terrainSize.x = Mathf.Clamp(value, 10, 200);
+            terrainWidthInputField.text = terrainSize.x.ToString();
+        }
+
+        else if (string.IsNullOrEmpty(text))
+        {
+            terrainSize.x = 10;
+            terrainWidthInputField.text = terrainSize.x.ToString();
+        }
+        
+        foreach (SimulationScenario scenario in simulationScenarios)
+        {
+            scenario.world.UpateTerrainSize(terrainSize);
+        }
+    }
+
+    public void OnEditTerrainHeight(string text)
+    {
+        Vector3 terrainSize = mainSimulationScenario.terrain.terrainData.size;
+
+        if (int.TryParse(text, out int value))
+        {
+            terrainSize.z = Mathf.Clamp(value, 10, 200);
+            terrainHeightInputField.text = terrainSize.z.ToString();
+        }
+
+        else if (string.IsNullOrEmpty(text))
+        {
+            terrainSize.z = 10;
+            terrainHeightInputField.text = terrainSize.z.ToString();
+        }
+
+        foreach (SimulationScenario scenario in simulationScenarios)
+        {
+            scenario.world.UpateTerrainSize(terrainSize);
+        }
+    }
 }

@@ -40,6 +40,10 @@ namespace Biocrowds.Core
 
         [SerializeField]
         private Terrain _terrain;
+        [SerializeField]
+        private Transform _quadBlack;
+        [SerializeField]
+        private Transform _quadFloor;
 
         [SerializeField]
         private NavMeshSurface surface;
@@ -172,11 +176,23 @@ namespace Biocrowds.Core
             var defaultBuildSettings = NavMesh.GetSettingsByID(0);
             surface.BuildNavMesh();
         }
+
+        public void UpateTerrainSize(Vector3 newSize)
+        {
+            _terrain.terrainData.size = new Vector3(newSize.x, _terrain.terrainData.size.y, newSize.z);
+            _quadFloor.localScale = new Vector3(newSize.x, newSize.z, 1f);
+            _quadFloor.localPosition = new Vector3(newSize.x, 0f, newSize.z)/2f;
+            _quadBlack.localScale = new Vector3(newSize.x+1f, newSize.z+1f, 1f);
+            _quadBlack.localPosition = new Vector3(newSize.x, -0.2f, newSize.z) / 2f;
+            _quadFloor.GetComponent<MeshRenderer>().material.mainTextureScale = 
+                new Vector2(newSize.x / 4f, newSize.z/4f);
+
+        }
         // Use this for initialization
         IEnumerator SetupWorld()
         {
             //change terrain size according informed
-            _terrain.terrainData.size = new Vector3(_dimension.x, _terrain.terrainData.size.y, _dimension.y);
+            UpateTerrainSize(new Vector3(_dimension.x, _terrain.terrainData.size.y, _dimension.y));
             _terrain.transform.position = new Vector3(_offset.x, _terrain.transform.position.y, _offset.y);
 
             //GameObjectUtility.SetStaticEditorFlags(_terrain.gameObject, StaticEditorFlags.NavigationStatic);

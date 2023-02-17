@@ -84,9 +84,6 @@ public class LevelImporter : MonoBehaviour
         var paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, false);
         if (paths.Length > 0)
         {
-            //for (int i = 0; i < paths.Length; i++)
-            //    Debug.Log("Now Importing: " + " " + paths[0]);
-
             using var fs = new FileStream(paths[0], FileMode.Open);
             string content = new StreamReader(fs).ReadToEnd();
 
@@ -123,21 +120,17 @@ public class LevelImporter : MonoBehaviour
         SimulationPrefabManager prefabManager = scenario.world.prefabManager;
         List<Transform> _goals = new List<Transform>();
         List<Transform> _goalsToRemove = new List<Transform>();
-        // Terrain - Only 1 terrain for now
-        //world.CreateCells();
+        
         var _terrain = scenario.world.GetTerrain();
         var _t = data["terrains"][alternativeIndex];
-        //_terrain.transform.FromJObject(_t["transform"]);
-        _terrain.terrainData.size = new Vector3(_t["terrain_size"][0].ToObject<float>(),
+        //_terrain.terrainData.size = ;
+        scenario.world.UpateTerrainSize(new Vector3(_t["terrain_size"][0].ToObject<float>(),
                                                 _t["terrain_size"][1].ToObject<float>(),
-                                                _t["terrain_size"][2].ToObject<float>());
-        
+                                                _t["terrain_size"][2].ToObject<float>()));
         // Goals
         var _goalData = data["goals"] as JArray;
         for (int i = 0; i < _goalData.Count; i++)
         {
-            
-
             Vector3 _goalPos = Vector3Extensions.FromJObject((_goalData[i]["position"]));
             GameObject newGoal = Instantiate(prefabManager.GetGoalPrefab(), _goalPos, Quaternion.identity, prefabManager.goalContainer);
             newGoal.name = "Goal_" + i.ToString();
@@ -227,74 +220,15 @@ public class LevelImporter : MonoBehaviour
 
     private void LoadContent(string text)
     {
-        Debug.Log("content" + text);
         editorUIController.RemoveAllAlternatives();
-
 
         JObject content = JObject.Parse(text);
         JArray scenarios = (JArray)content["scenarios"];
 
         Debug.Log("Loading scenarios. Quantity:" + scenarios.Count);
-
+        objImporter.ClearAllLoadedModels();
         for (int i = 0; i < scenarios.Count; i++)
             LoadSimulationScenario((JObject)scenarios[i], i);
-
-        return;
-
-
-        //world.ClearWorld(true);
-        objImporter.ClearLoadedModels();
-
-        List<Transform> _goals = new List<Transform>();
-        // Terrain - Only 1 terrain for now
-        //world.CreateCells();
-
-
-        SimulationPrefabManager prefabManager;
-
-        
-
-        
-
-        // Agents
-        /*var _agentsData = content["agents"] as JArray;
-        for (int i = 0; i < _agentsData.Count; i++)
-        {
-            List<GameObject> _goalListGO = new List<GameObject>();
-            List<float> _waitList = new List<float>();
-            var _goalList = _agentsData[i]["goal_list"] as JArray;
-            for (int j = 0; j < _goalList.Count; j++)
-            {
-                _goalListGO.Add(_goals[_goalList[j].ToObject<int>()].gameObject);
-                _waitList.Add(0f);
-            }
-            Agent newAgent = world.SpawnNewAgent(Vector3Extensions.FromJObject((_agentsData[i]["position"])),
-                _agentsData[i]["remove_goal_reach"].ToObject<bool>(),
-                _goalListGO);
-            newAgent.goalsWaitList = _waitList;
-        }*/
-
-        // Auxins
-        /*var _auxinsData = content["auxins"] as JArray;
-        for (int i = 0; i < _auxinsData.Count; i++)
-        {
-            GameObject newAuxin = Instantiate(prefabManager.GetAuxinPrefab(), prefabManager.auxinsContainer);
-            Auxin _auxin = newAuxin.GetComponent<Auxin>();
-
-            newAuxin.name = (_auxinsData[i]["name"].ToObject<string>());
-            newAuxin.transform.position = Vector3Extensions.FromJObject((_auxinsData[i]["position"]));
-            string index = newAuxin.name.Split('[')[1].Split(']')[0];
-            _auxin.Cell = world.Cells[int.Parse(index)];
-            _auxin.Cell.Auxins.Add(_auxin);
-            _auxin.Position = newAuxin.transform.position;
-            //world.Cells[int.Parse(index)].Auxins.Add(newAuxin);
-
-
-        }*/
-
-        //world.CreateNavMesh();
-        //world._isReady = true;
-
     }
 
     
