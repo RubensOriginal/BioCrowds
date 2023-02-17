@@ -166,10 +166,11 @@ public class LevelExporter : MonoBehaviour
         var scenarios = new JArray();
         var output = new JObject();
         //sb.Append("[");
+        var cassolValid = IsValidCassol(world, testLevels);
 
         for (int i = 0; i < testLevels.Count; i++)
         {
-            scenarios.Add(SimulationScenarioToJSON(testLevels[i], i, IsValidCassol(world, testLevels)));
+            scenarios.Add(SimulationScenarioToJSON(testLevels, i, cassolValid));
             //sb.Append(SimulationScenarioToJSON(testLevels[i], i,  IsValidCassol(world, testLevels)));
 
             //if (i != testLevels.Count - 1)
@@ -185,7 +186,7 @@ public class LevelExporter : MonoBehaviour
         //return sb.ToString();
     }
 
-    private JObject SimulationScenarioToJSON(SimulationScenario scenario, int testLevelId, bool isCassolValid)
+    private JObject SimulationScenarioToJSON(List<SimulationScenario> scenarios, int scenarioIndex, bool isCassolValid)
     {
         JObject output = new JObject();
         JArray _terrainsArray = new JArray();
@@ -196,7 +197,9 @@ public class LevelExporter : MonoBehaviour
         JArray _obstaclesArray = new JArray();
         JArray _spawnAreasArray = new JArray();
         JArray _loadedModelsArray = new JArray();
-        Debug.Log("Exporing Level");
+        Debug.Log("Exporing Scenario " + scenarioIndex);
+
+        var scenario = scenarios[scenarioIndex];
 
         var _terrains = FindObjectsOfType<Terrain>().ToList();
         var _spawnAreas = scenario.spawnAreasContainer.GetComponentsInChildren<SpawnArea>().ToList();
@@ -217,7 +220,16 @@ public class LevelExporter : MonoBehaviour
         for (int i = 0; i < _goals.Count; i++) // Goals (all goals, including other scenarios)
         {
             JObject _a = new JObject();
+            
+
+            int _goalScenarioIndex = 0;
+            for (int j = 0; j < scenarios.Count; j++)
+            {
+                if (_goals[i].transform.parent == scenarios[j].goalsContainer.transform)
+                    _goalScenarioIndex = j;
+            }
             _a.Add("position", JArray.FromObject((_goals[i].transform.position - scenario.transform.position).AsList()));
+            _a.Add("scenario_index", _goalScenarioIndex);
             _goalsArray.Add(_a);
         }
         for (int i = 0; i < _spawnAreas.Count; i++) // Agents (sampling points)
@@ -372,7 +384,7 @@ public class LevelExporter : MonoBehaviour
             _spawnAreasArray.Add(_sp);
         }
 
-        output.Add("time_stamp", timeStamp.ToLongTimeString() + ":" + (timeStamp.Millisecond + testLevelId).ToString());
+        output.Add("time_stamp", timeStamp.ToLongTimeString() + ":" + (timeStamp.Millisecond + scenarioIndex).ToString());
         output.Add("terrains", _terrainsArray);
         output.Add("goals", _goalsArray);
         output.Add("obstacles", _obstaclesArray);

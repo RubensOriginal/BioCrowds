@@ -73,71 +73,73 @@ public class MouseScript : MonoBehaviour
             }
         }
 
-            if (hitTerrain)
+        if (hitTerrain)
+        {
+            testLevel = terrainHit.collider.gameObject.transform.parent.parent;
+            ms.uiController.currrentCamera = testLevel.GetComponentInChildren<Camera>();
+
+            mousePos = currentCamera.ScreenToWorldPoint(Input.mousePosition);
+
+            transform.position = new Vector3(
+                Mathf.Clamp(mousePos.x, -50 + testLevel.transform.position.x, 50 + testLevel.transform.position.x),
+                0.50f,
+                Mathf.Clamp(mousePos.z, -50 + testLevel.transform.position.z, 50 + testLevel.transform.position.z));
+        }
+
+        if (ms.uiController.currrentCamera == null)
+            return;
+        if (Input.GetMouseButtonDown(0) && ms.uiController.currrentCamera.enabled)
+        {
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                testLevel = terrainHit.collider.gameObject.transform.parent.parent;
-                ms.uiController.currrentCamera = testLevel.GetComponentInChildren<Camera>();
-
-                mousePos = currentCamera.ScreenToWorldPoint(Input.mousePosition);
-
-                transform.position = new Vector3(
-                    Mathf.Clamp(mousePos.x, -50 + testLevel.transform.position.x, 50 + testLevel.transform.position.x),
-                    0.50f,
-                    Mathf.Clamp(mousePos.z, -50 + testLevel.transform.position.z, 50 + testLevel.transform.position.z));
-            }
-
-            if (Input.GetMouseButtonDown(0) && ms.uiController.currrentCamera.enabled)
-            {
-                if (!EventSystem.current.IsPointerOverGameObject())
+                if (manipulatorOption == LevelManupulator.Create)
                 {
-                    if (manipulatorOption == LevelManupulator.Create)
-                    {
-                        if (hitTerrain && !colliding)
-                            CreateObject();
-                    }
-                    else if (manipulatorOption == LevelManupulator.Destroy)
-                    {
-                        if (colliding)
-                            Destroy(hit.collider.gameObject);
+                    if (hitTerrain && !colliding)
+                        CreateObject();
+                }
+                else if (manipulatorOption == LevelManupulator.Destroy)
+                {
+                    if (colliding)
+                        Destroy(hit.collider.gameObject);
 
-                    }
-                    else if (manipulatorOption == LevelManupulator.Edit)
+                }
+                else if (manipulatorOption == LevelManupulator.Edit)
+                {
+                    if (colliding)
+                        oe.SelectObject(hit.collider.gameObject);
+                    else
+                        oe.UnselectObject();
+                }
+                else if (manipulatorOption == LevelManupulator.Link)
+                {
+                    if (colliding || hit.collider.gameObject.CompareTag("Goal"))
+                        oe.LinkGoalToSpawner(hit.collider.gameObject);
+                }
+                else if (manipulatorOption == LevelManupulator.Move)
+                {
+                    if (colliding)
                     {
-                        if (colliding)
-                            oe.SelectObject(hit.collider.gameObject);
+                        if (!mo.isSelected)
+                            mo.SelectObject(hit.collider.gameObject);
                         else
-                            oe.UnselectObject();
+                            mo.isSelected = false;
                     }
-                    else if (manipulatorOption == LevelManupulator.Link)
-                    {
-                        if (colliding || hit.collider.gameObject.CompareTag("Goal"))
-                            oe.LinkGoalToSpawner(hit.collider.gameObject);
-                    }
-                    else if (manipulatorOption == LevelManupulator.Move)
-                    {
-                        if (colliding)
-                        {
-                            if (!mo.isSelected)
-                                mo.SelectObject(hit.collider.gameObject);
-                            else
-                                mo.isSelected = false;
-                        }
-                    }
+                }
 
-                }
             }
-            else if (Input.GetMouseButtonDown(1) && !isRun)
+        }
+        else if (Input.GetMouseButtonDown(1) && !isRun)
+        {
+            if (ms.uiController.isZoom)
             {
-                if (ms.uiController.isZoom)
-                {
-                    ms.uiController.ResizeCameras();
-                }
-                else
-                {
-                    ms.uiController.ZoomCamera(ms.uiController.currrentCamera);
-                }
-                isRun = true;
+                ms.uiController.ResizeCameras();
             }
+            else
+            {
+                ms.uiController.ZoomCamera(ms.uiController.currrentCamera);
+            }
+            isRun = true;
+        }
 
         isRun = false;
     }

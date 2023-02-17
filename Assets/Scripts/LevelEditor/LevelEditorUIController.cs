@@ -86,10 +86,13 @@ public class LevelEditorUIController : MonoBehaviour
     [Header("Cameras")]
     public List<Camera> cameras;
     public Camera currrentCamera;
+    public Slider cameraSpeed;
+    public ManagerScript ms;
 
     [Header("Test Level")]
     public SimulationScenario mainSimulationScenario;
     public List<SimulationScenario> simulationScenarios;
+    public GameObject simulationScenarioPrefab;
 
     [HideInInspector]
     public bool isZoom { get; private set; }
@@ -141,8 +144,13 @@ public class LevelEditorUIController : MonoBehaviour
         confirmPresetButton.OnPointerDownEvent += ConfirmPresetButton_OnPointerDownEvent;
         cancelPresetButton.OnPointerDownEvent += CancelPresetButton_OnPointerDownEvent;
 
-        if (!simulationScenarios.Contains(mainSimulationScenario))
-            simulationScenarios.Add(mainSimulationScenario);
+        if (simulationScenarios.Count == 0)
+        {
+            if (mainSimulationScenario != null)
+                simulationScenarios.Add(mainSimulationScenario);
+            else
+                simulationScenarios.Add(CreateNewAlternative());
+        }
 
         if (!cameras.Contains(mainSimulationScenario.GetComponentInChildren<Camera>()))
             cameras.Add(mainSimulationScenario.GetComponentInChildren<Camera>());
@@ -318,9 +326,45 @@ public class LevelEditorUIController : MonoBehaviour
             removeAlternativeButton.gameObject.SetActive(false);
     }
 
+    public void RemoveAllAlternatives()
+    {
+        foreach (SimulationScenario sm in simulationScenarios) {
+            Destroy(sm.gameObject);
+        }
+        mainSimulationScenario = null;
+        simulationScenarios.Clear();
+        cameras.Clear();
+    }
+
+    public SimulationScenario CreateNewAlternative()
+    {
+        createAlternativesButton.gameObject.SetActive(true);
+
+        GameObject newAlternative = Instantiate(simulationScenarioPrefab, new Vector3(simulationScenarios.Count * 100, 0, 0), new Quaternion());
+        newAlternative.name = "SimulationScenario" + (simulationScenarios.Count + 1);
+        var simulationScenario = newAlternative.GetComponent<SimulationScenario>();
+        simulationScenarios.Add(simulationScenario);
+
+        var cam = simulationScenario.editorCamera.GetComponent<CameraScript>();
+        cam.ms = ms;
+        cam.cameraSpeed = cameraSpeed;
+
+        cameras.Add(newAlternative.GetComponentInChildren<Camera>());
+        ResizeCameras();
+
+        removeAlternativeButton.gameObject.SetActive(true);
+        if (simulationScenarios.Count == 4)
+            createAlternativesButton.gameObject.SetActive(false);
+
+        if (mainSimulationScenario == null)
+            mainSimulationScenario = simulationScenario;
+
+        return simulationScenario;
+    }
+
     private void ConfirmLoadLoadAnywayButton_OnPointerDownEvent(PointerEventData obj)
     {
-        levelImporter.ImportLevel(simulationWorld, objImporter);
+        levelImporter.ImportLevel(objImporter);
         confirmLoadPanel.gameObject.SetActive(false);
     }
 
