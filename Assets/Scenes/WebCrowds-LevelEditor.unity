@@ -24911,7 +24911,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   world: {fileID: 6133400843197603327}
   terrain: {fileID: 6305520029635524196}
-  editorCamera: {fileID: 0}
+  editorCamera: {fileID: 6091173837175546350}
   spawnAreasContainer: {fileID: 6091173838045229999}
   goalsContainer: {fileID: 6091173838348678380}
   obstaclesContainer: {fileID: 6091173837574799193}

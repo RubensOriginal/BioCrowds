@@ -186,7 +186,7 @@ public class LevelExporter : MonoBehaviour
         JArray _spawnAreasArray = new JArray();
         JArray _loadedModelsArray = new JArray();
         Debug.Log("Exporing Scenario " + scenarioIndex);
-
+        UnityEngine.Random.InitState(0);
         var scenario = scenarios[scenarioIndex];
 
         var _terrains = FindObjectsOfType<Terrain>().ToList();

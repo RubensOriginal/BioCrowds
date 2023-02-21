@@ -111,7 +111,7 @@ public class RuntimeOBJImporter : MonoBehaviour
         return LoadOBJFromString(presets[index].text);
     }
 
-    public LoadedOBJData LoadOBJFromString(string data)
+    public LoadedOBJData LoadOBJFromString(string data, bool makeCopies = true, int targetContainer = 0)
     {
         UpdateImportedModelContainers();
 
@@ -124,7 +124,7 @@ public class RuntimeOBJImporter : MonoBehaviour
         loadedData.Add(data);
 
         // Adjust object position and scale
-        newObj.transform.SetParent(loadedModelContainers[0]);
+        newObj.transform.SetParent(loadedModelContainers[targetContainer]);
         newObj.transform.localScale = new Vector3(-1f, 0.1f, 1f);
 
         // Add materials, colliders and tags
@@ -141,6 +141,9 @@ public class RuntimeOBJImporter : MonoBehaviour
                 child.tag = "OBJCollider";
             }
         }
+
+        if (!makeCopies)
+            return newObjData;
 
         // Create copies for each alternative
         for (int i = 1; i < loadedModelContainers.Count; i ++)

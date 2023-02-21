@@ -206,9 +206,10 @@ public class LevelImporter : MonoBehaviour
         }
         // LoadedModels
         var _loadedModelsData = data["loaded_models"] as JArray;
+        Debug.Log("Loaded models count" + _loadedModelsData.Count);
         for (int i = 0; i < _loadedModelsData.Count; i++)
         {
-            LoadedOBJData newSpawnAreaData = objImporter.LoadOBJFromString(_loadedModelsData[i]["data"].ToObject<string>());
+            LoadedOBJData newSpawnAreaData = objImporter.LoadOBJFromString(_loadedModelsData[i]["data"].ToObject<string>(), false, alternativeIndex);
             newSpawnAreaData.name = "LoadedModel_" + i.ToString();
             newSpawnAreaData.transform.FromJObject(_loadedModelsData[i]["transform"]);
         }
