@@ -14,12 +14,34 @@ using System.Runtime.InteropServices;
 
 public class RuntimeOBJImporter : MonoBehaviour
 {
+    public LevelEditorUIController editorUIController;
     public List<TextAsset> presets;
     public Material objectsMaterial;
-	GameObject loadedObject;
-	public Transform loadedModelsContainer;
+	GameObject newObj;
+    public List<Transform> loadedModelContainers = new List<Transform>();
     public List<LoadedOBJData> loadedModels;
+    public List<string> loadedData;
     public ExtensionFilter[] extensions;
+
+    public void Start()
+    {
+        
+        extensions = new[] {
+            new ExtensionFilter("OBJ Files", "obj"),
+        };
+        UpdateImportedModelContainers();
+    }
+
+    public void UpdateImportedModelContainers()
+    {
+        loadedModelContainers = new List<Transform>();
+        foreach(SimulationScenario scenario in editorUIController.simulationScenarios)
+        {
+            loadedModelContainers.Add(scenario.importedModelsContainer.transform);
+        }
+    }
+
+
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     
@@ -35,30 +57,14 @@ public class RuntimeOBJImporter : MonoBehaviour
 	private IEnumerator OutputRoutine(string url)
     {
         var loader = new WWW(url);
-
         yield return loader;
-
-        var textStream = new MemoryStream(Encoding.UTF8.GetBytes(loader.text));
-        loadedObject = new OBJLoader().Load(textStream);
-        loadedObject.transform.SetParent(loadedModelsContainer);
-        foreach(Transform child in loadedObject.transform)
-            {
-                if (child.TryGetComponent(out Renderer renderer))
-                {
-                    renderer.material = objectsMaterial;
-                }
-            }
+        LoadOBJFromString(loader.text);
         yield break;
     }
 #else
-    void Start()
-    {
-        extensions = new[] {
-            new ExtensionFilter("OBJ Files", "obj"),
-        };
-    }
 
-	IEnumerator ShowLoadDialogCoroutine()
+
+    IEnumerator ShowLoadDialogCoroutine()
     {
         yield return new WaitForEndOfFrame(); // To re-enable button color
         var paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", extensions, true);
@@ -67,15 +73,15 @@ public class RuntimeOBJImporter : MonoBehaviour
 			for (int i = 0; i < paths.Length; i++)
 				Debug.Log("Now Loading: " + " " + paths[0]);
 
-            loadedObject = new OBJLoader().Load(paths[0]);
-            var data = loadedObject.AddComponent<LoadedOBJData>();
+            newObj = new OBJLoader().Load(paths[0]);
+            var data = newObj.AddComponent<LoadedOBJData>();
             using (var fs = new FileStream(paths[0], FileMode.Open))
             {
                 data.objData = new StreamReader(fs).ReadToEnd();
             }
             loadedModels.Add(data);
-            loadedObject.transform.SetParent(loadedModelsContainer);
-            foreach(Transform child in loadedObject.transform)
+            newObj.transform.SetParent(loadedModelContainers[0]);
+            foreach(Transform child in newObj.transform)
             {
                 if (child.TryGetComponent(out Renderer renderer))
                 {
@@ -90,11 +96,6 @@ public class RuntimeOBJImporter : MonoBehaviour
     
 #endif
 
-    public void Awake()
-    {
-        if (!loadedModelsContainer)
-            loadedModelsContainer = GameObject.Find("ImportedModels").GetComponent<Transform>();
-    }
 
     public void LoadOBJ()
     {
@@ -110,17 +111,24 @@ public class RuntimeOBJImporter : MonoBehaviour
         return LoadOBJFromString(presets[index].text);
     }
 
-    public LoadedOBJData LoadOBJFromString(string data)
+    public LoadedOBJData LoadOBJFromString(string data, bool makeCopies = true, int targetContainer = 0)
     {
-        var textStream = new MemoryStream(Encoding.UTF8.GetBytes(data));
-        loadedObject = new OBJLoader().Load(textStream);
+        UpdateImportedModelContainers();
 
-        var newObjData = loadedObject.AddComponent<LoadedOBJData>();
+        // Creates a new GameObject from the data
+        var textStream = new MemoryStream(Encoding.UTF8.GetBytes(data));
+        newObj = new OBJLoader().Load(textStream);
+        var newObjData = newObj.AddComponent<LoadedOBJData>();
         newObjData.objData = data;
         loadedModels.Add(newObjData);
-        loadedObject.transform.SetParent(loadedModelsContainer);
-        loadedObject.transform.localScale = new Vector3(-1f, 0.1f, 1f);
-        foreach (Transform child in loadedObject.transform)
+        loadedData.Add(data);
+
+        // Adjust object position and scale
+        newObj.transform.SetParent(loadedModelContainers[targetContainer]);
+        newObj.transform.localScale = new Vector3(-1f, 0.1f, 1f);
+
+        // Add materials, colliders and tags
+        foreach (Transform child in newObj.transform)
         {
             if (child.TryGetComponent(out Renderer renderer))
             {
@@ -133,18 +141,36 @@ public class RuntimeOBJImporter : MonoBehaviour
                 child.tag = "OBJCollider";
             }
         }
+
+        if (!makeCopies)
+            return newObjData;
+
+        // Create copies for each alternative
+        for (int i = 1; i < loadedModelContainers.Count; i ++)
+        {
+            GameObject copyObj = Instantiate(newObj);
+            copyObj.transform.SetParent(loadedModelContainers[i]);
+            copyObj.transform.localPosition = Vector3.zero;
+            copyObj.transform.localScale = new Vector3(-1f, 0.1f, 1f);
+            loadedModels.Add(copyObj.GetComponent<LoadedOBJData>());
+        }
         //loadedObject.transform.position = new Vector3(15f, 0f, 15f);
         return newObjData;
     }
 
-    public void ClearLoadedModels()
+    public void ClearAllLoadedModels()
     {
-        foreach (Transform child in loadedModelsContainer.transform)
+        UpdateImportedModelContainers();
+        foreach (Transform scenario in loadedModelContainers)
         {
-            child.gameObject.SetActive(false);
-            Destroy(child.gameObject);
+            foreach (Transform child in scenario)
+            {
+                child.gameObject.SetActive(false);
+                Destroy(child.gameObject);
+            }
         }
         loadedModels = new List<LoadedOBJData>();
+        loadedData = new List<string>();
     }
 
 }
