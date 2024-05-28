@@ -72,7 +72,7 @@ public class VisualAgent : MonoBehaviour
         if (targetDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 36f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(0, targetRotation.eulerAngles.y, targetRotation.eulerAngles.z), 36f);
         }
         //transform.LookAt(transform.position - currMoveVect, Vector3.up);
         anim.SetFloat("Speed", Mathf.Clamp(presentAvgSpeed*32f, 0f, 0.9f));
@@ -95,6 +95,7 @@ public class VisualAgent : MonoBehaviour
         currPosition = new Vector3(pos.x, pos.y, pos.z);
         transform.position = currPosition;
         transform.LookAt(p_agent.goalsList[0].transform.position);
+        transform.rotation = Quaternion.Euler(0, transform.eulerAngles.y, transform.eulerAngles.z);
         updated = false;
         for (int i = 0; i < 15; i++)
         {

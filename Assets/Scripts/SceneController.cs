@@ -16,13 +16,15 @@ public class SceneController : MonoBehaviour
     public static bool ShowAuxinVectors { get; protected set; } = true;
 
     public static bool ShowNavMeshCorners { get; protected set; } = true;
-
+    public static bool TakeScreenshots { get; protected set; } = true;
+    
     [Header("Render Settings")]
     public bool _showCells;
     public bool _showAuxins;
     public bool _showAuxinVector;
     public bool _showSpawnAreas;
     public bool _showNavMeshCorners;
+    public bool _takeScreenshots;
 
     private void Awake()
     {
@@ -31,6 +33,7 @@ public class SceneController : MonoBehaviour
         ShowSpawnAreas = _showSpawnAreas;
         ShowAuxinVectors = _showAuxinVector;
         ShowNavMeshCorners = _showNavMeshCorners;
+        TakeScreenshots = _takeScreenshots;
     }
     void Start()
     {

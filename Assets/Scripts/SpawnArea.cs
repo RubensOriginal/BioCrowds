@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Biocrowds.Core;
 using UnityEngine;
 
 public class SpawnArea : MonoBehaviour
@@ -11,7 +12,9 @@ public class SpawnArea : MonoBehaviour
     public int initialNumberOfAgents;
     public bool initialRemoveWhenGoalReached;
     public List<GameObject> initialAgentsGoalList;
+    public List<float> goalSpeeds;
     public List<float> initialWaitList;
+    public int initialFrame = 0;
 
     [Header("Repeating Spawner Settings")]
     public float cycleLenght = 1.0f;
@@ -21,7 +24,6 @@ public class SpawnArea : MonoBehaviour
     public List<float> repeatingWaitList;
     private float cycleCounter = 0.0f;
     private bool cycleReady = false;
-
 
     public bool CycleReady { get => cycleReady;  }
 
@@ -74,5 +76,28 @@ public class SpawnArea : MonoBehaviour
     public void ShowMesh(bool _show)
     {
         _meshRenderer.enabled = _show;
+    }
+
+    public List<float> CalculateMaxSpeed()
+    {
+        List<float> mSpeed = new List<float>();
+
+        if (goalSpeeds.Count > 0)
+        {
+            for (int i = 0; i < initialAgentsGoalList.Count; i++)
+            {
+                if (i < goalSpeeds.Count)
+                    mSpeed.Add(goalSpeeds[i]);
+                else
+                    mSpeed.Add(goalSpeeds[^1]);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < initialAgentsGoalList.Count; i++)
+                mSpeed.Add(1.5f);
+        }
+        
+        return mSpeed;
     }
 }

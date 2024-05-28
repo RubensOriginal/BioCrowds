@@ -29,6 +29,7 @@ namespace Biocrowds.Core
         // Multiple goals
         public List<GameObject> goalsList;
         public List<float> goalsWaitList;
+        public List<float> goalsMaxSpeed;
         public bool isWaiting = false;
         [SerializeField]
         private float waitCount = 0f;
@@ -160,6 +161,9 @@ namespace Biocrowds.Core
                 _goalPosition = goalsList[goalIndex].transform.position;
                 _dirAgentGoal = _goalPosition - transform.position;
             }
+
+            _maxSpeed = goalsMaxSpeed[goalIndex];
+            goalDistThreshold = _maxSpeed / 30;
         }
 
         public void UpdateVisualAgent()
@@ -187,6 +191,7 @@ namespace Biocrowds.Core
 
         public void WaitStep(float _timeStep)
         {
+            // Debug.Log(Goal.name + (goalIndex != goalsWaitList.Count - 1) + " | " + (goalIndex + 1 > goalsWaitList.Count) + "");
             if (goalIndex != goalsWaitList.Count - 1 && goalIndex + 1 > goalsWaitList.Count)
             {
                 //Debug.LogError("No wait defined for current goal");
@@ -417,6 +422,8 @@ namespace Biocrowds.Core
             Vector2 agentPos = new Vector2(transform.position.x, transform.position.z);
             Vector2 goalPos = new Vector2(goalsList[goalIndex].transform.position.x,
                 goalsList[goalIndex].transform.position.z);
+            
+            // Debug.Log(Goal.name + " | " + Vector2.Distance(agentPos, goalPos).ToString() + " | " + goalDistThreshold);
             return (Vector2.Distance(agentPos, goalPos) <= goalDistThreshold);
         }
 

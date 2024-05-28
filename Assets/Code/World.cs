@@ -34,7 +34,6 @@ namespace Biocrowds.Core
 
         [SerializeField] private float GOAL_DISTANCE_THRESHOLD = 1.0f;
 
-
         [Header("Terrain Setting")]
         public MeshFilter planeMeshFilter;
 
@@ -79,6 +78,9 @@ namespace Biocrowds.Core
         [SerializeField]
         private Transform _agentsContainer;
         private int _newAgentID = 0;
+        
+        private List<SpawnArea> _frameSpawn = new List<SpawnArea>();
+        private int _currentFrame = 0;
 
         public List<Cell> Cells
         {
@@ -121,6 +123,8 @@ namespace Biocrowds.Core
 
                 planeMeshFilter.gameObject.SetActive(false);
             }
+
+            Application.targetFrameRate = 30;
         }
 
         public void LoadWorld()
@@ -297,13 +301,23 @@ namespace Biocrowds.Core
             //instantiate agents
             foreach (SpawnArea _area in spawnAreas)
             {
-                for (int i = 0; i < _area.initialNumberOfAgents; i ++)
+                if (_area.initialFrame == 0)
                 {
-                    if (MAX_AGENTS == 0 || _agents.Count < MAX_AGENTS)
-                        SpawnNewAgentInArea(_area, true);
-                    yield return null;
+                    for (int i = 0; i < _area.initialNumberOfAgents; i ++)
+                    {
+                        if (MAX_AGENTS == 0 || _agents.Count < MAX_AGENTS)
+                            SpawnNewAgentInArea(_area, true);
+                        yield return null;
+                    }
                 }
+                else
+                {
+                    _frameSpawn.Add(_area);
+                }
+                
             }
+
+            _frameSpawn = _frameSpawn.OrderBy(area => area.initialFrame).ToList();
         }
 
         // Update is called once per frame
@@ -312,6 +326,31 @@ namespace Biocrowds.Core
             //TODO: Modificar de time-deltatime para fixed frame
             if (!_isReady)
                 return;
+
+            if (SceneController.TakeScreenshots && _agents.Count > 0)
+            {
+                ScreenCapture.CaptureScreenshot("Screenshot/sim/" + _currentFrame + ".png");
+            }
+
+            if (_frameSpawn.Count != 0)
+            {
+                while (_frameSpawn.First().initialFrame == _currentFrame)
+                {
+                    SpawnArea area = _frameSpawn.First();
+
+                    for (int i = 0; i < area.initialNumberOfAgents; i ++)
+                    {
+                        if (MAX_AGENTS == 0 || _agents.Count < MAX_AGENTS)
+                            SpawnNewAgentInArea(area, true);
+                    }
+
+                    _frameSpawn.Remove(area);
+
+                    if (_frameSpawn.Count == 0)
+                        break;
+                }
+            }
+            
 
             foreach (SpawnArea _area in spawnAreas)
             {
@@ -402,7 +441,7 @@ namespace Biocrowds.Core
             for (int i = 0; i < _agents.Count; i++)
                 _agents[i].NavmeshStep(SIMULATION_TIME_STEP);
 
-            
+            _currentFrame++;
         }
 
         private Cell GetClosestCellToPoint (Vector3 point)
@@ -445,6 +484,7 @@ namespace Biocrowds.Core
             newAgent.CurrentCell = GetClosestCellToPoint(_pos);
             newAgent.agentRadius = AGENT_RADIUS;  //agent radius
             newAgent.goalDistThreshold = GOAL_DISTANCE_THRESHOLD;
+            newAgent.goalsMaxSpeed = _area.CalculateMaxSpeed();
             if (_isInitialSpawn)
             {
                 newAgent.Goal = _area.initialAgentsGoalList[0];  //agent goal
