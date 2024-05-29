@@ -55,7 +55,7 @@ namespace Biocrowds.Core
         }
         //number of agents in the scene
         [SerializeField]
-        private int _maxAgents = 30;
+        private int _maxAgents = 150;
 
         //agent prefab
         [SerializeField]
@@ -92,8 +92,12 @@ namespace Biocrowds.Core
             get { return _auxins; }
         }
 
-        [SerializeField]
+        [SerializeField] 
         private MarkerSpawner _markerSpawner = null;
+
+        public Camera camera;
+
+        public BoundingBoxCalculator calculator;
 
 
         //max auxins on the ground
@@ -327,11 +331,6 @@ namespace Biocrowds.Core
             if (!_isReady)
                 return;
 
-            if (SceneController.TakeScreenshots && _agents.Count > 0)
-            {
-                ScreenCapture.CaptureScreenshot("Screenshot/sim/" + _currentFrame + ".png");
-            }
-
             if (_frameSpawn.Count != 0)
             {
                 while (_frameSpawn.First().initialFrame == _currentFrame)
@@ -442,6 +441,18 @@ namespace Biocrowds.Core
                 _agents[i].NavmeshStep(SIMULATION_TIME_STEP);
 
             _currentFrame++;
+        }
+
+        void LateUpdate()
+        {
+            if (!_isReady)
+                return;
+
+            if (SceneController.TakeScreenshots && _agents.Count > 0)
+            {
+                ScreenCapture.CaptureScreenshot("Screenshot/sim/" + _currentFrame + ".png");
+                calculator.SaveBoundingBox(_agents, camera, _currentFrame);
+            }
         }
 
         private Cell GetClosestCellToPoint (Vector3 point)

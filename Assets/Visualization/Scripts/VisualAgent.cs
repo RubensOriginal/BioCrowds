@@ -23,10 +23,11 @@ public class VisualAgent : MonoBehaviour
     Vector3 avgDir;
     [SerializeField]
     public List<Vector3> dirView;
+    public GameObject VisualReference;
 
 
-	// Update is called once per frame
-	public void Step() 
+    // Update is called once per frame
+    public void Step() 
     {
         prevMoveVect = currMoveVect;
         currMoveVect = currPosition - transform.parent.position;

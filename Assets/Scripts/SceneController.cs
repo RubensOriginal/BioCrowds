@@ -34,6 +34,8 @@ public class SceneController : MonoBehaviour
         ShowAuxinVectors = _showAuxinVector;
         ShowNavMeshCorners = _showNavMeshCorners;
         TakeScreenshots = _takeScreenshots;
+
+        world.calculator = GetComponent<BoundingBoxCalculator>();
     }
     void Start()
     {
