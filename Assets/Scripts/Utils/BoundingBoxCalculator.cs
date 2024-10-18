@@ -26,10 +26,10 @@ public class BoundingBoxCalculator : MonoBehaviour
             {
                 Bound bound = CalculateBoundingBox(agent._visualAgent.VisualReference.GetComponent<Renderer>().bounds, camera);
 
-                float nMinX = bound.min.x / camera.pixelWidth;
-                float nMaxX = bound.max.x / camera.pixelWidth;
-                float nMinY = bound.min.y / camera.pixelHeight;
-                float nMaxY = bound.max.y / camera.pixelHeight;
+                float nMinX = Mathf.Clamp(bound.min.x / camera.pixelWidth, 0.0f ,1.0f);
+                float nMaxX = Mathf.Clamp(bound.max.x / camera.pixelWidth, 0.0f, 1.0f);
+                float nMinY = Mathf.Clamp(bound.min.y / camera.pixelHeight, 0.0f, 1.0f);
+                float nMaxY = Mathf.Clamp(bound.max.y / camera.pixelHeight, 0.0f, 1.0f);
 
                 float width = nMaxX - nMinX;
                 float height = nMaxY - nMinY;
@@ -52,8 +52,9 @@ public class BoundingBoxCalculator : MonoBehaviour
                 //float xCenter = nMinX + (width / 2);
                 //float yCenter = nMinY + (height / 2);
 
-                Debug.Log("0 " + nMinX + " " + nMaxX + " " + nMinY + " " + nMaxY);
-                sw.WriteLine("0 " + xCenter + " " +  yCenter + " " + width + " " + height);
+                //Debug.Log("0 " + nMinX + " " + nMaxX + " " + nMinY + " " + nMaxY);
+                if (width != 0 && height != 0)
+                    sw.WriteLine("0 " + xCenter + " " +  yCenter + " " + width + " " + height);
             }
         }
     }

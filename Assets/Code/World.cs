@@ -337,7 +337,7 @@ namespace Biocrowds.Core
                 {
                     SpawnArea area = _frameSpawn.First();
 
-                    for (int i = 0; i < area.initialNumberOfAgents; i ++)
+                    for (int i = 0; i < area.initialNumberOfAgents; i++)
                     {
                         if (MAX_AGENTS == 0 || _agents.Count < MAX_AGENTS)
                             SpawnNewAgentInArea(area, true);
@@ -349,7 +349,7 @@ namespace Biocrowds.Core
                         break;
                 }
             }
-            
+
 
             foreach (SpawnArea _area in spawnAreas)
             {
@@ -450,9 +450,25 @@ namespace Biocrowds.Core
 
             if (SceneController.TakeScreenshots && _agents.Count > 0)
             {
-                ScreenCapture.CaptureScreenshot("Screenshot/sim/" + _currentFrame + ".png");
-                calculator.SaveBoundingBox(_agents, camera, _currentFrame);
+                ScreenCapture.CaptureScreenshot("Screenshot/sim/" + (_currentFrame + SceneController.Offset) + ".png");
+                calculator.SaveBoundingBox(_agents, camera, _currentFrame + SceneController.Offset);
             }
+
+            if (SceneController.ShowCurrentFrame)
+            {
+                Debug.Log("Current Frame: " + _currentFrame);
+            }
+
+            if (SceneController.SimulationSize > 0 && SceneController.SimulationSize == _currentFrame)
+            {
+                #if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+                #else
+                Application.Quit();
+                #endif
+            }
+
+
         }
 
         private Cell GetClosestCellToPoint (Vector3 point)

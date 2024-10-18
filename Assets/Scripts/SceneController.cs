@@ -17,6 +17,9 @@ public class SceneController : MonoBehaviour
 
     public static bool ShowNavMeshCorners { get; protected set; } = true;
     public static bool TakeScreenshots { get; protected set; } = true;
+    public static bool ShowCurrentFrame { get; protected set; } = true;
+    public static int SimulationSize { get; protected set; } = 0;
+    public static int Offset { get; protected set; } = 0;
     
     [Header("Render Settings")]
     public bool _showCells;
@@ -25,6 +28,9 @@ public class SceneController : MonoBehaviour
     public bool _showSpawnAreas;
     public bool _showNavMeshCorners;
     public bool _takeScreenshots;
+    public bool _showCurrentFrame;
+    public int _simulationSize;
+    public int _offset;
 
     private void Awake()
     {
@@ -34,6 +40,9 @@ public class SceneController : MonoBehaviour
         ShowAuxinVectors = _showAuxinVector;
         ShowNavMeshCorners = _showNavMeshCorners;
         TakeScreenshots = _takeScreenshots;
+        ShowCurrentFrame = _showCurrentFrame;
+        SimulationSize = _simulationSize;
+        Offset = _offset;
 
         world.calculator = GetComponent<BoundingBoxCalculator>();
     }
